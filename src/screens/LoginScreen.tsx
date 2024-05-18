@@ -2,7 +2,9 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import KakaoSymbol from './../assets/kakaoSymbol.svg';
 import Logo from './../assets/mealmory_logo.svg';
+import {useAuthStore} from '../stores/loginStore';
 export default function LoginScreen() {
+  const {setLogin} = useAuthStore();
   return (
     <View style={styles.conainter}>
       <View>
@@ -10,7 +12,7 @@ export default function LoginScreen() {
         <Text style={styles.appTitle}>MealMory</Text>
         <Text style={styles.appDescription}>식사의 추억</Text>
       </View>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => setLogin(true)}>
         <KakaoSymbol width={30} height={27} style={styles.symbol} />
         <Text style={styles.btnText}>카카오 로그인</Text>
       </TouchableOpacity>
