@@ -1,27 +1,27 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import MainScreen from '../screens/MainScreen';
-import LoginScreen from '../screens/LoginScreen';
-import {AuthStackParamList, HomeTabParamList} from './navigation';
+import {HomeTabParamList} from './navigation';
 
-const Stack = createStackNavigator<HomeTabParamList>();
-const AuthStack = createStackNavigator<AuthStackParamList>();
-export const HomeTap = () => {
-  return (
-    <Stack.Navigator initialRouteName="Home">
-      <Stack.Screen name="Home" component={MainScreen} />
-    </Stack.Navigator>
-  );
-};
+const RootStack = createStackNavigator();
+const Home = createStackNavigator<HomeTabParamList>();
 
-export const AuthNavigatr = () => {
+export default function RootNavigator() {
   return (
-    <AuthStack.Navigator initialRouteName="Login">
-      <AuthStack.Screen
-        name="Login"
-        component={LoginScreen}
+    <RootStack.Navigator>
+      <RootStack.Screen
+        name="HomeTab"
+        component={HomeTap}
         options={{headerShown: false}}
       />
-    </AuthStack.Navigator>
+    </RootStack.Navigator>
+  );
+}
+
+export const HomeTap = () => {
+  return (
+    <Home.Navigator initialRouteName="Home">
+      <Home.Screen name="Home" component={MainScreen} />
+    </Home.Navigator>
   );
 };
