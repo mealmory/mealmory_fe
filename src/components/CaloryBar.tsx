@@ -5,6 +5,7 @@ interface CaloryBarProps {
   percent: number;
 }
 const CaloryBar = ({type, calory, percent}: CaloryBarProps) => {
+  const formattedCalory = calory.toLocaleString();
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
@@ -17,9 +18,9 @@ const CaloryBar = ({type, calory, percent}: CaloryBarProps) => {
             styles.valueBar,
             type === 'amr' ? styles.totalBar : styles.currentBar,
           ]}>
-          {percent > 30 && <Text style={styles.text}>{calory}</Text>}
+          {percent > 30 && <Text style={styles.text}>{formattedCalory}</Text>}
         </View>
-        {percent <= 30 && <Text style={styles.text}>{calory}</Text>}
+        {percent <= 30 && <Text style={styles.text}>{formattedCalory}</Text>}
       </View>
     </View>
   );
@@ -30,8 +31,7 @@ export default CaloryBar;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    padding: 5,
+    // backgroundColor: '#fff',
   },
   rowBox: {
     width: '100%',
@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
     color: '#000',
     textAlign: 'center',
     fontSize: 20,
+    fontWeight: '600',
   },
   title: {
     fontSize: 16,
