@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useAuthStore} from '../stores/loginStore';
 import {HomeScreenProps} from '../navigation/navigation';
@@ -8,6 +8,7 @@ import CaloryBar from '../components/CaloryBar';
 
 import {AVG_TITLE} from '../contands/mainFlowContands';
 import AverageCard from '../components/AverageCard';
+import Table from '../components/Table';
 
 export default function HomeScreen({navigation}: HomeScreenProps) {
   const {setLogin} = useAuthStore();
@@ -25,6 +26,12 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
     date: '2024-04-12',
   };
 
+  const planData = {
+    '08:00': 1234567,
+    '12:00': 1234567,
+    '18:00': 1234567,
+    '20:00': 1234567,
+  };
   return (
     <ScrollView style={styles.container}>
       {/* calory bar chart */}
@@ -52,6 +59,17 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
         </ScrollView>
       </View>
       {/* meal plan table */}
+      <View style={[styles.section]}>
+        <Text style={styles.sectionText}>오늘 식단 목록</Text>
+        <Pressable
+          style={({pressed}) => [
+            {backgroundColor: pressed ? '#f6f2c9' : '#FFFBD3'},
+            styles.button,
+          ]}>
+          <Text style={styles.buttonText}>식단 추가하기</Text>
+        </Pressable>
+        <Table thList={['시간', '칼로리']} tableData={planData} />
+      </View>
     </ScrollView>
   );
 }
@@ -81,5 +99,17 @@ const styles = StyleSheet.create({
   cardList: {
     flex: 1,
     flexDirection: 'row',
+  },
+  button: {
+    borderRadius: 13,
+    borderColor: '#EFEFEF',
+    borderWidth: 1,
+    padding: 12,
+  },
+  buttonText: {
+    fontSize: 20,
+    color: '#FFB800',
+    fontWeight: '700',
+    textAlign: 'center',
   },
 });
