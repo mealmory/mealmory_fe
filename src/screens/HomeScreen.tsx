@@ -33,7 +33,7 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
     '20:00': 1234567,
   };
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* calory bar chart */}
       <View style={[styles.section, styles.calorySection]}>
         <CaloryBar type={'amr'} calory={data.user.amr} percent={100} />
@@ -46,7 +46,10 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
       {/* average data card */}
       <View style={[styles.section, styles.cardSection]}>
         <Text style={styles.sectionText}>평균 데이터</Text>
-        <ScrollView horizontal style={styles.cardList}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.cardList}>
           {Object.keys(data.avg).map(key => {
             return (
               <AverageCard
