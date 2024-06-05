@@ -28,6 +28,10 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
     '18:00': 1234567,
     '20:00': 1234567,
   };
+
+  function handleDetailPress(time: string) {
+    navigation.navigate('MealPlanByTime', {time: time});
+  }
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* calory bar chart */}
@@ -67,7 +71,11 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
           ]}>
           <Text style={styles.buttonText}>식단 추가하기</Text>
         </Pressable>
-        <Table thList={['시간', '칼로리']} tableData={planData} />
+        <Table
+          thList={['시간', '칼로리']}
+          tableData={planData}
+          handleDetailPress={handleDetailPress}
+        />
       </View>
     </ScrollView>
   );

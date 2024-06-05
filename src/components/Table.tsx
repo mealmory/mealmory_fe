@@ -3,9 +3,10 @@ import {Pressable, StyleSheet, Text, View} from 'react-native';
 interface TableProps {
   thList: [string, string];
   tableData: {[key: string]: number};
+  handleDetailPress: (time: string) => void;
 }
 
-const Table = ({thList, tableData}: TableProps) => {
+const Table = ({thList, tableData, handleDetailPress}: TableProps) => {
   return (
     <View style={styles.table}>
       <View style={[styles.tr]}>
@@ -25,7 +26,9 @@ const Table = ({thList, tableData}: TableProps) => {
         return (
           <View key={key} style={[styles.tr]}>
             <Text style={[styles.tText, styles.tdl, styles.tdBox]}>{key}</Text>
-            <Pressable style={[styles.tdr, styles.tdBox]}>
+            <Pressable
+              style={[styles.tdr, styles.tdBox]}
+              onPress={() => handleDetailPress(key)}>
               <Text style={[styles.pressableData, styles.tText]}>
                 {tableData[key].toLocaleString()}
               </Text>
