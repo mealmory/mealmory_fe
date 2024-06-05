@@ -1,10 +1,12 @@
 import React, {Children} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import HomeScreen from '../screens/HomeScreen';
+import HomeScreen from '../screens/MainFlow/HomeScreen';
 import {StyleSheet, Text, View} from 'react-native';
 import Logo from './../assets/mealmory_logo.svg';
+import {genTabIcon} from '../util/svgUtil';
+import {HomeTabParamList} from './navigation';
 
-const MainTab = createBottomTabNavigator();
+const MainTab = createBottomTabNavigator<HomeTabParamList>();
 
 const MainTabs = () => {
   return (
@@ -18,8 +20,17 @@ const MainTabs = () => {
           </View>
         ),
         headerTitleAlign: 'center',
+        tabBarLabelStyle: {
+          color: '#000',
+        },
       }}>
-      <MainTab.Screen name="Home" component={HomeScreen} />
+      <MainTab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          tabBarIcon: props => genTabIcon({...props, name: 'Home'}),
+        }}
+      />
     </MainTab.Navigator>
   );
 };
