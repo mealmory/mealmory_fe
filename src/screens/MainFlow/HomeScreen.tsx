@@ -1,18 +1,14 @@
 import React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useAuthStore} from '../stores/loginStore';
-import {HomeScreenProps} from '../navigation/navigation';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import CaloryBar from '../components/CaloryBar';
+import {HomeScreenProps} from '../../navigation/navigation';
+import CaloryBar from '../../components/CaloryBar';
 
-import {AVG_TITLE} from '../contands/mainFlowContands';
-import AverageCard from '../components/AverageCard';
-import Table from '../components/Table';
+import {AVG_TITLE} from '../../contands/mainFlowContands';
+import AverageCard from '../../components/AverageCard';
+import Table from '../../components/Table';
 
 export default function HomeScreen({navigation}: HomeScreenProps) {
-  const {setLogin} = useAuthStore();
-
   const data = {
     avg: {
       bmi: 23.5,
