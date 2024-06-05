@@ -1,4 +1,4 @@
-import React, {Children} from 'react';
+import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/MainFlow/HomeScreen';
 import {StyleSheet, Text, View} from 'react-native';
@@ -13,12 +13,7 @@ const MainTabs = () => {
     <MainTab.Navigator
       initialRouteName="Home"
       screenOptions={{
-        headerTitle: () => (
-          <View style={styles.header}>
-            <Logo width={35} height={35} />
-            <Text style={styles.title}>MealMory</Text>
-          </View>
-        ),
+        headerTitle: CustomHeaderTitle,
         headerTitleAlign: 'center',
         tabBarLabelStyle: {
           color: '#000',
@@ -36,6 +31,13 @@ const MainTabs = () => {
 };
 
 export default MainTabs;
+
+const CustomHeaderTitle = () => (
+  <View style={styles.header}>
+    <Logo width={35} height={35} />
+    <Text style={styles.title}>MealMory</Text>
+  </View>
+);
 
 const styles = StyleSheet.create({
   header: {
