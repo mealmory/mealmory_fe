@@ -20,7 +20,7 @@ const CheckBox = ({ name, handleClick, checked }: CheckBoxProps) => {
         checked={checked}
       />
       <div
-        className={`border border-gray-700 rounded-md w-5 h-5 flex items-center justify-center ${
+        className={`border border-gray-700 dark:border-gray-300 rounded-md w-5 h-5 flex items-center justify-center ${
           checked ? "bg-[#FFFBD3] text-[#FFB800]" : ""
         }`}
       >
