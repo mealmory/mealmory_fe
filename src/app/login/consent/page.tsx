@@ -42,7 +42,7 @@ export default function Consent() {
             </div>
           );
         })}
-        <button className="bg-cuspoint text-cusorange shadow-border rounded-xl w-full p-3">
+        <button className="bg-cuspoint text-cusorange shadow-border rounded-xl w-full p-3 font-semibold">
           동의하고 시작하기
         </button>
       </div>
