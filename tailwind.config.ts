@@ -14,10 +14,13 @@ const config: Config = {
       backgroundColor: {
         cusyellow: "#F6E54D",
         cusbanana: "#FFFEF7",
+        cuspoint: "#FFFBD3",
         cuspink: "#FFE3C9",
-        cusorange: "#FFB800",
         cusgray: "#E6E6E6",
         dcusgray: "#5A5A5A",
+      },
+      colors: {
+        cusorange: "#FFB800",
       },
     },
   },
