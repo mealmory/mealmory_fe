@@ -1,6 +1,7 @@
 "use client";
 
 import CheckBox from "@/components/CheckBox";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Consent() {
@@ -16,6 +17,7 @@ export default function Consent() {
     terms: false,
     privacy: false,
   });
+  const router = useRouter();
   function handleCheckAgree(key: keyof typeof agreements) {
     setAgreements((prev) => ({ ...prev, [key]: !prev[key] }));
   }
@@ -42,7 +44,10 @@ export default function Consent() {
             </div>
           );
         })}
-        <button className="bg-cuspoint text-cusorange shadow-border rounded-xl w-full p-3 font-semibold">
+        <button
+          className="bg-cuspoint text-cusorange shadow-border rounded-xl w-full p-3 font-semibold"
+          onClick={() => router.push("/login/user-info")}
+        >
           동의하고 시작하기
         </button>
       </div>
