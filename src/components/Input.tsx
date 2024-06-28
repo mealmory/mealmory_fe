@@ -1,13 +1,15 @@
-import { HTMLInputTypeAttribute, useId } from "react";
+import { ChangeEvent, HTMLInputTypeAttribute, useId } from "react";
 
 const Input = ({
   label,
-  name,
   type,
+  value,
+  handleChange,
 }: {
   label: string;
-  name: string;
   type: HTMLInputTypeAttribute;
+  value?: number;
+  handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }) => {
   const uuid = useId();
   return (
@@ -16,9 +18,10 @@ const Input = ({
       <br />
       <input
         type={type}
-        min={type === "number" ? 0 : type === "date" ? "1924-01-01" : undefined}
+        min={type === "number" ? 0 : undefined}
         id={uuid}
-        name={name}
+        value={value}
+        onChange={handleChange}
         className=" outline-none shadow-border rounded-xl py-2 px-3 w-full text-xl"
       />
     </div>
