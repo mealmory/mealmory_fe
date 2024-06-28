@@ -8,7 +8,7 @@ interface UserProfileInfoProps {
   };
 }
 
-const UserProfileInfo = async ({ profileData }: UserProfileInfoProps) => {
+const UserProfileInfo = ({ profileData }: UserProfileInfoProps) => {
   return (
     <div className="flex flex-col items-center gap-2">
       <Image
