@@ -39,12 +39,10 @@ export default function UserInfo() {
             type={type}
             value={inputValue[name as keyof typeof inputValue]}
             handleChange={(e) => {
-              if (typeof e.target.value === "number") {
-                setInputValue((prev) => ({
-                  ...prev,
-                  [name as keyof typeof inputValue]: Number(e.target.value),
-                }));
-              }
+              setInputValue((prev) => ({
+                ...prev,
+                [name as keyof typeof inputValue]: Number(e.target.value),
+              }));
             }}
           />
         ))}
