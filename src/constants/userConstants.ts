@@ -2,16 +2,9 @@ export const USER_INFO_FORM_LABEL = {
   inputList: [
     { label: "키", name: "height", type: "number" },
     { label: "체중", name: "weight", type: "number" },
+    { label: "나이", name: "age", type: "number" },
   ],
   selectList: [
-    {
-      name: "birth",
-      label: "출생연도",
-      options: Array.from({ length: 100 }, (_, i) => {
-        const value = new Date().getFullYear() - i;
-        return { label: value.toString(), value };
-      }),
-    },
     {
       name: "gender",
       label: "성별",

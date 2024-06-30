@@ -14,11 +14,11 @@ export default function UserInfo() {
     nickname: "분노 그 잡채",
   };
   const [selectedOption, setSelectedOption] = useState({
-    birth: new Date().getFullYear(),
     gender: 0,
     actLevel: 0,
   });
   const [inputValue, setInputValue] = useState({
+    age: 0,
     height: 0,
     weight: 0,
   });
@@ -41,7 +41,8 @@ export default function UserInfo() {
             handleChange={(e) => {
               setInputValue((prev) => ({
                 ...prev,
-                [name as keyof typeof inputValue]: Number(e.target.value),
+                [name as keyof typeof inputValue]:
+                  type === "number" ? Number(e.target.value) : e.target.value,
               }));
             }}
           />
