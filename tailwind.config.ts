@@ -21,6 +21,7 @@ const config: Config = {
       },
       colors: {
         cusorange: "#FFB800",
+        cusyellow: "#F6E54D",
       },
     },
   },
