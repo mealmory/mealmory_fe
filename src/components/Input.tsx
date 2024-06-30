@@ -8,7 +8,7 @@ const Input = ({
 }: {
   label: string;
   type: HTMLInputTypeAttribute;
-  value?: number;
+  value?: number | string;
   handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }) => {
   const uuid = useId();
