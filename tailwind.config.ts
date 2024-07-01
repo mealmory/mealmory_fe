@@ -18,6 +18,7 @@ const config: Config = {
         cuspink: "#FFE3C9",
         cusgray: "#E6E6E6",
         dcusgray: "#5A5A5A",
+        cusdark: "rgb(90,90,90)",
       },
       colors: {
         cusorange: "#FFB800",
