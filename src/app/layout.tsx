@@ -20,11 +20,11 @@ export default function RootLayout({
       <body
         className={
           inter.className +
-          " overscroll-none overflow-hidden sm:overflow-auto flex h-screen w-screen justify-between flex-col sm:flex-row max-w-[2560px] mx-auto"
+          " overscroll-none overflow-y-scroll w-screen max-w-[2560px] mx-auto relative sm:pl-40 sm:pt-0 pt-10"
         }
       >
         <Navigator />
-        <main className="sm:h-full flex-1 w-full text-xl sm:text-base overflow-y-scroll">
+        <main className="h-full sm:min-h-screen w-full text-xl sm:text-base">
           {children}
         </main>
       </body>
