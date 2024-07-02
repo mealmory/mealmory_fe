@@ -8,7 +8,7 @@ export const MAIN_LABELS = {
     bmr: "기초대사량",
     weight: "체중",
   },
-  useAvg: {
+  userAvg: {
     bmi: "나의 비만도",
     bmr: "나의 기초대사량",
   },
