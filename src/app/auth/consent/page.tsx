@@ -46,7 +46,7 @@ export default function Consent() {
         })}
         <button
           className="bg-cuspoint text-cusorange shadow-border rounded-xl w-full p-3 font-semibold"
-          onClick={() => router.push("/login/user-info")}
+          onClick={() => router.push("/auth/user-info")}
         >
           동의하고 시작하기
         </button>

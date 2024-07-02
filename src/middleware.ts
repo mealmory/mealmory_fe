@@ -8,7 +8,7 @@ export function middleware(req: NextRequest) {
     if (req.cookies.get("mact")) {
       return NextResponse.redirect(new URL("/home", req.url));
     } else {
-      return NextResponse.redirect(new URL("/login", req.url));
+      return NextResponse.redirect(new URL("/auth", req.url));
     }
   } else {
     return NextResponse.next({

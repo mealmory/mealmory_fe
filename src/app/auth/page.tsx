@@ -14,7 +14,7 @@ export default function Login() {
       <h1 className=" text-4xl">MealMory</h1>
       <h2 className=" text-xl">식사의 추억</h2>
       <Link
-        href={"/login/consent"}
+        href={"/auth/consent"}
         className="flex gap-2 rounded-xl bg-[#FEE500] text-[rgba(0,0,0,0.85)] p-3 items-center active:bg-[rgb(233,216,66)] mt-5"
       >
         <Image
