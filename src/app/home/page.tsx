@@ -1,5 +1,6 @@
 import DataCard from "@/components/DataCard";
 import { MAIN_LABELS } from "@/constants/mainConstants";
+import { ReactNode } from "react";
 
 export default async function Home() {
   const data = {
@@ -20,12 +21,14 @@ export default async function Home() {
     [`14:00`]: 123455,
     [`18:30`]: 123455,
     [`20:00`]: 123455,
+    [`21:00`]: 123455,
+    [`22:00`]: 123455,
   };
   const { caloryData, avg } = MAIN_LABELS;
 
   return (
-    <div className="w-full h-full p-2 flex flex-col gap-10">
-      <div className="w-full">
+    <div className="w-full min-h-screen h-max p-2 flex flex-col gap-10 overflow-visible">
+      <Section>
         {Object.keys(caloryData).map((key) => {
           const target = key as keyof typeof caloryData;
           const percent =
@@ -41,58 +44,75 @@ export default async function Home() {
             />
           );
         })}
-      </div>
-      <div className="w-full">
-        <p>동일 연령대 평균 데이터</p>
+      </Section>
+      <Section titleHeader="동일 연령대 평균 데이터">
         <div className="flex items-center gap-2 overflow-x-scroll p-1 scroll-hide">
           {Object.keys(avg).map((key) => {
             const target = key as keyof typeof avg;
             return (
               <DataCard
                 key={target}
-                className="basis-36 flex-grow flex-shrink-0 flex-col p-2 h-40 gap-3 justify-center items-center"
+                className="basis-36 flex-grow flex-shrink-0 flex-col p-2 h-40 gap-3 justify-center items-center rounded-xl"
                 labelClass="-translate-y-4"
                 label={avg[target]}
-                value={data.avg[target]}
+                value={data.avg[target].toString()}
               />
             );
           })}
         </div>
-      </div>
-      <div className="w-full flex-1">
-        <p>오늘 식단 목록</p>
-        <div className="flex h-full flex-col sm:flex-row bg-cusbanana rounded-xl shadow-border sm:gap-2 sm:bg-inherit sm:py-1 sm:shadow-none sm:w-full sm:flex-wrap sm:content-center">
-          <div className="flex sm:hidden rounded-t-xl overflow-hidden">
-            <p className="max-w-32 w-full text-center border text-xl p-2">
-              시간
-            </p>
-            <p className="w-full text-center border text-xl p-2">칼로리</p>
+      </Section>
+      <div className="w-full min-h-full h-max sm:flex-1 sm:flex flex-row">
+        <Section>asd</Section>
+        <Section titleHeader="오늘 식단 목록" className="">
+          <div className="flex h-full flex-col bg-cusbanana rounded-xl shadow-border ">
+            <div className="flex rounded-t-xl overflow-hidden">
+              <p className="max-w-32 w-full text-center border text-xl p-2">
+                시간
+              </p>
+              <p className="w-full text-center border text-xl p-2">칼로리</p>
+            </div>
+            {Object.keys(mealPlanList).map((key, i, arr) => {
+              const target = key as keyof typeof mealPlanList;
+              const textClass = "w-full h-full text-center border p-2 ";
+              return (
+                <DataCard
+                  key={target}
+                  label={target}
+                  value={mealPlanList[target].toLocaleString() + " kcal"}
+                  className={
+                    "flex-1 flex-row items-center shadow-none " +
+                    (i === arr.length - 1
+                      ? " rounded-b-xl overflow-hidden "
+                      : "")
+                  }
+                  labelClass={`max-w-32 ${textClass}`}
+                  valueClass={`font-semibold underline text-cusorange cursor-pointer ${textClass}`}
+                />
+              );
+            })}
           </div>
-          {Object.keys(mealPlanList).map((key, i, arr) => {
-            const target = key as keyof typeof mealPlanList;
-            const textClass =
-              "w-full h-full text-center border p-2 sm:border-none";
-            return (
-              <DataCard
-                key={target}
-                label={target}
-                value={mealPlanList[target]}
-                className={
-                  "flex-1 flex-row items-center shadow-none rounded-none sm:shadow-border sm:rounded-xl sm:basis-72 sm:flex-1 sm:h-44 sm:justify-center" +
-                  (i === arr.length - 1
-                    ? " rounded-b-xl overflow-hidden sm:overflow-auto"
-                    : "")
-                }
-                labelClass={`max-w-32 ${textClass}`}
-                valueClass={`font-semibold sm:-translate-y-6 underline text-cusorange cursor-pointer ${textClass}`}
-              />
-            );
-          })}
-        </div>
+        </Section>
       </div>
     </div>
   );
 }
+
+const Section = ({
+  children,
+  titleHeader,
+  className,
+}: {
+  children: ReactNode;
+  titleHeader?: string;
+  className?: string;
+}) => {
+  return (
+    <div className={"w-full " + (className ?? "")}>
+      {titleHeader && <p>{titleHeader}</p>}
+      {children}
+    </div>
+  );
+};
 
 const CaloryBar = ({
   percent,
