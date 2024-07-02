@@ -1,7 +1,7 @@
 interface DataCardProps {
   className: string;
   label: string;
-  value: number;
+  value: string;
   labelClass?: string;
   valueClass?: string;
   handleClick?: () => void;
@@ -16,9 +16,7 @@ const DataCard = ({
   handleClick,
 }: DataCardProps) => {
   return (
-    <div
-      className={`flex sm:flex-col bg-cusbanana shadow-border rounded-xl ${className}`}
-    >
+    <div className={`flex bg-cusbanana shadow-border ${className}`}>
       <div className={"flex justify-center items-center " + (labelClass ?? "")}>
         <p>{label}</p>
       </div>
@@ -26,7 +24,7 @@ const DataCard = ({
         onClick={handleClick}
         className={"flex justify-center items-center " + (valueClass ?? "")}
       >
-        <p>{value.toLocaleString()}</p>
+        <p>{value}</p>
       </div>
     </div>
   );
