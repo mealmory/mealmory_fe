@@ -23,6 +23,10 @@ const config: Config = {
       colors: {
         cusorange: "#FFB800",
         cusyellow: "#F6E54D",
+        bmiLess: "rgb(42, 134, 200)",
+        bmiSafe: "rgb(133, 189, 26)",
+        bmiWarning: "rgb(201, 113, 30)",
+        bmiDanger: "rgb(194, 50, 33)",
       },
     },
   },
