@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navigator from "@/components/Navigator";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,13 +19,10 @@ export default function RootLayout({
       <body
         className={
           inter.className +
-          " overscroll-none overflow-y-scroll w-screen max-w-[2560px] mx-auto relative sm:pl-40 sm:pt-0 pt-10"
+          " overscroll-none overflow-y-scroll min-h-screen w-screen max-w-[2560px] mx-auto"
         }
       >
-        <Navigator />
-        <main className="h-full sm:min-h-screen w-full text-xl sm:text-base">
-          {children}
-        </main>
+        {children}
       </body>
     </html>
   );
