@@ -9,10 +9,10 @@ import { usePathname } from "next/navigation";
 export default function Navigator() {
   const pathname = usePathname();
   const showFlag =
-    pathname === "/home" ||
-    pathname === "/graph" ||
-    pathname === "/profile" ||
-    pathname === "/more";
+    pathname === "/main" ||
+    pathname === "/main/graph" ||
+    pathname === "/main/profile" ||
+    pathname === "/main/more";
   return (
     <>
       {showFlag ? (

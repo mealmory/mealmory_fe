@@ -10,22 +10,22 @@ import { BsGridFill } from "@react-icons/all-files/bs/BsGridFill";
 export const LINK_ITEMS = [
   {
     title: "메인",
-    link: "/home",
+    link: "/main",
     icon: { normal: BsHouse, matched: BsHouseFill },
   },
   {
     title: "통계",
-    link: "/graph",
+    link: "/main/graph",
     icon: { normal: BsBarChart, matched: BsBarChartFill },
   },
   {
     title: "프로필",
-    link: "/profile",
+    link: "/main/profile",
     icon: { normal: BsPerson, matched: BsPersonFill },
   },
   {
     title: "더보기",
-    link: "/more",
+    link: "/main/more",
     icon: { normal: BsGrid, matched: BsGridFill },
   },
 ];
