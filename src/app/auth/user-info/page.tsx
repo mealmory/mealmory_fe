@@ -1,7 +1,7 @@
 "use client";
 
 import Input from "@/components/Input";
-import SelectMenu from "@/components/SelectMenu";
+import SelectMenu from "@/components/auth/SelectMenu";
 import UserProfileInfo from "@/components/userInfo/UserProfileInfo";
 import { USER_INFO_FORM_LABEL } from "@/constants/userConstants";
 import { useRouter } from "next/navigation";
