@@ -5,10 +5,12 @@ const Input = ({
   type,
   value,
   handleChange,
+  disabled,
 }: {
   label: string;
   type: HTMLInputTypeAttribute;
   value?: number | string;
+  disabled?: boolean;
   handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }) => {
   const uuid = useId();
@@ -22,7 +24,8 @@ const Input = ({
         id={uuid}
         value={value}
         onChange={handleChange}
-        className=" outline-none shadow-border rounded-xl py-2 px-3 w-full text-xl"
+        className=" outline-none shadow-border rounded-xl py-2 px-3 w-full text-xl disabled:text-gray-400"
+        disabled={disabled}
       />
     </div>
   );
