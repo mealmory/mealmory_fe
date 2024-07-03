@@ -26,7 +26,7 @@ export default function UserInfo() {
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     // 값 확인하고 fetch
-    router.push("/main");
+    router.push("/home");
   }
   return (
     <div className="w-full h-full flex flex-col max-w-[360px] mx-auto p-2 pt-12">

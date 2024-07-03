@@ -5,10 +5,10 @@ import { usePathname } from "next/navigation";
 const usePath = () => {
   const pathname = usePathname();
   const isShow =
-    pathname === "/main" ||
-    pathname === "/main/statistics" ||
-    pathname === "/main/profile" ||
-    pathname === "/main/more";
+    pathname === "/home" ||
+    pathname === "/statistics" ||
+    pathname === "/profile" ||
+    pathname === "/more";
   return { pathname, isShow };
 };
 
