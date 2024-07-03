@@ -59,9 +59,15 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
         </thead>
         <tbody>
           {caloryList ? (
-            caloryList.map(([key, value]) => {
-              return (
-                <tr key={key}>
+            caloryList.map(([key, value], i) =>
+              key === "empty" ? (
+                <tr key={`${key}${i}${value}`}>
+                  <td colSpan={2} className={thClass + " invisible"}>
+                    {value}
+                  </td>
+                </tr>
+              ) : (
+                <tr key={`${key}${i}`}>
                   <td className={thClass}>{key}</td>
                   <td
                     className={`${thClass} font-semibold underline text-cusorange cursor-pointer`}
@@ -69,8 +75,8 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
                     {value.toLocaleString() + " kcal"}
                   </td>
                 </tr>
-              );
-            })
+              )
+            )
           ) : (
             <tr>
               <td colSpan={2}>데이터가 없습니다.</td>
@@ -78,7 +84,7 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
           )}
         </tbody>
       </table>
-      {pageLength && (
+      {pageLength && pageLength > 1 ? (
         <div className="w-full flex items-center justify-center gap-2 border-t p-2">
           <Button
             disabled={page <= 1}
@@ -107,7 +113,7 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
             handleButtonClick={() => handlePagenationClick(true)}
           />
         </div>
-      )}
+      ) : null}
     </div>
   );
 };
