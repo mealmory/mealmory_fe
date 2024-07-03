@@ -33,3 +33,9 @@ body {
 .scroll-hide::-webkit-scrollbar {
   display: none;
 }
+
+button {
+  cursor: pointer;
+  border-radius: 12px;
+  font-weight: 600;
+}
