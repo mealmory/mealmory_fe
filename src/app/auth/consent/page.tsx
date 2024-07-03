@@ -1,6 +1,6 @@
 "use client";
 
-import CheckBox from "@/components/CheckBox";
+import CheckBox from "@/components/auth/CheckBox";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 

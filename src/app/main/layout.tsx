@@ -1,4 +1,4 @@
-import Navigator from "@/components/Navigator";
+import Navigator from "@/components/main/Navigator";
 
 export default function MainLayout({
   children,
