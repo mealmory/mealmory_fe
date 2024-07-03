@@ -1,5 +1,8 @@
-import DataCard from "@/components/DataCard";
+import AvgDataCard from "@/components/main/AvgDataCard";
+import Section from "@/components/main/Section";
+import Table from "@/components/main/Table";
 import { MAIN_LABELS } from "@/constants/mainConstants";
+import { checkBmi } from "@/utils/checkBmi";
 import { ReactNode } from "react";
 
 export default async function Home() {
@@ -7,24 +10,22 @@ export default async function Home() {
     user: {
       totalCalory: 1000,
       amr: 10000,
+      bmi: 18,
+      bmr: 124214,
     },
     avg: {
-      bmi: 0,
-      bmr: 0,
+      bmi: 25,
+      bmr: 12442,
       weight: 0,
     },
     date: "2024-04-28",
   };
   const mealPlanList = {
     [`08:00`]: 123455,
-    [`12:00`]: 123455,
-    [`14:00`]: 123455,
-    [`18:30`]: 123455,
-    [`20:00`]: 123455,
-    [`21:00`]: 123455,
-    [`22:00`]: 123455,
+    [`09:00`]: 123455,
+    [`10:00`]: 123455,
   };
-  const { caloryData, avg } = MAIN_LABELS;
+  const { caloryData, avg, userAvg } = MAIN_LABELS;
 
   return (
     <div className="w-full min-h-screen h-max p-2 flex flex-col gap-10 overflow-visible">
@@ -45,71 +46,79 @@ export default async function Home() {
           );
         })}
       </Section>
-      <Section titleHeader="동일 연령대 평균 데이터">
-        <div className="flex items-center gap-2 overflow-x-scroll p-1 scroll-hide">
-          {Object.keys(avg).map((key) => {
-            const target = key as keyof typeof avg;
-            return (
-              <DataCard
-                key={target}
-                className="basis-36 flex-grow flex-shrink-0 flex-col p-2 h-40 gap-3 justify-center items-center rounded-xl"
-                labelClass="-translate-y-4"
-                label={avg[target]}
-                value={data.avg[target].toString()}
-              />
-            );
-          })}
-        </div>
+      <Section titleHeader="나의 데이터">
+        <AvgCardList avgDatas={data.user} avgTitles={userAvg} />
       </Section>
-      <div className="w-full min-h-full h-max sm:flex-1 sm:flex flex-row">
-        <Section>asd</Section>
-        <Section titleHeader="오늘 식단 목록" className="">
-          <div className="flex h-full flex-col bg-cusbanana rounded-xl shadow-border ">
-            <div className="flex rounded-t-xl overflow-hidden">
-              <p className="max-w-32 w-full text-center border text-xl p-2">
-                시간
-              </p>
-              <p className="w-full text-center border text-xl p-2">칼로리</p>
-            </div>
-            {Object.keys(mealPlanList).map((key, i, arr) => {
-              const target = key as keyof typeof mealPlanList;
-              const textClass = "w-full h-full text-center border p-2 ";
-              return (
-                <DataCard
-                  key={target}
-                  label={target}
-                  value={mealPlanList[target].toLocaleString() + " kcal"}
-                  className={
-                    "flex-1 flex-row items-center shadow-none " +
-                    (i === arr.length - 1
-                      ? " rounded-b-xl overflow-hidden "
-                      : "")
-                  }
-                  labelClass={`max-w-32 ${textClass}`}
-                  valueClass={`font-semibold underline text-cusorange cursor-pointer ${textClass}`}
-                />
-              );
-            })}
-          </div>
+      <div className="w-ful md:flex flex-row gap-2">
+        <Section titleHeader="동일 연령대 평균 데이터">
+          <AvgCardList
+            avgDatas={data.avg}
+            avgTitles={avg}
+            clasName="overflow-x-scroll scroll-hide"
+          />
         </Section>
       </div>
+      <Section
+        titleHeader="오늘 식단 목록"
+        className="flex-1 flex flex-col gap-2"
+      >
+        <Table
+          tHead={"시간"}
+          tclassName="flex-1 flex flex-col justify-between"
+          tDataList={mealPlanList}
+          period="day"
+        />
+      </Section>
     </div>
   );
 }
 
-const Section = ({
-  children,
-  titleHeader,
-  className,
-}: {
-  children: ReactNode;
-  titleHeader?: string;
-  className?: string;
-}) => {
+interface AvgCardList<T> {
+  avgDatas: { [key in keyof T]: number };
+  avgTitles: T;
+  clasName?: string;
+}
+
+const AvgCardList = <T extends {}>({
+  avgDatas,
+  avgTitles,
+  clasName,
+}: AvgCardList<T>) => {
   return (
-    <div className={"w-full " + (className ?? "")}>
-      {titleHeader && <p>{titleHeader}</p>}
-      {children}
+    <div className={"flex items-center gap-2 p-1 " + (clasName ?? "")}>
+      {Object.keys(avgTitles).map((key) => {
+        const target = key as keyof typeof avgTitles;
+        let value = avgDatas[target].toLocaleString();
+        let valueClass = "";
+        if (target === "bmi") {
+          const { text, status } = checkBmi(avgDatas[target]);
+          value += ` | ${text}`;
+          valueClass +=
+            status === "less"
+              ? "text-bmiLess"
+              : status === "safe"
+              ? "text-bmiSafe"
+              : status === "warning"
+              ? "text-bmiWraning"
+              : status === "danger"
+              ? "text-bmiDanger"
+              : "text-black";
+        } else if (target === "bmr") {
+          value += " kcal";
+        } else if (target === "weight") {
+          value += " kg";
+        }
+        console.log(value);
+        return (
+          <AvgDataCard
+            key={key}
+            label={avgTitles[target] as string}
+            value={value}
+            className="basis-36 flex-grow flex-shrink-0 flex-col p-2 h-40 gap-3 justify-center items-center rounded-xl"
+            valueClass={`font-semibold ${valueClass}`}
+          />
+        );
+      })}
     </div>
   );
 };
