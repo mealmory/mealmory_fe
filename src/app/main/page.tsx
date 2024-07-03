@@ -108,7 +108,6 @@ const AvgCardList = <T extends {}>({
         } else if (target === "weight") {
           value += " kg";
         }
-        console.log(value);
         return (
           <AvgDataCard
             key={key}
