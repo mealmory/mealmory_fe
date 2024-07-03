@@ -7,7 +7,7 @@ interface DataCardProps {
   handleClick?: () => void;
 }
 
-const DataCard = ({
+const AvgDataCard = ({
   className,
   label,
   value,
@@ -22,7 +22,10 @@ const DataCard = ({
       </div>
       <div
         onClick={handleClick}
-        className={"flex justify-center items-center " + (valueClass ?? "")}
+        className={
+          "flex justify-center items-center font-semibold sm:font-bold  " +
+          (valueClass ?? "")
+        }
       >
         <p>{value}</p>
       </div>
@@ -30,4 +33,4 @@ const DataCard = ({
   );
 };
 
-export default DataCard;
+export default AvgDataCard;
