@@ -11,7 +11,7 @@ export default function UserInfo() {
   const data = {
     image: "/tempImg.png",
     email: "anger@gmail.com",
-    nickname: "분노 그 잡채",
+    nickName: "분노 그 잡채",
   };
   const [selectedOption, setSelectedOption] = useState({
     gender: 0,

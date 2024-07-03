@@ -3,16 +3,17 @@ import Image from "next/image";
 interface UserProfileInfoProps {
   profileData: {
     image: string;
-    nickname: string;
+    nickName?: string;
     email: string;
   };
 }
 
 const UserProfileInfo = ({ profileData }: UserProfileInfoProps) => {
+  const { image, email, nickName } = profileData;
   return (
     <div className="flex flex-col items-center gap-2">
       <Image
-        src={profileData.image}
+        src={image}
         width={107}
         height={107}
         className=" rounded-full"
@@ -20,8 +21,8 @@ const UserProfileInfo = ({ profileData }: UserProfileInfoProps) => {
         priority
       />
       <div className=" text-gray-500 text-center dark:text-white">
-        <p>{profileData.email}</p>
-        <p>{profileData.nickname}</p>
+        <p>{email}</p>
+        {nickName && <p>{nickName}</p>}
       </div>
     </div>
   );
