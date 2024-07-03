@@ -6,7 +6,7 @@ const usePath = () => {
   const pathname = usePathname();
   const isShow =
     pathname === "/main" ||
-    pathname === "/main/graph" ||
+    pathname === "/main/statistics" ||
     pathname === "/main/profile" ||
     pathname === "/main/more";
   return { pathname, isShow };

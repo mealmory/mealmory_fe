@@ -15,7 +15,7 @@ export const LINK_ITEMS = [
   },
   {
     title: "통계",
-    link: "/main/graph",
+    link: "/main/statistics",
     icon: { normal: BsBarChart, matched: BsBarChartFill },
   },
   {
