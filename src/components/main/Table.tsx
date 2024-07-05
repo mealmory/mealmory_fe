@@ -23,23 +23,11 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
     }
     return {
       caloryList: caloryList,
-      pageLength: Math.floor(arr.length / periodNum),
+      pageLength: Math.ceil(arr.length / periodNum),
     };
   }, [tDataList, period, page]);
 
   const { caloryList, pageLength } = listDataSet;
-
-  function handlePagenationClick(isNext: boolean) {
-    if (pageLength && caloryList)
-      setPage((prev) => {
-        if (isNext) {
-          if (prev < pageLength) return prev + 1;
-        } else {
-          if (prev > 1) return prev - 1;
-        }
-        return prev;
-      });
-  }
 
   const thClass = "border-2 p-1";
   return (
