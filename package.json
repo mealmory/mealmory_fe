@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@react-icons/all-files": "^4.1.0",
-    "axios": "^1.7.2",
     "next": "14.2.4",
     "next-themes": "^0.3.0",
     "react": "^18",
