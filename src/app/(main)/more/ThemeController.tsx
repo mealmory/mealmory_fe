@@ -18,39 +18,39 @@ const ThemeController = () => {
       name: "밝은 테마",
       Icon: BsFillBrightnessHighFill,
       type: "light",
-      color: "bg-cusorange",
+      color: "peer-checked:bg-cusorange",
     },
     {
       name: "어두운 테마",
       Icon: BsMoon,
       type: "dark",
-      color: "bg-blue-500",
+      color: "peer-checked:bg-blue-500",
     },
 
     {
       name: "시스템 테마",
       Icon: BsCircleHalf,
       type: "system",
-      color: "bg-green-500",
+      color: "peer-checked:bg-green-500",
     },
   ];
 
   return (
-    <div className="w-full flex gap-2 items-center border-b-2 pb-2">
+    <fieldset className="w-full flex gap-2 items-center border-b-2 pb-5">
       {icons.map((item) => {
         const { type, ...props } = item;
         return (
           <ThemeBtn
             key={props.name}
             {...props}
-            active={type === curTheme}
+            checked={type === curTheme}
             handleClick={() => {
               handlThemeClick(type as typeof curTheme);
             }}
           />
         );
       })}
-    </div>
+    </fieldset>
   );
 };
 
@@ -60,24 +60,32 @@ const ThemeBtn = ({
   Icon,
   name,
   handleClick,
-  active,
+  checked,
   color,
 }: {
   Icon: IconType;
   name: string;
   handleClick: () => void;
-  active: boolean;
+  checked: boolean;
   color: string;
 }) => {
-  const activeStyle = active ? `${color} text-white` : "bg-cusgray";
   return (
-    <button
-      className={"flex-1 sm:p-7 p-4 border " + activeStyle}
-      type="button"
-      onClick={handleClick}
-    >
-      <Icon size={40} style={{ margin: "0 auto", marginBottom: "15px" }} />
-      <p className="mx-auto text-sm sm:text-base">{name}</p>
-    </button>
+    <label className={"flex-1"}>
+      <input
+        className="hidden peer"
+        type="radio"
+        checked={checked}
+        onChange={handleClick}
+      />
+      <div
+        className={
+          "w-full sm:p-7 transition ease-in-out duration-300 p-4 rounded-xl bg-cusgray peer-checked:text-white " +
+          color
+        }
+      >
+        <Icon size={40} style={{ margin: "0 auto", marginBottom: "15px" }} />
+        <p className="text-center text-sm sm:text-base ">{name}</p>
+      </div>
+    </label>
   );
 };
