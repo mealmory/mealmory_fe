@@ -3,15 +3,13 @@ import { IconType } from "@react-icons/all-files";
 import { BsFillBrightnessHighFill } from "@react-icons/all-files/bs/BsFillBrightnessHighFill";
 import { BsMoon } from "@react-icons/all-files/bs/BsMoon";
 import { BsCircleHalf } from "@react-icons/all-files/bs/BsCircleHalf";
-import { useState } from "react";
-
+import { useTheme } from "next-themes";
+type Theme = "light" | "dark" | "system";
 const ThemeController = () => {
-  const [curTheme, setCurTheme] = useState<"light" | "dark" | "system">(
-    "light"
-  );
+  const { theme, setTheme } = useTheme();
 
-  function handlThemeClick(type: typeof curTheme) {
-    setCurTheme(type);
+  function handlThemeClick(type: Theme) {
+    setTheme(type);
   }
   const icons = [
     {
@@ -43,9 +41,9 @@ const ThemeController = () => {
           <ThemeBtn
             key={props.name}
             {...props}
-            checked={type === curTheme}
+            checked={type === theme}
             handleClick={() => {
-              handlThemeClick(type as typeof curTheme);
+              handlThemeClick(type as Theme);
             }}
           />
         );
