@@ -1,7 +1,6 @@
 "use client";
-import { ReactNode, useMemo, useState } from "react";
-import { BsChevronLeft } from "@react-icons/all-files/bs/BsChevronLeft";
-import { BsChevronRight } from "@react-icons/all-files/bs/BsChevronRight";
+import { useMemo, useState } from "react";
+import Pagination from "./Pagination";
 interface TableProps {
   tHead: string;
   tclassName?: string;
@@ -84,60 +83,9 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
           )}
         </tbody>
       </table>
-      {pageLength && pageLength > 1 ? (
-        <div className="w-full flex items-center justify-center gap-2 border-t p-2">
-          <Button
-            disabled={page <= 1}
-            dot={<BsChevronLeft className="text-black" />}
-            handleButtonClick={() => handlePagenationClick(false)}
-          />
-          <ul className="flex gap-2">
-            {Array.from({ length: pageLength }, (_, i) => i + 1).map((num) => (
-              <li key={num}>
-                <Button
-                  className={
-                    "rounded-lg w-6 sm:block " +
-                    (num === page
-                      ? "text-white bg-cusorange font-bold block"
-                      : "hidden")
-                  }
-                  dot={num}
-                  handleButtonClick={() => setPage(num)}
-                />
-              </li>
-            ))}
-          </ul>
-          <Button
-            disabled={page === pageLength}
-            dot={<BsChevronRight className="text-black" />}
-            handleButtonClick={() => handlePagenationClick(true)}
-          />
-        </div>
-      ) : null}
+      <Pagination pageLength={pageLength} page={page} setPage={setPage} />
     </div>
   );
 };
 
 export default Table;
-
-const Button = ({
-  disabled,
-  dot,
-  handleButtonClick,
-  className,
-}: {
-  disabled?: boolean;
-  handleButtonClick: () => void;
-  dot: number | ReactNode;
-  className?: string;
-}) => {
-  return (
-    <button
-      className={"cursor-pointer disabled:invisible " + (className ?? "")}
-      disabled={disabled}
-      onClick={handleButtonClick}
-    >
-      {dot}
-    </button>
-  );
-};
