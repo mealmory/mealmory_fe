@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const notifications = Array.from({ length: 10 }, (_, i) => ({
   id: i,
@@ -8,6 +8,6 @@ const notifications = Array.from({ length: 10 }, (_, i) => ({
   date: "2024-04-12",
 }));
 
-export function GET() {
-  return NextResponse.json(notifications);
+export function GET(req: NextRequest) {
+  return NextResponse.json({ data: notifications });
 }
