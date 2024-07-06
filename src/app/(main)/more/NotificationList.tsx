@@ -1,6 +1,7 @@
 "use client";
 
 import Pagination from "@/components/main/Pagination";
+import { ApiResponse, fetchClient } from "@/utils/fetchClient";
 import { useEffect, useState } from "react";
 type Notice = { id: number; title: string; description: string; date: string };
 const VIEW_NOTICE_LENGTH = 5;
@@ -10,11 +11,9 @@ const NotificationList = () => {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/dummy/notice/search")
-      .then((res) => res.json())
-      .then((res) => {
-        setData(res);
-      });
+    fetchClient<Notice[]>("dummy/notice/search", {
+      method: "GET",
+    }).then((data) => setData(data.body.data));
   }, []);
 
   const noticeList = data?.slice(
