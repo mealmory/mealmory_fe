@@ -26,6 +26,7 @@ const NotificationList = () => {
 
   return (
     <div className="w-full flex flex-col items-center gap-2 py-3">
+      <p className="text-xl sm:text-2xl mb-2">공지사항</p>
       {!noticeList || noticeList.length < 1 ? (
         <div className="w-full rounded-xl shadow-border p-3 sm:p-6 flex justify-center items-center">
           <p>공지사항이 없습니다.</p>
@@ -37,7 +38,7 @@ const NotificationList = () => {
             className="w-full flex items-center justify-between rounded-xl shadow-border p-3 sm:p-6"
           >
             <div>
-              <p className="text-xl sm:text-2xl w-full">{title}</p>
+              <p className="text-lg sm:text-xl w-full">{title}</p>
               <p className="sm:text-sm text-xs block w-full max-w-[210px] text-ellipsis">
                 {description}
               </p>
