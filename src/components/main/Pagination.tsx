@@ -1,4 +1,3 @@
-import page from "@/app/page";
 import { BsChevronLeft } from "@react-icons/all-files/bs/BsChevronLeft";
 import { BsChevronRight } from "@react-icons/all-files/bs/BsChevronRight";
 import { Dispatch, ReactNode, SetStateAction } from "react";
@@ -24,7 +23,7 @@ const Pagination = ({ page, pageLength, setPage }: PaginationProps) => {
   return (
     <>
       {pageLength && pageLength > 1 ? (
-        <div className="w-full flex items-center justify-center gap-2 border-t p-2">
+        <div className="w-full flex items-center justify-center gap-2 p-2">
           <Button
             disabled={page <= 1}
             dot={<BsChevronLeft className="text-black" />}

@@ -71,6 +71,7 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
           )}
         </tbody>
       </table>
+      <div className="w-full border-b" />
       <Pagination pageLength={pageLength} page={page} setPage={setPage} />
     </div>
   );
