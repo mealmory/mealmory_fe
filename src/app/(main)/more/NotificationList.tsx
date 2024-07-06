@@ -1,7 +1,7 @@
 "use client";
 
 import Pagination from "@/components/main/Pagination";
-import { ApiResponse, fetchClient } from "@/utils/fetchClient";
+import { fetchClient } from "@/utils/fetchClient";
 import { useEffect, useState } from "react";
 type Notice = { id: number; title: string; description: string; date: string };
 const VIEW_NOTICE_LENGTH = 5;
