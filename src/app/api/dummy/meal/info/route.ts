@@ -6,6 +6,12 @@ const menuList = Array.from({ length: 4 }, () => ({
   calory: 12345,
   weight: 214,
   unit: 1,
+  cpfGraph: {
+    carbs: 214,
+    protein: 0,
+    fat: 0,
+    calory: 0,
+  },
 }));
 export function GET(req: NextApiRequest) {
   return NextResponse.json(
