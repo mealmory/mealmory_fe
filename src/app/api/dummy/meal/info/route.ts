@@ -10,7 +10,6 @@ const menuList = Array.from({ length: 4 }, () => ({
     carbs: 214,
     protein: 0,
     fat: 0,
-    calory: 0,
   },
 }));
 export function GET(req: NextApiRequest) {
