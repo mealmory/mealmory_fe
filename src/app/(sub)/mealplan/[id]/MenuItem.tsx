@@ -39,8 +39,8 @@ const MenuItem = ({
 
       <div
         className={
-          "w-full bg-white border-y p-5 flex flex-col gap-3 transition-[height] duration-300 ease-in-out overflow-hidden " +
-          (flip ? (last ? "border-y-0 p-0 h-0" : "p-0 h-0") : "")
+          "w-full bg-white border-y flex flex-col gap-3 transition-[height] duration-300 ease-in-out overflow-hidden " +
+          (flip ? (last ? "border-y-0 p-0 h-0" : "p-0 h-0") : "p-5")
         }
       >
         <p>칼로리 : {calory}</p>
