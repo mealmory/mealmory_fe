@@ -11,8 +11,9 @@ const MenuItem = ({
   unit,
   cpfGraph,
   last,
-}: MenuData & { last?: boolean }) => {
-  const [flip, setFlip] = useState(true);
+  first,
+}: MenuData & { last?: boolean; first?: boolean }) => {
+  const [flip, setFlip] = useState(first ? false : true);
 
   function translationCdfTitle(key: "carbs" | "protein" | "fat") {
     switch (key) {
