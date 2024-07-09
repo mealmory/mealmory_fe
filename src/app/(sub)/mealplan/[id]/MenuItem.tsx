@@ -27,8 +27,8 @@ const MenuItem = ({
   }
   return (
     <div className="">
-      <label className={"w-full flex items-center justify-between p-3 "}>
-        <p>{menu}</p>
+      <label className={"w-full flex items-center justify-between p-4 "}>
+        <p className="pl-2 font-semibold">{menu}</p>
         <input type="checkbox" className="hidden" />
         <HiChevronRight
           className={!flip ? "rotate-90" : ""}
@@ -39,7 +39,7 @@ const MenuItem = ({
 
       <div
         className={
-          "w-full bg-white border-y flex flex-col gap-3 transition-[height] duration-300 ease-in-out overflow-hidden " +
+          "w-full bg-white border-y flex flex-col gap-3 overflow-hidden " +
           (flip ? (last ? "border-y-0 p-0 h-0" : "p-0 h-0") : "p-5")
         }
       >
