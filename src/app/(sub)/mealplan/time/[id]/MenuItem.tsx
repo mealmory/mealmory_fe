@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import FlipItem from "../../FlipItem";
 import { MenuData } from "./page";
-import { HiChevronRight } from "@react-icons/all-files/hi/HiChevronRight";
 
 const MenuItem = ({
   menu,
@@ -13,8 +12,6 @@ const MenuItem = ({
   last,
   first,
 }: MenuData & { last?: boolean; first?: boolean }) => {
-  const [flip, setFlip] = useState(first ? false : true);
-
   function translationCdfTitle(key: "carbs" | "protein" | "fat") {
     switch (key) {
       case "carbs":
@@ -26,26 +23,11 @@ const MenuItem = ({
     }
   }
   return (
-    <div className="">
-      <label className={"w-full flex items-center justify-between p-4 "}>
-        <p className="pl-2 font-semibold">{menu}</p>
-        <input type="checkbox" className="hidden" />
-        <HiChevronRight
-          className={!flip ? "rotate-90" : ""}
-          size={30}
-          onClick={() => setFlip((prev) => !prev)}
-        />
-      </label>
-
-      <div
-        className={
-          "w-full bg-white border-y flex flex-col gap-3 overflow-hidden " +
-          (flip ? (last ? "border-y-0 p-0 h-0" : "p-0 h-0") : "p-5")
-        }
-      >
-        <p>칼로리 : {calory}</p>
+    <FlipItem title={menu} last={last} first={first}>
+      <>
+        <p>칼로리 : {calory.toLocaleString()} kcal</p>
         <p>
-          섭취량 : {weight}
+          섭취량 : {weight.toLocaleString()}
           {unit === 0 ? "g" : "ml"}
         </p>
         {cpfGraph && (
@@ -66,8 +48,8 @@ const MenuItem = ({
             </table>
           </div>
         )}
-      </div>
-    </div>
+      </>
+    </FlipItem>
   );
 };
 
