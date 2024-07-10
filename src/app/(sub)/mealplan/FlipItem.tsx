@@ -32,8 +32,8 @@ const FlipItem = ({
 
       <div
         className={
-          "w-full bg-white border-y flex flex-col gap-3 overflow-hidden " +
-          (flip ? (last ? "border-y-0 p-0 h-0" : "p-0 h-0") : "p-5")
+          "w-full bg-white border-y overflow-hidden " +
+          (flip ? (last ? "border-y-0 h-0" : " h-0") : "")
         }
       >
         {children}

@@ -24,11 +24,11 @@ const MenuItem = ({
   }
   return (
     <FlipItem title={menu} last={last} first={first}>
-      <>
+      <div className="flex flex-col gap-3 p-5">
         <p>칼로리 : {calory.toLocaleString()} kcal</p>
         <p>
           섭취량 : {weight.toLocaleString()}
-          {unit === 0 ? "g" : "ml"}
+          {unit === 0 ? "ml" : "g"}
         </p>
         {cpfGraph && (
           <div className="rounded-xl shadow-border overflow-hidden">
@@ -48,7 +48,7 @@ const MenuItem = ({
             </table>
           </div>
         )}
-      </>
+      </div>
     </FlipItem>
   );
 };
