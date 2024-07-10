@@ -13,6 +13,7 @@ export default function SubHeader() {
       if (segments[1] === "edit") return "식단 수정";
       return "식단 상세";
     }
+    if (segments[0] === "notice") return "공지 사항";
     return "title 미정";
   })();
 
