@@ -33,7 +33,7 @@ export default function Profile() {
   });
   const btnClass = "shadow-border p-3 ";
   return (
-    <div className="w-full min-h-screen h-max max-w-[360px] mx-auto flex flex-col justify-center gap-4">
+    <div className="w-full min-h-screen h-max max-w-[360px] mx-auto flex flex-col justify-center p-1 gap-4">
       <UserProfileInfo
         profileData={{ email: data.email, image: data.profile }}
       />
