@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Jua } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
-const inter = Inter({ subsets: ["latin"] });
+const jua = Jua({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--jua",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "MealMory",
@@ -19,7 +24,7 @@ export default function RootLayout({
     <html lang="ko" suppressHydrationWarning>
       <body
         className={
-          inter.className +
+          jua.className +
           " overscroll-none overflow-y-scroll min-h-screen w-screen max-w-[2560px] mx-auto"
         }
       >
