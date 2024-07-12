@@ -10,13 +10,13 @@
 
   --background: rgb(var(--white-rgb));
   --foreground: rgb(var(--foreground-black));
-  --poinvalue: rgb(var(var(--black-rgb)))
+  --poinvalue: rgb(var(--black-rgb))
 }
 
 .dark {
   --background: rgb(var(--black-rgb));
   --foreground: rgb(var(--foreground-white));  
-  --poinvalue: rgb(var(var(--white-rgb)))
+  --poinvalue: rgb(var(--white-rgb))
 }
   
 body {
@@ -24,7 +24,7 @@ body {
   background:var(--background);
 }
 
-.value {
+.point-value {
   color: var(--poinvalue);
 }
 
