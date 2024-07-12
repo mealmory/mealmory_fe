@@ -1,6 +1,18 @@
 import Link from "next/link";
 import FlipItem from "../../FlipItem";
-
+type MealPlanOfDay = Array<{
+  type: string;
+  date: string;
+  total: number;
+  id: number;
+  cpfData?: { carbs: number; protein: number; fat: number };
+  menuList: Array<{
+    menu: string;
+    calory: number;
+    weight: number;
+    unit: number;
+  }>;
+}>;
 export default function MealPlanOfDay({ params }: { params: { id: string } }) {
   const { id } = params;
   const data = Array.from({ length: 5 }, (_, i) => ({
