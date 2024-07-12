@@ -5,19 +5,27 @@
 :root {
   --black-rgb: 90, 90, 90;
   --white-rgb: 255, 255, 255;
-    
+  --foreground-white: 209, 213, 219;
+  --foreground-black: 107, 114, 128;
+
   --background: rgb(var(--white-rgb));
-  --foreground: rgb(var(--black-rgb));
+  --foreground: rgb(var(--foreground-black));
+  --poinvalue: rgb(var(var(--black-rgb)))
 }
-  
+
 .dark {
   --background: rgb(var(--black-rgb));
-  --foreground: rgb(var(--white-rgb));  
+  --foreground: rgb(var(--foreground-white));  
+  --poinvalue: rgb(var(var(--white-rgb)))
 }
   
 body {
   color: var(--foreground);
   background:var(--background);
+}
+
+.value {
+  color: var(--poinvalue);
 }
 
 @layer utilities {
