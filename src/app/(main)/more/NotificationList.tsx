@@ -37,7 +37,7 @@ const NotificationList = () => {
             className="w-full flex items-center justify-between rounded-xl shadow-border p-3 sm:p-6"
           >
             <div>
-              <p className="text-lg sm:text-xl w-full">{title}</p>
+              <p className="text-lg sm:text-xl w-full point-value">{title}</p>
               <p className="sm:text-sm text-xs block w-full max-w-[210px] text-ellipsis">
                 {description}
               </p>

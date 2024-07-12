@@ -89,11 +89,11 @@ const AvgCardList = <T extends {}>({
       {Object.keys(avgTitles).map((key) => {
         const target = key as keyof typeof avgTitles;
         let value = avgDatas[target].toLocaleString();
-        let valueClass = "";
+        let valueClass = "point-value";
         if (target === "bmi") {
           const { text, status } = checkBmi(avgDatas[target]);
           value += ` | ${text}`;
-          valueClass +=
+          valueClass =
             status === "less"
               ? "text-bmiLess"
               : status === "safe"
@@ -102,7 +102,7 @@ const AvgCardList = <T extends {}>({
               ? "text-bmiWraning"
               : status === "danger"
               ? "text-bmiDanger"
-              : "text-black";
+              : "point-value";
         } else if (target === "bmr") {
           value += " kcal";
         } else if (target === "weight") {
@@ -114,7 +114,7 @@ const AvgCardList = <T extends {}>({
             label={avgTitles[target] as string}
             value={value}
             className="basis-36 flex-grow flex-shrink-0 flex-col p-2 h-40 gap-3 justify-center items-center rounded-xl"
-            valueClass={`font-semibold ${valueClass}`}
+            valueClass={valueClass}
           />
         );
       })}
@@ -149,14 +149,15 @@ const CaloryBar = ({
         )}
         <span
           className={
-            isAmr
-              ? "sm:absolute sm:right-2 sm:-top-5"
+            "point-value" +
+            (isAmr
+              ? " sm:absolute sm:right-2 sm:-top-5"
               : percent < 50
               ? " absolute -right-1 top-1/2 translate-x-full -translate-y-1/2 "
-              : ""
+              : "")
           }
         >
-          {calory.toLocaleString()}
+          {calory.toLocaleString()} kcal
         </span>
       </div>
     </div>
