@@ -1,15 +1,19 @@
 "use client";
 
 import { HiChevronRight } from "@react-icons/all-files/hi/HiChevronRight";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const Selector = ({
   className,
+  titleClass,
   options,
   value,
   handleClick,
+  optionsClassName,
 }: {
-  className: string;
+  className?: string;
+  titleClass?: string;
+  optionsClassName?: string;
   options: Array<{ name: string; optionValue: number | string }>;
   value: number | string;
   handleClick: (value: number | string) => void;
@@ -41,14 +45,11 @@ const Selector = ({
     };
   }, [flip, options]);
   return (
-    <div
-      className={
-        "relative shadow-border rounded-lg py-2 px-3 dark:bg-black " +
-        (className ?? "")
-      }
-    >
+    <div className={"relative " + (className ?? "")}>
       <button
-        className="flex items-center justify-between w-full"
+        className={
+          "flex items-center justify-between w-full " + (titleClass ?? "")
+        }
         onClick={() => setFlip((prev) => !prev)}
         ref={(el) => {
           optionRefs.current[0] = el;
@@ -58,7 +59,12 @@ const Selector = ({
         <HiChevronRight className="rotate-90" size={30} />
       </button>
       {!flip && (
-        <ul className="rounded-lg overflow-hidden absolute -bottom-1 left-0 translate-y-full w-full border">
+        <ul
+          className={
+            "rounded-lg absolute -bottom-1 left-0 translate-y-full w-full border bg-white dark:bg-cusdark " +
+            (optionsClassName ?? "overflow-hidden")
+          }
+        >
           {options.map(({ name, optionValue }, i) => (
             <li
               key={optionValue}
