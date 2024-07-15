@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Selector from "../Selector";
-import { getDaysInMonth } from "@/utils/calendarFns";
+import { formattedNumber, getDaysInMonth } from "@/utils/calendarFns";
+import TimeDropdown from "./TimeDropdown";
 
 interface CalendarProps {
   min?: Date;
@@ -10,6 +11,7 @@ interface CalendarProps {
   endDate: Date;
   startDate?: Date;
   handleDateChange: (target: Date) => void;
+  timeSelect?: boolean;
 }
 const WEEK_NAMES = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -19,6 +21,7 @@ const Calendar = ({
   endDate,
   handleDateChange,
   startDate,
+  timeSelect,
 }: CalendarProps) => {
   const maxDate = max ?? new Date();
   const minDate = min ?? new Date("2023-3-14");
@@ -28,7 +31,6 @@ const Calendar = ({
   const [currentMonth, setCurrentMonth] = useState(
     endDate.getMonth() + 1 || maxDate.getMonth() + 1
   );
-
   function handlePrevMonth() {
     if (currentMonth === 1) {
       setCurrentYear(currentYear - 1);
@@ -49,7 +51,7 @@ const Calendar = ({
 
   function handleYearMonthClick(isYearClick: boolean) {
     if (isYearClick) {
-      return (value: number | string) => {
+      return (value: number) => {
         const minMonth = minDate.getMonth() + 1,
           maxMonth = maxDate.getMonth() + 1;
 
@@ -58,11 +60,11 @@ const Calendar = ({
         } else if (value === minDate.getFullYear() && currentMonth < minMonth) {
           setCurrentMonth(minMonth);
         }
-        typeof value === "number" && setCurrentYear(value);
+        setCurrentYear(value);
       };
     }
-    return (value: number | string) => {
-      typeof value === "number" && setCurrentMonth(value);
+    return (value: number) => {
+      setCurrentMonth(value);
     };
   }
 
@@ -101,7 +103,7 @@ const Calendar = ({
       key: "month",
       value: currentMonth,
       options: months.map((month) => ({
-        name: month < 10 ? `0${month}` : String(month),
+        name: formattedNumber(month),
         optionValue: month,
       })),
       handleClick: handleYearMonthClick(false),
@@ -142,7 +144,7 @@ const Calendar = ({
     };
   }
   return (
-    <div className="w-full max-w-md mx-auto rounded-lg shadow-border p-4 text-gray-500 dark:text-white">
+    <div className="w-full max-w-md mx-auto p-4 text-gray-500 dark:text-white">
       <div className="flex justify-between items-center mb-4">
         <ArrowButton
           handleClick={handlePrevMonth}
@@ -169,7 +171,7 @@ const Calendar = ({
                     key={key}
                     titleClass="text-lg text-cusorange"
                     optionsClassName="max-h-40 overflow-y-scroll"
-                    value={value as number | string}
+                    value={value}
                     options={options}
                     handleClick={handleClick}
                   />
@@ -186,7 +188,7 @@ const Calendar = ({
           isNext={true}
         />
       </div>
-      <div className="grid grid-cols-7 gap-1">
+      <div className={"grid grid-cols-7 gap-1 " + (timeSelect ? "mb-2" : "")}>
         {WEEK_NAMES.map((day) => (
           <div key={day} className="text-center font-bold ">
             {day}
@@ -220,6 +222,12 @@ const Calendar = ({
           );
         })}
       </div>
+      {timeSelect && (
+        <TimeDropdown
+          currentDate={endDate}
+          handleDateChange={handleDateChange}
+        />
+      )}
     </div>
   );
 };
