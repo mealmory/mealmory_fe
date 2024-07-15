@@ -17,3 +17,7 @@ export const getDaysInMonth = (year: number, month: number) => {
     31,
   ][month - 1];
 };
+
+export const formattedNumber = (num: number) => {
+  return num < 10 ? `0${num}` : String(num);
+};
