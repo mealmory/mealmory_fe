@@ -14,14 +14,14 @@ const Selector = ({
   className?: string;
   titleClass?: string;
   optionsClassName?: string;
-  options: Array<{ name: string; optionValue: number | string }>;
+  options: Array<{ name: string; optionValue: number }>;
   value: number | string;
-  handleClick: (value: number | string) => void;
+  handleClick: (value: number) => void;
 }) => {
   const [flip, setFlip] = useState(true);
   const optionRefs = useRef<(HTMLElement | null)[]>([]);
   const selectedOption = options.find((option) => option.optionValue === value);
-  const handleOptionClick = (value: number | string) => {
+  const handleOptionClick = (value: number) => {
     handleClick(value);
     setFlip(true);
   };
