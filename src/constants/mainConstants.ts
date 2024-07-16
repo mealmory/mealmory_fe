@@ -13,3 +13,13 @@ export const MAIN_LABELS = {
     bmr: "나의 기초대사량",
   },
 };
+
+export const MEAL_ITEM_TITLE = {
+  menu: "메뉴",
+  weight: "중량",
+  calory: "칼로리",
+  carbs: "탄수화물",
+  protein: "단백질",
+  fat: "지방",
+  total: "총 칼로리",
+};
