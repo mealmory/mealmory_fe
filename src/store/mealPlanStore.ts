@@ -37,15 +37,18 @@ const useMealPlanStore = create<MealPlanStoreType>((set) => ({
         {
           id: uuid(),
           type: type,
-          menu: "밥",
-          calory: 300,
-          weight: 210,
+          menu: "",
+          calory: 0,
+          weight: 0,
           unit: 1,
-          cpfData: {
-            carbs: 100,
-            protein: 0,
-            fat: 0,
-          },
+          cpfData:
+            type === "search"
+              ? {
+                  carbs: 0,
+                  protein: 0,
+                  fat: 0,
+                }
+              : undefined,
         },
       ],
     }));
