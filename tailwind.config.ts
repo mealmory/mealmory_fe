@@ -29,6 +29,9 @@ const config: Config = {
         bmiWarning: "rgb(201, 113, 30)",
         bmiDanger: "rgb(194, 50, 33)",
       },
+      gridTemplateColumns: {
+        80: "repeat(4, minmax(80px, 1fr))",
+      },
     },
   },
   plugins: [],
