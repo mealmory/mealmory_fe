@@ -5,6 +5,7 @@ import Selector from "@/components/Selector";
 import useMealPlanStore from "@/store/mealPlanStore";
 import MealPlanItem from "./MealPlanItem";
 import { MEAL_ITEM_TITLE } from "@/constants/mainConstants";
+import { useRouter } from "next/navigation";
 
 interface MenuDTO {
   menu: string;
@@ -35,10 +36,9 @@ const MEAL_TYPES = [
 
 export default function MealAddPage() {
   const [selectedType, setSelectedType] = useState(0);
-  const [openCalender, setOpenCalender] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const { mealPlanList, addMeal } = useMealPlanStore();
-
+  const router = useRouter();
   const totalCalory =
     mealPlanList.length > 0 &&
     mealPlanList.map((meal) => meal?.calory).reduce((a, b) => a && b && a + b);
@@ -47,7 +47,7 @@ export default function MealAddPage() {
       <div className="flex flex-col-reverse sm:flex-row items-center gap-3 sm:gap-8 w-[96%] mx-auto sm:w-full sm:mx-0">
         {/* meal type , datepicker */}
         <Selector
-          className="flex-1 w-full shadow-border rounded-xl p-3 dark:bg-black z-10"
+          className="flex-1 w-full shadow-border rounded-xl p-3 dark:bg-black"
           options={[{ name: "식사 종류", optionValue: 0 }, ...MEAL_TYPES]}
           value={selectedType}
           handleClick={(value: number | string) =>
@@ -56,19 +56,10 @@ export default function MealAddPage() {
         />
         <button
           className="flex-1 shadow-border p-4 w-full"
-          onClick={() => setOpenCalender((prev) => !prev)}
           suppressHydrationWarning
         >
           {selectedDate.toLocaleString()}
         </button>
-        {/* <div className="w-[360px] rounded-xl shadow-border ">
-          <Calendar
-            endDate={selectedDate}
-            startDate={startDate}
-            handleDateChange={(day) => setSelectedDate(day)}
-            timeSelect
-          />
-        </div> */}
       </div>
       <div className="my-5">
         {/* menu, weight, unit, calory input */}
@@ -88,7 +79,9 @@ export default function MealAddPage() {
       <div className="w-full max-w-96 mx-auto flex flex-col gap-5">
         <button
           className="w-full border-2 border-cusorange text-cusorange p-2"
-          onClick={() => addMeal("self")}
+          onClick={() =>
+            router.push("/mealplan/add/category", { scroll: false })
+          }
         >
           메뉴 추가하기
         </button>
