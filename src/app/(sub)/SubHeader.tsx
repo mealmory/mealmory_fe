@@ -16,17 +16,21 @@ export default function SubHeader() {
     if (segments[0] === "notice") return "공지 사항";
     return "title 미정";
   })();
-
+  const isShow = segments.at(-1) !== "division";
   return (
-    <header className="absolute left-0 top-0 w-full z-10">
-      <div className="relative w-full h-max p-3 text-2xl sm:text-xl">
-        <HiChevronLeft
-          size={40}
-          className="absolute left-0 top-1/2 -translate-y-1/2 translate-x-3 z-10"
-          onClick={() => router.back()}
-        />
-        <p className="w-full text-center">{title}</p>
-      </div>
-    </header>
+    <>
+      {isShow ? (
+        <header className="absolute left-0 top-0 w-full z-10">
+          <div className="relative w-full h-max p-3 text-2xl sm:text-xl">
+            <HiChevronLeft
+              size={40}
+              className="absolute left-0 top-1/2 -translate-y-1/2 translate-x-3 z-10"
+              onClick={() => router.back()}
+            />
+            <p className="w-full text-center">{title}</p>
+          </div>
+        </header>
+      ) : null}
+    </>
   );
 }
