@@ -12,7 +12,7 @@ const Modal = ({ children }: { children: ReactNode }) => {
       onClick={() => router.back()}
     >
       <div
-        className="w-full h-full md:w-[360px] sm:h-[680px] overflow-y-scroll bg-white dark:bg-cusdark sm:rounded-2xl"
+        className="w-full h-full md:w-[360px] sm:h-[680px] overflow-hidden bg-white dark:bg-cusdark sm:rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {children}
