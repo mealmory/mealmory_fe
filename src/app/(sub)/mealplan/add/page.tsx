@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Selector from "@/components/Selector";
 import useMealPlanStore from "@/store/mealPlanStore";
 import MealPlanItem from "./MealPlanItem";
@@ -80,7 +80,7 @@ export default function MealAddPage() {
         <button
           className="w-full border-2 border-cusorange text-cusorange p-2"
           onClick={() =>
-            router.push("/mealplan/add/category", { scroll: false })
+            router.push("/mealplan/add/division", { scroll: false })
           }
         >
           메뉴 추가하기
