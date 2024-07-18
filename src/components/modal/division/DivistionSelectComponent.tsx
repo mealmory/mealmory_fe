@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import useMenuRegion, { MenuRegion } from "@/store/menuRegionStore";
 import { useEffect } from "react";
 import { CATEGORY_ITEMS } from "@/constants/mainConstants";
+import MenuSearchField from "./MenuSearchField";
 const DIVISION = [
   { did: 1, name: "가공 식품" },
   { did: 2, name: "가정식" },
@@ -38,7 +39,7 @@ const DivisionSelectComponent = () => {
     }
   }
   return (
-    <>
+    <div className="w-full h-full flex flex-col items-center">
       <CategoryModalHeader
         handlePrevClick={handlePrevClick}
         menuRegion={menuRegion}
@@ -48,13 +49,15 @@ const DivisionSelectComponent = () => {
         <DivisionField
           handleClickDivision={(did) => setMenuRegion("division", did)}
         />
-      ) : (
+      ) : menuRegion.category === 0 ? (
         <CategoryField
           regionKey={regionKey}
           handleClickCategory={(id) => setMenuRegion("category", id)}
         />
+      ) : (
+        <MenuSearchField />
       )}
-    </>
+    </div>
   );
 };
 
