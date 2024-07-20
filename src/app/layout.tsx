@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Jua } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import KakaoScript from "./KakaoScript";
 
 const jua = Jua({
   subsets: ["latin"],
@@ -29,6 +30,7 @@ export default function RootLayout({
         }
       >
         <ThemeProvider>{children}</ThemeProvider>
+        <KakaoScript />
       </body>
     </html>
   );
