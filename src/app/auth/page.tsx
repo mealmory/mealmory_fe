@@ -1,5 +1,9 @@
+"use client";
+
 import Image from "next/image";
-import Link from "next/link";
+
+const redirectUri = process.env.NEXT_PUBLIC_KAKAO_REDIRECT;
+const scope = ["profile_nickname", "profile_image"].join(",");
 
 export default function Login() {
   return (
@@ -7,36 +11,34 @@ export default function Login() {
       <Image
         src="/mealmory_logo.svg"
         alt="밀모리 로고"
-        width={200}
-        height={100}
-        className=" mb-5"
+        width={0}
+        height={0}
+        className=" mb-5 w-[200px] h-[200px]"
+        priority
       />
       <h1 className=" text-4xl">MealMory</h1>
       <h2 className=" text-xl">식사의 추억</h2>
-      <Link
-        href={"/auth/consent"}
+      <button
         className="flex gap-2 rounded-xl bg-[#FEE500] text-[rgba(0,0,0,0.85)] p-3 items-center active:bg-[rgb(233,216,66)] mt-5"
+        onClick={() => {
+          window.Kakao &&
+            window.Kakao.Auth.authorize({
+              redirectUri,
+              scope,
+            });
+        }}
       >
         <Image
           src={"/kakaoSymbol.svg"}
-          width={20}
-          height={20}
+          width={0}
+          height={0}
+          className="w-5 h-5"
           alt="카카오 로고"
           color="#000000"
+          priority
         />
         카카오톡 로그인
-        {/* 임시 레이아웃 용 */}
-      </Link>
-      {/* <button className="flex gap-2 rounded-xl bg-[#FEE500] text-[rgba(0,0,0,0.85)] p-3 items-center active:bg-[rgb(233,216,66)] mt-5">
-        <Image
-          src={"/kakaoSymbol.svg"}
-          width={20}
-          height={20}
-          alt="카카오 로고"
-          color="#000000"
-        />
-        카카오톡 로그인
-      </button> */}
+      </button>
     </div>
   );
 }
