@@ -1,15 +1,24 @@
 "use client";
 
 import Script from "next/script";
+import { useEffect } from "react";
 
 declare global {
   interface Window {
     Kakao: any;
   }
-  type Kakao = any;
 }
 
 const KakaoScript = () => {
+  useEffect(() => {
+    if (window) {
+      if (window.Kakao && !window.Kakao.isInitialized()) {
+        setTimeout(() => {
+          window.Kakao.init(process.env.NEXT_PUBLIC_JS_SDK_KEY);
+        }, 500);
+      }
+    }
+  }, [window.Kakao]);
   const onLoad = () => {
     setTimeout(() => {
       window.Kakao.init(process.env.NEXT_PUBLIC_JS_SDK_KEY);
