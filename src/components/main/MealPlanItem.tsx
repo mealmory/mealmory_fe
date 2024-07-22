@@ -5,6 +5,7 @@ import useMealPlanStore, {
 } from "@/store/mealPlanStore";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { BsX } from "@react-icons/all-files/bs/BsX";
+import { useRouter } from "next/navigation";
 
 const MealPlanItem = ({
   data,
@@ -17,7 +18,7 @@ const MealPlanItem = ({
 }) => {
   const { setMeal, addCPF, deleteCPF, deleteMeal } = useMealPlanStore();
   const { id, menu, weight, calory, cpfData, type, unit } = data;
-
+  const router = useRouter();
   function handleChangeValue(
     key: keyof MealType,
     value: string | number | { carbs: number; protein: number; fat: number }
@@ -45,19 +46,24 @@ const MealPlanItem = ({
         {/* search: button | self : input */}
         <div className="w-full flex items-center justify-between rounded-xl shadow-border bg-white dark:bg-cusdark p-3 gap-5">
           <p>{MEAL_ITEM_TITLE.menu} :</p>
-          {type === "search" ? (
-            <div className="flex-1 flex items-center justify-between point-value">
-              <p>{menu}</p>
-              <BsSearch />
-            </div>
-          ) : (
-            <input
-              className="flex-1 outline-none border-b border-black dark:border-gray-500 "
-              type="text"
-              value={menu}
-              onChange={(e) => handleChangeValue("menu", e.target.value)}
-            />
-          )}
+          <div className="flex-1 flex items-center justify-between point-value px-3 gap-3">
+            {type === "search" ? (
+              <p
+                className="flex-1"
+                onClick={() => router.push("/mealplan/add/division")}
+              >
+                {menu}
+              </p>
+            ) : (
+              <input
+                className="flex-1 outline-none border-b border-black dark:border-gray-500 "
+                type="text"
+                value={menu}
+                onChange={(e) => handleChangeValue("menu", e.target.value)}
+              />
+            )}
+            <BsSearch onClick={() => router.push("/mealplan/add/division")} />
+          </div>
         </div>
         <div className="w-full rounded-xl shadow-border bg-white dark:bg-cusdark p-3 my-4">
           <div className="w-full flex items-center justify-between gap-5 mb-3">
@@ -101,9 +107,21 @@ const MealPlanItem = ({
             </button>
           )}
         </div>
-        <p className="text-center">
-          {MEAL_ITEM_TITLE.calory}: {calory.toLocaleString()} kcal
-        </p>
+        {type === "search" ? (
+          <p className="text-center">
+            {MEAL_ITEM_TITLE.calory}: {calory.toLocaleString()} kcal
+          </p>
+        ) : (
+          <div className="flex items-center justify-center gap-2">
+            <input
+              className="p-3 shadow-border rounded-2xl"
+              type="number"
+              value={calory}
+              onChange={(e) => handleChangeValue("calory", e.target.value)}
+            />
+            <p>kcal</p>
+          </div>
+        )}
       </div>
     </div>
   );
