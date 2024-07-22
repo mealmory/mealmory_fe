@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { v4 as uuid } from "uuid";
+import { MenuDTO } from "@/components/main/MealplanForm";
 export interface MealType {
   id: string;
   type: MealItemType;
@@ -21,7 +22,7 @@ interface MealPlanStoreType {
   addMeal: (type: MealItemType) => void;
   setMeal: (newMeal: MealType) => void;
   deleteMeal: (id: string) => void;
-  editStart: (mealList: Array<MealType>) => void;
+  editStart: (mealList: Array<MenuDTO>) => void;
   addCPF: (id: string) => void;
   deleteCPF: (id: string) => void;
 }
@@ -29,7 +30,14 @@ interface MealPlanStoreType {
 const useMealPlanStore = create<MealPlanStoreType>((set) => ({
   mealPlanList: [],
   reset: () => set({ mealPlanList: [] }),
-  editStart: (mealList) => set({ mealPlanList: mealList }),
+  editStart: (mealList) => {
+    const newList = mealList.map((item) => ({
+      ...item,
+      type: "self" as MealItemType,
+      id: uuid(),
+    }));
+    set({ mealPlanList: newList });
+  },
   addMeal: (type) => {
     set((state) => ({
       mealPlanList: [
