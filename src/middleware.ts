@@ -5,7 +5,7 @@ export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   reqHeaders.set("x-pathname", pathname);
   if (pathname === "/") {
-    if (req.cookies.get("mact")) {
+    if (req.cookies.get("act")) {
       return NextResponse.redirect(new URL("/home", req.url));
     } else {
       return NextResponse.redirect(new URL("/auth", req.url));
