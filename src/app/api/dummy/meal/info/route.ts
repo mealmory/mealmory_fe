@@ -6,7 +6,7 @@ const menuList = Array.from({ length: 4 }, () => ({
   calory: 12345,
   weight: 214,
   unit: 1,
-  cpfGraph: {
+  cpfData: {
     carbs: 214,
     protein: 0,
     fat: 0,
