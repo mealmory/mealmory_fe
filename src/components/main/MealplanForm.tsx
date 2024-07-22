@@ -5,11 +5,13 @@ import Selector from "@/components/Selector";
 import useMealPlanStore from "@/store/mealPlanStore";
 
 import { MEAL_ITEM_TITLE } from "@/constants/mainConstants";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import useDate from "@/store/selectDateStore";
-import MealPlanItem from "@/app/(sub)/mealplan/add/MealPlanItem";
+import MealPlanItem from "@/components/main/MealPlanItem";
+import { fetchClient } from "@/utils/fetchClient";
+import { MenuTypeStrToNum } from "@/utils/mealplanFns";
 
-interface MenuDTO {
+export interface MenuDTO {
   menu: string;
   calory: number;
   weight: number;
@@ -22,8 +24,15 @@ interface MenuDTO {
 }
 
 interface MealDTO {
-  time: string;
+  date: string;
   type: 1 | 2 | 3 | 4 | 5;
+  total: number;
+  menuList: Array<MenuDTO>;
+}
+
+interface MealInfoType {
+  type: "아침" | "점심" | "져녁" | "야식" | "간식";
+  date: string;
   total: number;
   menuList: Array<MenuDTO>;
 }
@@ -46,15 +55,23 @@ export default function MealplanForm({
   setSelectedType: Dispatch<SetStateAction<number>>;
 }) {
   const { mealPlanList, editStart, reset } = useMealPlanStore();
-  const { selectedDate, init } = useDate();
+  const { selectedDate, init, changeDate } = useDate();
   const router = useRouter();
   const totalCalory =
     mealPlanList.length > 0 &&
     mealPlanList.map((meal) => meal?.calory).reduce((a, b) => a && b && a + b);
-
+  const pathname = usePathname();
   useEffect(() => {
     if (edit) {
       // fetch response setState
+      const id = pathname.split("/").at(-1);
+      fetchClient<MealInfoType>(`dummy/meal/info?id=${id}`)
+        .then((res) => res.body.data)
+        .then((data) => {
+          setSelectedType(MenuTypeStrToNum(data.type));
+          editStart(data.menuList);
+          changeDate(new Date(data.date));
+        });
     }
     return () => {
       init();
