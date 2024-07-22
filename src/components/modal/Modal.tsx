@@ -3,7 +3,13 @@
 import { useRouter } from "next/navigation";
 import { ReactNode } from "react";
 
-const Modal = ({ children }: { children: ReactNode }) => {
+const Modal = ({
+  children,
+  maxContent,
+}: {
+  children: ReactNode;
+  maxContent?: boolean;
+}) => {
   const router = useRouter();
 
   return (
@@ -12,7 +18,10 @@ const Modal = ({ children }: { children: ReactNode }) => {
       onClick={() => router.back()}
     >
       <div
-        className="w-full h-full md:w-[360px] sm:h-[680px] overflow-hidden bg-white dark:bg-cusdark sm:rounded-2xl"
+        className={
+          "w-full h-full md:w-[360px] overflow-hidden bg-white dark:bg-cusdark sm:rounded-2xl " +
+          (maxContent ? "sm:max-h-[680px] sm:h-max" : "sm:h-[680px]")
+        }
         onClick={(e) => e.stopPropagation()}
       >
         {children}
