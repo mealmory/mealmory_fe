@@ -1,5 +1,6 @@
 "use client";
 
+import { questionAlert } from "@/utils/alertFns";
 import { useRouter } from "next/navigation";
 
 const DetailController = ({
@@ -22,8 +23,16 @@ const DetailController = ({
       <Button
         name="삭제"
         handler={() => {
-          // fetch delete
-          router.back();
+          questionAlert({
+            afterEffect: () => {
+              router.back();
+            },
+            title: "식단을 삭제하시겠습니까?",
+            text: "삭제된 식단은 다시 복구할 수 없습니다.",
+            confirmText: "삭제",
+            successText: "식단이 삭제되었습니다.",
+            successTitle: "삭제 완료",
+          });
         }}
       />
     </div>
