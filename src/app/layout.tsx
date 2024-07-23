@@ -18,18 +18,23 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html lang="ko" suppressHydrationWarning>
       <body
         className={
           jua.className +
-          " overscroll-none overflow-y-scroll min-h-screen w-screen max-w-[2560px] mx-auto"
+          " overscroll-none overflow-y-scroll min-h-screen w-screen max-w-[2560px] mx-auto relative"
         }
       >
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          {children}
+          {modal}
+        </ThemeProvider>
         <KakaoScript />
       </body>
     </html>
