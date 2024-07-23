@@ -1,11 +1,11 @@
 "use client";
 
 import Navigator from "@/components/main/Navigator";
-import usePath from "@/hooks/usePath";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
-  const { pathname, isShow } = usePath();
-  return isShow ? (
+  const pathname = usePathname();
+  return (
     <footer className="sm:hidden fixed bottom-0 left-0 w-full z-10 bg-white dark:bg-cusdark p-1">
       <Navigator
         pathname={pathname}
@@ -15,5 +15,5 @@ export default function Footer() {
         iconSize={28}
       />
     </footer>
-  ) : null;
+  );
 }

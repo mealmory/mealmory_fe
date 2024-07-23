@@ -1,11 +1,11 @@
 "use client";
 import Navigator from "@/components/main/Navigator";
-import usePath from "@/hooks/usePath";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
-  const { pathname, isShow } = usePath();
-  return isShow ? (
+  const pathname = usePathname();
+  return (
     <header className="sm:h-screen h-max sm:w-40 w-full fixed top-0 left-0 bg-white dark:bg-cusdark z-10 flex flex-col sm:p-4 p-1 sm:shadow-border justify-center sm:justify-start gap-4">
       <div className=" self-center flex items-center gap-1">
         <Image
@@ -25,5 +25,5 @@ export default function Header() {
         itemClass="flex gap-1 items-center"
       />
     </header>
-  ) : null;
+  );
 }
