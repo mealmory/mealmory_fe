@@ -1,29 +1,36 @@
 "use client";
 import { useMemo, useState } from "react";
 import Pagination from "./Pagination";
+import { useRouter } from "next/navigation";
 interface TableProps {
   tHead: string;
   tclassName?: string;
-  tDataList: { [key: string]: number };
+  tDataList: Array<{
+    id: number;
+    time: string;
+    calory: number;
+    empty: boolean;
+  }>;
   period: "day" | "week" | "month";
 }
 
 const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
   const [page, setPage] = useState(1);
+  const router = useRouter();
   const listDataSet = useMemo(() => {
     const periodNum = period === "week" ? 7 : period === "month" ? 10 : 5;
-    const arr = Object.entries(tDataList);
-    if (!arr.length) return { caloryList: undefined, pageLength: undefined };
-    const caloryList = arr.slice(
+    if (!tDataList.length)
+      return { caloryList: undefined, pageLength: undefined };
+    const caloryList = tDataList.slice(
       periodNum * page - periodNum,
       periodNum * page
     );
     while (caloryList.length < periodNum) {
-      caloryList.push(["empty", 0]);
+      caloryList.push({ id: 0, time: "", calory: 0, empty: true });
     }
     return {
       caloryList: caloryList,
-      pageLength: Math.ceil(arr.length / periodNum),
+      pageLength: Math.ceil(tDataList.length / periodNum),
     };
   }, [tDataList, period, page]);
 
@@ -46,20 +53,25 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
         </thead>
         <tbody>
           {caloryList ? (
-            caloryList.map(([key, value], i) =>
-              key === "empty" ? (
-                <tr key={`${key}${i}${value}`}>
+            caloryList.map(({ id, time, calory, empty }) =>
+              empty ? (
+                <tr key={`${id}${time}`}>
                   <td colSpan={2} className={thClass + " invisible"}>
-                    {value}
+                    {calory}
                   </td>
                 </tr>
               ) : (
-                <tr key={`${key}${i}`}>
-                  <td className={thClass}>{key}</td>
+                <tr key={`${id}${time}`}>
+                  <td className={thClass}>{time}</td>
                   <td
                     className={`${thClass} font-semibold underline text-cusorange cursor-pointer`}
+                    onClick={() =>
+                      router.push(
+                        `/mealplan/${period === "day" ? "time" : "day"}/${id}`
+                      )
+                    }
                   >
-                    {value.toLocaleString() + " kcal"}
+                    {calory.toLocaleString() + " kcal"}
                   </td>
                 </tr>
               )

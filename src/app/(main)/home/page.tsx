@@ -3,7 +3,6 @@ import Section from "@/components/main/Section";
 import Table from "@/components/main/Table";
 import { MAIN_LABELS } from "@/constants/mainConstants";
 import { checkBmi } from "@/utils/checkBmi";
-import { ReactNode } from "react";
 
 export default async function Home() {
   const data = {
@@ -20,11 +19,15 @@ export default async function Home() {
     },
     date: "2024-04-28",
   };
-  const mealPlanList = {
-    [`08:00`]: 123455,
-    [`09:00`]: 123455,
-    [`10:00`]: 123455,
-  };
+  const mealPlanList = [
+    { id: 0, time: "08:00", calory: 21134, empty: false },
+    { id: 1, time: "09:00", calory: 21134, empty: false },
+    { id: 2, time: "10:00", calory: 21134, empty: false },
+    { id: 3, time: "11:00", calory: 21134, empty: false },
+    { id: 4, time: "12:00", calory: 21134, empty: false },
+    { id: 5, time: "13:00", calory: 21134, empty: false },
+  ];
+
   const { caloryData, avg, userAvg } = MAIN_LABELS;
 
   return (
