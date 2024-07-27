@@ -11,6 +11,8 @@ import {
   DoughnutController,
   LineController,
 } from "chart.js";
+import { useTheme } from "next-themes";
+import { useMemo } from "react";
 import { Line, Doughnut } from "react-chartjs-2";
 
 ChartJS.register(
@@ -35,6 +37,23 @@ interface ChartProps {
 }
 
 const Chart = ({ labels, dataList, dataLabel, color, line }: ChartProps) => {
+  const { theme } = useTheme();
+
+  const colors = useMemo(() => {
+    if (theme === "system") {
+      const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      return {
+        gridColor: isDark ? "#afafaf" : "#ebebeb",
+        ticksColor: isDark ? "#FFFFFF" : "#6d6d6d",
+      };
+    }
+    return {
+      gridColor: theme === "dark" ? "#afafaf" : "#ebebeb",
+      ticksColor: theme === "dark" ? "#FFFFFF" : "#6d6d6d",
+    };
+  }, [theme]);
+  const { gridColor, ticksColor } = colors;
+
   return (
     <div className="rounded-2xl bg-cusbanana dark:bg-cusdarkbanana shadow-border p-2 basis-1/2 flex-1 min-h-[23.16vw] flex items-center justify-center">
       {line ? (
@@ -42,11 +61,29 @@ const Chart = ({ labels, dataList, dataLabel, color, line }: ChartProps) => {
           options={{
             responsive: true,
             scales: {
-              x: {},
+              x: {
+                grid: {
+                  color: gridColor,
+                },
+                ticks: {
+                  color: ticksColor,
+                },
+              },
+              y: {
+                grid: {
+                  color: gridColor,
+                },
+                ticks: {
+                  color: ticksColor,
+                },
+              },
             },
             plugins: {
               legend: {
-                display: true,
+                display: false,
+                title: {
+                  color: ticksColor,
+                },
               },
               tooltip: {
                 callbacks: {
