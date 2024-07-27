@@ -47,7 +47,7 @@ export default async function MealPlanDetail({
           />
         </div>
         {/* 메뉴 플립 리스트  */}
-        <div className="rounded-xl shadow-border bg-cusbanana overflow-hidden w-full h-fulls">
+        <div className="rounded-xl shadow-border bg-cusbanana dark:bg-cusdarkbanana overflow-hidden w-full h-fulls">
           {data.menuList.map((item, i) => (
             <MenuItem
               key={item.menu + i}

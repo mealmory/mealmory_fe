@@ -16,7 +16,7 @@ const ServiceInfoList = () => {
           <Link
             key={title}
             href={link}
-            className=" w-full flex items-center justify-between p-4 rounded-xl shadow-border"
+            className=" w-full flex items-center justify-between p-4 rounded-xl shadow-border dark:bg-cusdarkbanana"
           >
             <p>{title}</p>
             <HiChevronRight

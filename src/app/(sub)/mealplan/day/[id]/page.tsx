@@ -67,7 +67,7 @@ export default function MealPlanOfDay({ params }: { params: { id: string } }) {
   }
   return (
     <main className="min-h-[calc(100vh-55px)] h-full w-full p-2">
-      <div className="rounded-xl shadow-border w-full bg-cusbanana">
+      <div className="rounded-xl shadow-border w-full bg-cusbanana dark:bg-cusdarkbanana">
         {data.map(
           ({ type, date, total, id: detailId, menuList, cpfData }, i) => (
             <FlipItem
@@ -76,7 +76,7 @@ export default function MealPlanOfDay({ params }: { params: { id: string } }) {
               first={i === 0 ? true : undefined}
               last={i === data.length - 1 ? true : undefined}
             >
-              <div className="flex flex-col gap-3 p-5">
+              <div className="flex flex-col gap-3 p-5 bg-white dark:bg-cusdark">
                 <p>
                   식사 시간 :{" "}
                   <Link
@@ -89,7 +89,7 @@ export default function MealPlanOfDay({ params }: { params: { id: string } }) {
                 <p>칼로리 : {total.toLocaleString()} kcal</p>
                 {cpfData && (
                   <div className="rounded-xl shadow-border overflow-hidden">
-                    <table className="text-center border-collapse border-hidden w-full">
+                    <table className="text-center border-collapse border-hidden w-full dark:bg-cusdarkbanana">
                       <tbody>
                         {Object.entries(cpfData).map(([key, value]) => (
                           <tr key={key}>
@@ -106,11 +106,11 @@ export default function MealPlanOfDay({ params }: { params: { id: string } }) {
                   </div>
                 )}
               </div>
-              <div className="md:flex gap-2 flex-wrap w-full h-full p-5 bg-zinc-300">
+              <div className="md:flex gap-2 flex-wrap w-full h-full p-5 bg-zinc-300 dark:bg-zinc-800">
                 {menuList.map(({ menu, calory, weight, unit }, i) => (
                   <div
                     key={menu + i}
-                    className=" rounded-xl shadow-border p-3 md:basis-[376px] flex-1 md:flex-grow-0 md:flex-shrink-0  bg-white mb-2 md:mb-0"
+                    className=" rounded-xl shadow-border p-3 md:basis-[376px] flex-1 md:flex-grow-0 md:flex-shrink-0  bg-white dark:bg-cusdarkbanana mb-2 md:mb-0"
                   >
                     <p className="text-center mb-1 text-lg">{menu}</p>
                     <p>칼로리 : {calory.toLocaleString()} kcal</p>

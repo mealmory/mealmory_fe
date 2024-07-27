@@ -34,7 +34,7 @@ const NotificationList = () => {
         noticeList.map(({ id, title, description, date }) => (
           <div
             key={id}
-            className="w-full flex items-center justify-between rounded-xl shadow-border p-3 sm:p-6"
+            className="w-full flex items-center justify-between rounded-xl shadow-border p-3 sm:p-6 dark:bg-cusdarkbanana"
           >
             <div>
               <p className="text-lg sm:text-xl w-full point-value">{title}</p>

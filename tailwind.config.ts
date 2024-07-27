@@ -20,6 +20,7 @@ const config: Config = {
         cusgray: "#E6E6E6",
         dcusgray: "#5A5A5A",
         cusdark: "rgb(90,90,90)",
+        cusdarkbanana: "#6C6C6C",
       },
       colors: {
         cusorange: "#FFB800",

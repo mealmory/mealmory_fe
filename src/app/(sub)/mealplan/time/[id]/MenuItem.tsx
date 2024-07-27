@@ -24,7 +24,7 @@ const MenuItem = ({
   }
   return (
     <FlipItem title={menu} last={last} first={first}>
-      <div className="flex flex-col gap-3 p-5">
+      <div className="flex flex-col gap-3 p-5 bg-white dark:bg-cusdark">
         <p>칼로리 : {calory.toLocaleString()} kcal</p>
         <p>
           섭취량 : {weight.toLocaleString()}

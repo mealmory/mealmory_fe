@@ -14,7 +14,9 @@ const AvgDataCard = ({
   valueClass,
 }: DataCardProps) => {
   return (
-    <div className={`flex bg-cusbanana text-center shadow-border ${className}`}>
+    <div
+      className={`flex bg-cusbanana dark:bg-cusdarkbanana text-center shadow-border ${className}`}
+    >
       <p className={"-translate-y-4 " + (labelClass ?? "")}>{label}</p>
 
       <p className={valueClass ?? ""}>{value}</p>

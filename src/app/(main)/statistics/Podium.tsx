@@ -12,7 +12,7 @@ const Podium = ({ rank }: { rank: { [key: string | number]: string } }) => {
     return { src, alt, rank: key, type: value };
   });
   return (
-    <div className="rounded-2xl bg-cusbanana shadow-border p-5 min-h-[23.12vw] h-max w-full basis-1/2 flex-1 flex items-end">
+    <div className="rounded-2xl bg-cusbanana dark:bg-cusdarkbanana shadow-border p-5 min-h-[23.12vw] h-max w-full basis-1/2 flex-1 flex items-end">
       <div className="border-b-2 border-black w-full flex items-end justify-around">
         {[rankResult[1], rankResult[0], rankResult[2]].map(
           ({ src, alt, rank, type }) => {

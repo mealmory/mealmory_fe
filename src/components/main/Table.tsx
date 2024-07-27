@@ -40,7 +40,7 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
   return (
     <div
       className={
-        "w-full h-full shadow-border rounded-xl bg-cusbanana overflow-hidden " +
+        "w-full h-full shadow-border rounded-xl bg-cusbanana dark:bg-cusdarkbanana overflow-hidden " +
         (tclassName ?? "")
       }
     >

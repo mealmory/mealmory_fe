@@ -36,7 +36,7 @@ interface ChartProps {
 
 const Chart = ({ labels, dataList, dataLabel, color, line }: ChartProps) => {
   return (
-    <div className="rounded-2xl bg-cusbanana shadow-border p-2 basis-1/2 flex-1 min-h-[23.16vw] flex items-center justify-center">
+    <div className="rounded-2xl bg-cusbanana dark:bg-cusdarkbanana shadow-border p-2 basis-1/2 flex-1 min-h-[23.16vw] flex items-center justify-center">
       {line ? (
         <Line
           options={{
