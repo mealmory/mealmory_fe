@@ -1,6 +1,6 @@
 "use client";
 
-import { fetchClient } from "@/utils/fetchClient";
+import { fetchServer } from "@/utils/fetchClient";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
@@ -10,18 +10,17 @@ export default function CallbackKakao() {
   const code = searchParams.get("code");
   useEffect(() => {
     if (code) {
-      fetchClient("auth/callback", {
+      fetchServer("auth/callback", {
         method: "POST",
         body: { code },
         credentials: "same-origin",
-      })
-        .then((res) => {
-          // console.log(res.body);
-          router.push("/auth/consent");
-        })
-        .catch((e) => {
-          router.replace("/auth");
-        });
+      }).then((res) => {
+        // console.log(res.body);
+        router.push("/auth/consent");
+      });
+      // .catch((e) => {
+      //   router.replace("/auth");
+      // });
     }
   }, [code]);
   return <div></div>;
