@@ -68,3 +68,10 @@ export const fetchClient: <T>(
 ) => Promise<JsonResponse<ApiResponse<T>>> = returnFetchJson({
   baseUrl: "http://localhost:3000/api/",
 });
+
+export const fetchServer: <T>(
+  url: FetchArgs[0],
+  init?: JsonRequestInit
+) => Promise<JsonResponse<ApiResponse<T>>> = returnFetchJson({
+  baseUrl: "http://localhost:3000/api/",
+});
