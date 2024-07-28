@@ -1,32 +1,46 @@
-import { cookies } from "next/dist/client/components/headers";
+import { fetchClient } from "@/utils/fetchClient";
 import { NextRequest, NextResponse } from "next/server";
+
+interface LoginResponse {
+  accessToken: string;
+  agreement: number;
+  collect: number;
+  email: string;
+  id: number;
+  nickName: string;
+  profile: number;
+  refreshToken: string;
+}
 
 export async function POST(req: NextRequest) {
   const { code } = await req.json();
-  console.log(code);
   try {
-    const res = await fetch(
-      `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.NEXT_PUBLIC_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT}&code=${code}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      }
-    );
+    const timeNow = new Date();
+    const timestamp = Math.floor(timeNow.getTime() / 1000);
+    const res = await fetchClient<LoginResponse>("user/login", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${code}`,
+        "Content-Type": "application/json",
+      },
+      body: {
+        timestamp,
+      },
+    });
     if (res.ok) {
-      const data = await res.json();
+      const data = res.body.data;
       const response = NextResponse.json({
         data: data,
       });
-
       response.headers.set("Access-Control-Allow-Credentials", "true");
 
-      response.cookies.set("act", `${data.token_type} ${data.access_token}`, {
-        expires: new Date(Date.now() + data.expires_in),
+      response.cookies.set("act", data.accessToken, {
+        // expires: new Date(Date.now() + data.expires_in),
         secure: process.env.NODE_ENV === "production",
         path: "/",
       });
-      response.cookies.set("rft", `${data.token_type} ${data.refresh_token}`, {
-        expires: new Date(Date.now() + data.refresh_token_expires_in),
+      response.cookies.set("rft", data.refreshToken, {
+        // expires: new Date(Date.now() + data.refresh_token_expires_in),
         secure: process.env.NODE_ENV === "production",
         path: "/",
       });
