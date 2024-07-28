@@ -3,7 +3,7 @@
 import Image from "next/image";
 
 const redirectUri = process.env.NEXT_PUBLIC_KAKAO_REDIRECT;
-const scope = ["profile_nickname", "profile_image"].join(",");
+const scope = ["profile_nickname", "profile_image", "account_email"].join(",");
 
 export default function Login() {
   return (
