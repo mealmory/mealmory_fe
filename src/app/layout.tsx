@@ -3,6 +3,7 @@ import { Jua } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import KakaoScript from "./KakaoScript";
+import { Suspense } from "react";
 
 const jua = Jua({
   subsets: ["latin"],
@@ -32,8 +33,10 @@ export default function RootLayout({
         }
       >
         <ThemeProvider>
-          {children}
-          {modal}
+          <Suspense>
+            {children}
+            {modal}
+          </Suspense>
         </ThemeProvider>
         <KakaoScript />
       </body>
