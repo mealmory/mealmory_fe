@@ -2,7 +2,7 @@ import returnFetch, {
   FetchArgs,
   ReturnFetchDefaultOptions,
 } from "return-fetch";
-
+import Cookies from "js-cookie";
 type JsonRequestInit = Omit<NonNullable<FetchArgs[1]>, "body"> & {
   body?: object;
 };
@@ -66,7 +66,29 @@ export const fetchClient: <T>(
   url: FetchArgs[0],
   init?: JsonRequestInit
 ) => Promise<JsonResponse<ApiResponse<T>>> = returnFetchJson({
-  baseUrl: "http://localhost:3000/api/",
+  baseUrl: process.env.NEXT_PUBLIC_BASEURL,
+  interceptors: {
+    async request(requestArgs) {
+      const accessToken = Cookies.get("act");
+      if (accessToken) {
+        requestArgs[1] = {
+          ...requestArgs[1],
+          headers: {
+            ...requestArgs[1]?.headers,
+            authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        };
+      }
+      return requestArgs;
+    },
+    async response(response, requestArgs, fetch) {
+      const res = await response.json();
+      if (res.code === 1007) {
+      }
+      return response;
+    },
+  },
 });
 
 export const fetchServer: <T>(
