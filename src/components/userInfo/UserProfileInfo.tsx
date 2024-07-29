@@ -13,7 +13,7 @@ const UserProfileInfo = ({ profileData }: UserProfileInfoProps) => {
   return (
     <div className="flex flex-col items-center gap-2">
       <Image
-        src={image}
+        src={image === "0" ? "/mealmory_logo.svg" : image}
         width={107}
         height={107}
         className=" rounded-full"
