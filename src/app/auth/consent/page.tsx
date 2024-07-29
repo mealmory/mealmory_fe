@@ -1,6 +1,8 @@
 "use client";
 
 import CheckBox from "@/components/auth/CheckBox";
+import { fetcher } from "@/utils/fetchClient";
+import { getTimestamp } from "@/utils/timestamp";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -20,6 +22,25 @@ export default function Consent() {
   const router = useRouter();
   function handleCheckAgree(key: keyof typeof agreements) {
     setAgreements((prev) => ({ ...prev, [key]: !prev[key] }));
+  }
+
+  function handleSubmitConsent() {
+    if (agreements.privacy && agreements.terms) {
+      fetcher("user/process", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          timestamp: getTimestamp(),
+          agreement: 0,
+        },
+      }).then((res) => {
+        if (res.body.code === 0) {
+          router.push("/auth/user-info");
+        }
+      });
+    }
   }
 
   return (
@@ -46,7 +67,8 @@ export default function Consent() {
         })}
         <button
           className="bg-cuspoint text-cusorange shadow-border rounded-xl w-full p-3 font-semibold"
-          onClick={() => router.push("/auth/user-info")}
+          onClick={handleSubmitConsent}
+          disabled={!agreements.privacy || !agreements.terms}
         >
           동의하고 시작하기
         </button>
