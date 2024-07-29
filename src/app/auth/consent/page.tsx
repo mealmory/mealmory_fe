@@ -5,6 +5,7 @@ import { fetcher } from "@/utils/fetchClient";
 import { getTimestamp } from "@/utils/timestamp";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Cookies from "js-cookie";
 
 export default function Consent() {
   const consents = [
@@ -35,11 +36,18 @@ export default function Consent() {
           timestamp: getTimestamp(),
           agreement: 0,
         },
-      }).then((res) => {
-        if (res.body.code === 0) {
-          router.push("/auth/user-info");
+      }).then(
+        (res) => {
+          if (res.body.code === 0) {
+            router.push("/auth/user-info");
+          }
+        },
+        () => {
+          router.replace("/auth");
+          Cookies.remove("act");
+          Cookies.remove("rft");
         }
-      });
+      );
     }
   }
 
