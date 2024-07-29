@@ -3,6 +3,7 @@ import returnFetch, {
   ReturnFetchDefaultOptions,
 } from "return-fetch";
 import Cookies from "js-cookie";
+import { errorAlert } from "./alertFns";
 type JsonRequestInit = Omit<NonNullable<FetchArgs[1]>, "body"> & {
   body?: object;
 };
@@ -82,12 +83,6 @@ export const fetchClient: <T>(
       }
       return requestArgs;
     },
-    async response(response, requestArgs, fetch) {
-      const res = await response.json();
-      if (res.code === 1007) {
-      }
-      return response;
-    },
   },
 });
 
@@ -97,3 +92,30 @@ export const fetchServer: <T>(
 ) => Promise<JsonResponse<ApiResponse<T>>> = returnFetchJson({
   baseUrl: "http://localhost:3000/api/",
 });
+
+export const fetcher = async <T>(
+  url: FetchArgs[0],
+  init?: JsonRequestInit,
+  errorEffect?: () => void
+) => {
+  const res = await fetchClient<T>(url, init);
+  const { code } = res.body;
+  if (code === 1007) {
+    const newResponse = await fetchServer<T>("auth/refresh", {
+      method: "POST",
+      credentials: "same-origin",
+    });
+    if (!newResponse.ok) {
+      throw new Error("리프레시 요청 실패");
+    }
+    return newResponse;
+  } else if (code === 1004 || code === 1005 || code === 1006) {
+    errorEffect &&
+      errorAlert(
+        "사용자 인증에 실패했습니다. 다시 로그인 해 주세요.",
+        "",
+        errorEffect
+      );
+  }
+  return res;
+};
