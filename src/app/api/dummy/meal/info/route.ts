@@ -12,7 +12,7 @@ const menuList = Array.from({ length: 4 }, () => ({
     fat: 0,
   },
 }));
-export function GET(req: NextApiRequest) {
+export async function GET() {
   return NextResponse.json(
     genTempDto({
       type: "아침",

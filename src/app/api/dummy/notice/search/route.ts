@@ -8,6 +8,6 @@ const notifications = Array.from({ length: 10 }, (_, i) => ({
   date: "2024-04-12",
 }));
 
-export function GET(req: NextRequest) {
+export async function GET(req: NextRequest) {
   return NextResponse.json({ data: notifications });
 }

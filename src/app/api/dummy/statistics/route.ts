@@ -3,7 +3,7 @@ import { genTempDto } from "@/utils/genTempDTO";
 import { NextApiRequest } from "next";
 import { NextRequest, NextResponse } from "next/server";
 
-export function GET(req: NextRequest) {
+export async function GET(req: NextRequest) {
   const query = req.nextUrl.searchParams;
   console.log("query", query);
   const statisticsDTO = {

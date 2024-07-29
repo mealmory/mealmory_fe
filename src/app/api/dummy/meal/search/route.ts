@@ -10,6 +10,6 @@ const mealPlan = [
   { id: 13, type: "야식", time: "2024-05-15 21:00:00", total: 1548 },
 ];
 
-export function GET() {
+export async function GET() {
   return NextResponse.json(genTempDto(mealPlan));
 }
