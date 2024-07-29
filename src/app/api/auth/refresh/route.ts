@@ -7,16 +7,16 @@ interface RefreshAuth {
 }
 export async function POST(req: NextRequest) {
   try {
-    const token = req.cookies.get("rft");
+    const token = req.cookies.get("rft")?.value;
     if (token) {
       const body = await fetchClient<RefreshAuth>("user/token", {
         method: "POST",
         headers: {
           authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-        body: { timeStamp: getTimestamp() },
+        body: { timestamp: getTimestamp() },
       }).then((res) => res.body);
-
       if (body.code === 0) {
         const { data, ...returnData } = body;
         const response = NextResponse.json(returnData);
