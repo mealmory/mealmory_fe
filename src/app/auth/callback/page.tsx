@@ -28,9 +28,9 @@ export default function CallbackKakao() {
           localStorage.setItem("nickName", nickName);
           localStorage.setItem("profile", String(profile));
 
-          if (agreement === 0) {
+          if (agreement === 1) {
             router.replace("/auth/consent");
-          } else if (collect === 0) {
+          } else if (collect === 1) {
             router.replace("/auth/user-info");
           } else {
             router.replace("/home");
