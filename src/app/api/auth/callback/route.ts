@@ -1,4 +1,5 @@
 import { fetchClient } from "@/utils/fetchClient";
+import { getTimestamp } from "@/utils/timestamp";
 import { NextRequest, NextResponse } from "next/server";
 
 interface LoginResponse {
@@ -15,8 +16,6 @@ interface LoginResponse {
 export async function POST(req: NextRequest) {
   const { code } = await req.json();
   try {
-    const timeNow = new Date();
-    const timestamp = Math.floor(timeNow.getTime() / 1000);
     const res = await fetchClient<LoginResponse>("user/login", {
       method: "POST",
       headers: {
@@ -24,13 +23,15 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
       },
       body: {
-        timestamp,
+        timestamp: getTimestamp(),
       },
     });
-    if (res.ok) {
+    if (res.body.code === 0) {
       const data = res.body.data;
+      const { accessToken, refreshToken, ...returnData } = data;
       const response = NextResponse.json({
-        data: data,
+        ...res.body,
+        data: returnData,
       });
       response.headers.set("Access-Control-Allow-Credentials", "true");
 
@@ -42,10 +43,12 @@ export async function POST(req: NextRequest) {
       response.cookies.set("rft", data.refreshToken, {
         // expires: new Date(Date.now() + data.refresh_token_expires_in),
         secure: process.env.NODE_ENV === "production",
+        httpOnly: process.env.NODE_ENV === "production",
         path: "/",
       });
       return response;
     }
+    throw new Error("로그인 실패");
   } catch (e) {
     return NextResponse.json({
       data: "fail",
