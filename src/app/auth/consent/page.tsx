@@ -1,11 +1,11 @@
 "use client";
 
 import CheckBox from "@/components/auth/CheckBox";
-import { fetcher } from "@/utils/fetchClient";
+import { fetcher, fetchServer } from "@/utils/fetchClient";
 import { getTimestamp } from "@/utils/timestamp";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Cookies from "js-cookie";
+import { errorAlert } from "@/utils/alertFns";
 
 export default function Consent() {
   const consents = [
@@ -36,18 +36,20 @@ export default function Consent() {
           timestamp: getTimestamp(),
           agreement: 0,
         },
-      }).then(
-        (res) => {
-          if (res.body.code === 0) {
-            router.push("/auth/user-info");
-          }
-        },
-        () => {
-          router.replace("/auth");
-          Cookies.remove("act");
-          Cookies.remove("rft");
+      }).then((res) => {
+        if (res.body.code === 0) {
+          router.push("/auth/user-info");
         }
-      );
+        if (res.body.code === 1004) {
+          errorAlert(
+            "로그인 시간이 만료되었습니다.",
+            "다시 로그인 해 주세요.",
+            () => {
+              router.replace("/auth");
+            }
+          );
+        }
+      });
     }
   }
 
