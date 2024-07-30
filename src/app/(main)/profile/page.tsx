@@ -89,11 +89,9 @@ export default function Profile() {
   const btnClass = "shadow-border p-3 ";
   return (
     <div className="w-full min-h-screen h-max max-w-[360px] mx-auto flex flex-col justify-center p-1 gap-4">
-      {userData && (
-        <UserProfileInfo
-          profileData={{ email: userData.email, image: userData.profile }}
-        />
-      )}
+      <UserProfileInfo
+        profileData={{ email: userData?.email, image: userData?.profile }}
+      />
       <form className="w-full flex flex-col gap-4">
         {[
           { label: "닉네임", name: "nickName", type: "string" },

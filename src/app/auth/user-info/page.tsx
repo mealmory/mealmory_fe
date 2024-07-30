@@ -11,10 +11,14 @@ import { useRouter } from "next/navigation";
 import { useState, FormEvent, useEffect } from "react";
 
 export default function UserInfo() {
-  const [userData, setUserData] = useState({
-    image: "",
-    email: "",
-    nickName: "",
+  const [userData, setUserData] = useState<{
+    image?: string;
+    email?: string;
+    nickName?: string;
+  }>({
+    image: undefined,
+    email: undefined,
+    nickName: undefined,
   });
   const [selectedOption, setSelectedOption] = useState({
     gender: 0,
@@ -34,9 +38,9 @@ export default function UserInfo() {
           nickName: localStorage.getItem("nickName"),
         };
         setUserData({
-          image: newData.image ?? "",
-          email: newData.email ?? "",
-          nickName: newData.nickName ?? "",
+          image: newData.image ?? undefined,
+          email: newData.email ?? undefined,
+          nickName: newData.nickName ?? undefined,
         });
       }
     }, 100);

@@ -2,17 +2,18 @@ import Image from "next/image";
 
 interface UserProfileInfoProps {
   profileData: {
-    image: string;
+    image?: string;
     nickName?: string;
-    email: string;
+    email?: string;
   };
 }
 
 const UserProfileInfo = ({ profileData }: UserProfileInfoProps) => {
   const { image, email, nickName } = profileData;
+  const loading = image === undefined;
   return (
     <div className="flex flex-col items-center gap-2">
-      {image ? (
+      {!loading ? (
         <Image
           src={image === "0" ? "/mealmory_logo.svg" : image}
           width={107}
@@ -25,8 +26,8 @@ const UserProfileInfo = ({ profileData }: UserProfileInfoProps) => {
         <div className="w-[107px] h-[96.5px] bg-zinc-500 rounded-full"></div>
       )}
       <div className=" text-gray-500 text-center dark:text-white">
-        {email ? <p>{email}</p> : <SkeletonP className="mb-2" />}
-        {nickName ? <p>{nickName}</p> : <SkeletonP />}
+        {!loading ? <p>{email}</p> : <SkeletonP className="mb-2" />}
+        {!loading ? nickName && <p>{nickName}</p> : <SkeletonP />}
       </div>
     </div>
   );
