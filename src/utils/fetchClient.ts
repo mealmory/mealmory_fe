@@ -93,11 +93,7 @@ export const fetchServer: <T>(
   baseUrl: "http://localhost:3000/api/",
 });
 
-export const fetcher = async <T>(
-  url: FetchArgs[0],
-  init?: JsonRequestInit,
-  errorEffect?: () => void
-) => {
+export const fetcher = async <T>(url: FetchArgs[0], init?: JsonRequestInit) => {
   const res = await fetchClient<T>(url, init);
   const { code } = res.body;
   if (code === 1007) {
@@ -105,17 +101,10 @@ export const fetcher = async <T>(
       method: "POST",
       credentials: "same-origin",
     });
-    if (!newResponse.ok) {
-      throw new Error("리프레시 요청 실패");
+    if (newResponse.body.code === 0) {
+      const secondRes = await fetchClient<T>(url, init);
+      if (secondRes.body.code === 0) return secondRes;
     }
-    return newResponse;
-  } else if (code === 1004 || code === 1005 || code === 1006) {
-    errorEffect &&
-      errorAlert(
-        "사용자 인증에 실패했습니다. 다시 로그인 해 주세요.",
-        "",
-        errorEffect
-      );
   }
   return res;
 };
