@@ -19,7 +19,7 @@ export const USER_INFO_FORM_LABEL = {
     },
     {
       label: "활동량",
-      name: "actLevel",
+      name: "activemass",
       options: [
         { value: 0, label: "활동량을 선택해주세요." },
         {
