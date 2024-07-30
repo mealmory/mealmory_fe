@@ -4,39 +4,96 @@ import Input from "@/components/Input";
 import SelectMenu from "@/components/auth/SelectMenu";
 import UserProfileInfo from "@/components/userInfo/UserProfileInfo";
 import { USER_INFO_FORM_LABEL } from "@/constants/userConstants";
+import { successAlert } from "@/utils/alertFns";
+import { fetcher } from "@/utils/fetchClient";
+import { getTimestamp } from "@/utils/timestamp";
 import { useEffect, useState } from "react";
+
+interface UserData {
+  id: number;
+  email: string;
+  nickName: string;
+  gender: number;
+  age: number;
+  weight: number;
+  height: number;
+  bmi: number;
+  bmr: number;
+  amr: number;
+  activemass: number;
+  profile: string;
+}
 
 export default function Profile() {
   const [isEdit, setIdEdit] = useState(false);
-  useEffect(() => {
-    return setIdEdit(false);
-  }, []);
-  const data = {
-    email: "anger@gmail.com",
-    nickName: "분노 그 잡채",
-    gender: "남",
-    age: 20,
-    weight: 70,
-    height: 180,
-    actLevel: 1,
-    profile: "/tempImg.png",
-  };
+  const [userData, setUserData] = useState<UserData>();
   const [selectedOption, setSelectedOption] = useState({
-    gender: data.gender === "남" ? 1 : 2,
-    actLevel: data.actLevel,
+    gender: 0,
+    activemass: 0,
   });
   const [inputValue, setInputValue] = useState({
-    nickName: data.nickName,
-    age: data.age,
-    height: data.height,
-    weight: data.weight,
+    nickName: "",
+    age: 0,
+    height: 0,
+    weight: 0,
   });
+  useEffect(() => {
+    fetcher<UserData>(
+      "user/info/search?" +
+        new URLSearchParams({
+          timestamp: getTimestamp().toString(),
+        }),
+      {
+        method: "GET",
+      }
+    ).then((res) => {
+      if (res.body.code === 0) {
+        const { data } = res.body;
+        setUserData(data);
+        setSelectedOption({
+          gender: data.gender,
+          activemass: data.activemass,
+        });
+        setInputValue({
+          nickName: data.nickName,
+          age: data.age,
+          weight: data.weight,
+          height: data.height,
+        });
+      }
+    });
+    return () => {
+      setIdEdit(false);
+    };
+  }, []);
+  function handleEdit() {
+    fetcher("user/info/edit", {
+      method: "PUT",
+      body: {
+        timestamp: getTimestamp(),
+        height: inputValue.height,
+        weight: inputValue.weight,
+      },
+    }).then((res) => {
+      if (res.body.code === 0) {
+        successAlert(
+          "수정 완료!",
+          "프로필 데이터 수정을 완료하였습니다.",
+          () => {
+            setIdEdit(true);
+          }
+        );
+      }
+    });
+  }
   const btnClass = "shadow-border p-3 ";
   return (
     <div className="w-full min-h-screen h-max max-w-[360px] mx-auto flex flex-col justify-center p-1 gap-4">
-      <UserProfileInfo
-        profileData={{ email: data.email, image: data.profile }}
-      />
+      {userData && (
+        <UserProfileInfo
+          profileData={{ email: userData.email, image: userData.profile }}
+        />
+      )}
       <form className="w-full flex flex-col gap-4">
         {[
           { label: "닉네임", name: "nickName", type: "string" },
@@ -83,7 +140,7 @@ export default function Profile() {
               className={btnClass + "bg-cuspoint text-cusorange flex-1"}
               onClick={(e) => {
                 e.preventDefault();
-                setIdEdit(false);
+                handleEdit();
               }}
             >
               저장
