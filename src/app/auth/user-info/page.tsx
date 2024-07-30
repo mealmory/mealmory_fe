@@ -18,7 +18,7 @@ export default function UserInfo() {
   });
   const [selectedOption, setSelectedOption] = useState({
     gender: 0,
-    actLevel: 0,
+    activemass: 0,
   });
   const [inputValue, setInputValue] = useState({
     age: 0,
@@ -44,19 +44,33 @@ export default function UserInfo() {
   const router = useRouter();
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    fetcher("user/process", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
+    fetcher("user/info/add", {
+      method: "POST",
       body: {
         timestamp: getTimestamp(),
-        collect: 0,
+        gender: selectedOption.gender,
+        activemass: selectedOption.activemass,
+        age: inputValue.age,
+        weight: inputValue.weight,
+        height: inputValue.height,
       },
     })
       .then((res) => {
         if (res.body.code === 0) {
-          router.replace("/home");
+          fetcher("user/process", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: {
+              timestamp: getTimestamp(),
+              collect: 0,
+            },
+          }).then((res) => {
+            if (res.body.code === 0) {
+              router.replace("/home");
+            }
+          });
         }
       })
       .catch((e: Error) => {
