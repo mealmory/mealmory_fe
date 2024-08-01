@@ -1,24 +1,54 @@
+"use client";
+
 import AvgDataCard from "@/components/main/AvgDataCard";
 import Section from "@/components/main/Section";
 import Table from "@/components/main/Table";
 import { MAIN_LABELS } from "@/constants/mainConstants";
+import { errorAlert } from "@/utils/alertFns";
 import { checkBmi } from "@/utils/checkBmi";
+import { fetcher } from "@/utils/fetchClient";
+import { getTimestamp } from "@/utils/timestamp";
+import { useEffect, useState } from "react";
 
-export default async function Home() {
-  const data = {
-    user: {
-      totalCalory: 1000,
-      amr: 10000,
-      bmi: 18,
-      bmr: 124214,
-    },
-    avg: {
-      bmi: 25,
-      bmr: 12442,
-      weight: 0,
-    },
-    date: "2024-04-28",
+interface MainData {
+  avg: {
+    bmi: number;
+    bmr: number;
+    height: number;
+    weight: number;
   };
+  user: {
+    total: number;
+    height: number;
+    weight: number;
+    bmi: number;
+    bmr: number;
+    amr: number;
+  };
+  date: string;
+}
+
+export default function Home() {
+  const [mainData, setMainData] = useState<MainData>();
+  useEffect(() => {
+    fetcher<MainData>(
+      "main/home?" +
+        new URLSearchParams({ timestamp: getTimestamp().toString() }),
+      { method: "GET" }
+    )
+      .then((res) => {
+        if (res.body.code === 0) {
+          setMainData(res.body.data);
+          sessionStorage.setItem("sud", res.body.data.date);
+          return res.body.data;
+        }
+        throw new Error("데이터 요청 실패");
+      })
+      .catch((e) => {
+        errorAlert("데이터를 요청에 실패 했습니다.", "", () => {});
+      });
+  }, []);
+
   const mealPlanList = [
     { id: 0, time: "08:00", calory: 21134, empty: false },
     { id: 1, time: "09:00", calory: 21134, empty: false },
@@ -32,46 +62,50 @@ export default async function Home() {
 
   return (
     <div className="w-full min-h-screen h-max p-2 flex flex-col gap-10 overflow-visible">
-      <Section>
-        {Object.keys(caloryData).map((key) => {
-          const target = key as keyof typeof caloryData;
-          const percent =
-            target === "amr"
-              ? 100
-              : (data.user.totalCalory / data.user.amr) * 100;
-          return (
-            <CaloryBar
-              key={target}
-              label={caloryData[target]}
-              percent={percent}
-              calory={data.user[target]}
+      {mainData && (
+        <>
+          <Section>
+            {Object.keys(caloryData).map((key) => {
+              const target = key as keyof typeof caloryData;
+              const percent =
+                target === "amr"
+                  ? 100
+                  : (mainData.user.total / mainData.user.amr) * 100;
+              return (
+                <CaloryBar
+                  key={target}
+                  label={caloryData[target]}
+                  percent={percent}
+                  calory={mainData.user[target]}
+                />
+              );
+            })}
+          </Section>
+          <Section titleHeader="나의 데이터">
+            <AvgCardList avgDatas={mainData.user} avgTitles={userAvg} />
+          </Section>
+          <div className="w-ful md:flex flex-row gap-2">
+            <Section titleHeader="동일 연령대 평균 데이터">
+              <AvgCardList
+                avgDatas={mainData.avg}
+                avgTitles={avg}
+                clasName="overflow-x-scroll scroll-hide"
+              />
+            </Section>
+          </div>
+          <Section
+            titleHeader="오늘 식단 목록"
+            className="flex-1 flex flex-col gap-2"
+          >
+            <Table
+              tHead={"시간"}
+              tclassName="flex-1 flex flex-col justify-between"
+              tDataList={mealPlanList}
+              period="day"
             />
-          );
-        })}
-      </Section>
-      <Section titleHeader="나의 데이터">
-        <AvgCardList avgDatas={data.user} avgTitles={userAvg} />
-      </Section>
-      <div className="w-ful md:flex flex-row gap-2">
-        <Section titleHeader="동일 연령대 평균 데이터">
-          <AvgCardList
-            avgDatas={data.avg}
-            avgTitles={avg}
-            clasName="overflow-x-scroll scroll-hide"
-          />
-        </Section>
-      </div>
-      <Section
-        titleHeader="오늘 식단 목록"
-        className="flex-1 flex flex-col gap-2"
-      >
-        <Table
-          tHead={"시간"}
-          tclassName="flex-1 flex flex-col justify-between"
-          tDataList={mealPlanList}
-          period="day"
-        />
-      </Section>
+          </Section>
+        </>
+      )}
     </div>
   );
 }
