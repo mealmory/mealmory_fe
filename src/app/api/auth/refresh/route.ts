@@ -1,13 +1,15 @@
 import { fetchClient } from "@/utils/fetchClient";
 import { getTimestamp } from "@/utils/timestamp";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+
 interface RefreshAuth {
   accessToken: string;
   refreshToken: string;
 }
 export async function POST(req: NextRequest) {
   try {
-    const token = req.cookies.get("rft")?.value;
+    const token = cookies().get("rft")?.value;
     if (token) {
       const body = await fetchClient<RefreshAuth>("user/token", {
         method: "POST",
@@ -17,6 +19,7 @@ export async function POST(req: NextRequest) {
         },
         body: { timestamp: getTimestamp() },
       }).then((res) => res.body);
+
       if (body.code === 0) {
         const { data, ...returnData } = body;
         const response = NextResponse.json(returnData);
@@ -35,8 +38,8 @@ export async function POST(req: NextRequest) {
         });
         return response;
       }
-      throw new Error();
     }
+    throw new Error();
   } catch (e) {
     return NextResponse.json({
       code: 4004,
