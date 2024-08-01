@@ -1,11 +1,22 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import Cookies from "js-cookie";
 
-const redirectUri = process.env.NEXT_PUBLIC_KAKAO_REDIRECT;
-const scope = ["profile_nickname", "profile_image", "account_email"].join(",");
+export const redirectUri = process.env.NEXT_PUBLIC_KAKAO_REDIRECT;
+export const scope = [
+  "profile_nickname",
+  "profile_image",
+  "account_email",
+].join(",");
 
 export default function Login() {
+  const router = useRouter();
+  useEffect(() => {
+    if (Cookies.get("act")) router.replace("/home");
+  }, []);
   return (
     <div className="w-full h-full flex flex-col justify-center items-center gap-2">
       <Image
