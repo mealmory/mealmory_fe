@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(req: NextRequest) {
-  const reqHeaders = new Headers(req.headers);
   const { pathname } = req.nextUrl;
-  reqHeaders.set("x-pathname", pathname);
   if (pathname === "/") {
     if (req.cookies.get("act")) {
       return NextResponse.redirect(new URL("/home", req.url));
@@ -11,10 +9,6 @@ export function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/auth", req.url));
     }
   } else {
-    return NextResponse.next({
-      request: {
-        headers: reqHeaders,
-      },
-    });
+    return NextResponse.next();
   }
 }
