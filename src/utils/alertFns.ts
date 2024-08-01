@@ -3,10 +3,8 @@ import Swal from "sweetalert2";
 type QuestionAlert = {
   afterEffect: () => void;
   title: string;
-  text: string;
+  text?: string;
   confirmText: string;
-  successTitle: string;
-  successText: string;
 };
 
 export const questionAlert = ({
@@ -14,10 +12,8 @@ export const questionAlert = ({
   title,
   text,
   confirmText,
-  successText,
-  successTitle,
 }: QuestionAlert) => {
-  Swal.fire({
+  return Swal.fire({
     title,
     text,
     icon: "question",
@@ -26,19 +22,8 @@ export const questionAlert = ({
     cancelButtonColor: "#eac407",
     confirmButtonText: confirmText,
     cancelButtonText: "취소",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      Swal.fire({
-        title: successTitle,
-        text: successText,
-        icon: "success",
-        allowOutsideClick: () => false,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          afterEffect();
-        }
-      });
-    }
+    preConfirm: afterEffect,
+    allowOutsideClick: () => false,
   });
 };
 
