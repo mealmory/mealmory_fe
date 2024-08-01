@@ -3,7 +3,7 @@ import returnFetch, {
   ReturnFetchDefaultOptions,
 } from "return-fetch";
 import Cookies from "js-cookie";
-import { errorAlert } from "./alertFns";
+import { redirectUri, scope } from "@/app/auth/page";
 type JsonRequestInit = Omit<NonNullable<FetchArgs[1]>, "body"> & {
   body?: object;
 };
@@ -104,6 +104,13 @@ export const fetcher = async <T>(url: FetchArgs[0], init?: JsonRequestInit) => {
     if (newResponse.body.code === 0) {
       const secondRes = await fetchClient<T>(url, init);
       if (secondRes.body.code === 0) return secondRes;
+      return newResponse;
+    } else {
+      window.Kakao &&
+        window.Kakao.Auth.authorize({
+          redirectUri,
+          scope,
+        });
     }
   }
   return res;
