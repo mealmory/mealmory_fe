@@ -1,6 +1,7 @@
 import ThemeController from "./ThemeController";
 import NotificationList from "./NotificationList";
 import ServiceInfoList from "./ServiceInfoList";
+import UserMenu from "./UserMenu";
 
 export default function More() {
   return (
@@ -8,6 +9,7 @@ export default function More() {
       <ThemeController />
       <NotificationList />
       <ServiceInfoList />
+      <UserMenu />
     </div>
   );
 }
