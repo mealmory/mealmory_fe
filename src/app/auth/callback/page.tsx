@@ -25,16 +25,16 @@ export default function CallbackKakao() {
           if (res.body.code === 0) {
             const { email, nickName, profile, agreement, collect } =
               res.body.data;
-            localStorage.setItem("email", email);
-            localStorage.setItem("nickName", nickName);
-            localStorage.setItem("profile", String(profile));
+            sessionStorage.setItem("email", email);
+            sessionStorage.setItem("nickName", nickName);
+            sessionStorage.setItem("profile", String(profile));
 
             if (agreement === 1) {
               router.replace("/auth/consent");
             } else if (collect === 1) {
               router.replace("/auth/user-info");
             } else {
-              router.replace("/home");
+              router.back();
             }
           } else {
             throw new Error("로그인 실패");
