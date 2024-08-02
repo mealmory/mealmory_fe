@@ -1,28 +1,12 @@
 "use client";
 
 import useDate from "@/store/selectDateStore";
-import { fetchClient } from "@/utils/fetchClient";
+import { fetchServer } from "@/utils/fetchClient";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import Table from "@/components/main/Table";
-import dynamic from "next/dynamic";
-
-const Podium = dynamic(() => import("./Podium"), {
-  ssr: false,
-  loading: () => (
-    <div className="flex-1 pt-[25.16%] rounded-2xl bg-cusbanana shadow-border">
-      {" "}
-    </div>
-  ),
-});
-const Chart = dynamic(() => import("./Chart"), {
-  ssr: false,
-  loading: () => (
-    <div className="flex-1 pt-[25.16%] rounded-2xl bg-cusbanana shadow-border">
-      {" "}
-    </div>
-  ),
-});
+import Podium from "./Podium";
+import Chart from "./Chart";
 
 interface StatisticsData {
   rank: {
@@ -46,7 +30,7 @@ export default function StatisticsPage() {
   const router = useRouter();
   useEffect(() => {
     const date = selectedDate.toLocaleDateString().replaceAll(". ", "-");
-    fetchClient<StatisticsData>(
+    fetchServer<StatisticsData>(
       "dummy/statistics?" +
         new URLSearchParams({
           date: date.substring(0, date.length - 1),
@@ -61,7 +45,7 @@ export default function StatisticsPage() {
 
   return (
     <div className="w-full min-h-screen h-full p-2 sm:p-5 flex flex-col gap-9">
-      <div className="sm:flex gap-6">
+      <div className="flex flex-col sm:flex-row gap-6 w-full sm:w-max">
         {/* date, range */}
         <div className="flex items-center w-full sm:w-[280px] bg-cuspoint shadow-border rounded-2xl overflow-hidden px-2 py-1 sm:gap-3">
           {[1, 7, 30].map((value) => {
@@ -89,20 +73,27 @@ export default function StatisticsPage() {
           {selectedDate.toLocaleDateString()}
         </button>
       </div>
-      <div className="sm:flex items-center w-full gap-5 h-max">
+      <div className="flex flex-col sm:flex-row items-center w-full gap-5 h-max">
         {/* ranking, chart */}
-        {statisticsData?.rank && <Podium rank={statisticsData.rank} />}
-        {statisticsData?.dailyGraph && (
-          <Chart
-            dataLabel="칼로리 섭취량"
-            labels={Object.keys(statisticsData.dailyGraph).map((value) =>
-              value.substring(5, value.length)
-            )}
-            dataList={Object.values(statisticsData.dailyGraph)}
-            color={"#52e0c8"}
-            line
-          />
-        )}
+
+        <Podium rank={statisticsData?.rank} period={selectedRange} />
+        <Chart
+          dataLabel="칼로리 섭취량"
+          labels={
+            statisticsData
+              ? Object.keys(statisticsData.dailyGraph).map((value) =>
+                  value.substring(5, value.length)
+                )
+              : undefined
+          }
+          dataList={
+            statisticsData
+              ? Object.values(statisticsData.dailyGraph)
+              : undefined
+          }
+          color={"#52e0c8"}
+          line
+        />
       </div>
       <MealTable range={selectedRange} />
     </div>
@@ -155,5 +146,7 @@ const MealTable = ({ range }: { range: 1 | 7 | 30 }) => {
       period={period}
       tclassName="flex-1 flex flex-col justify-between"
     />
-  ) : null;
+  ) : (
+    <div className="w-full h-full shadow-border rounded-xl bg-cusbanana dark:bg-cusdarkbanana overflow-hidden flex-1"></div>
+  );
 };
