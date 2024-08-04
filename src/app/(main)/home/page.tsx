@@ -8,6 +8,7 @@ import { errorAlert } from "@/utils/alertFns";
 import { checkBmi } from "@/utils/checkBmi";
 import { fetcher } from "@/utils/fetchClient";
 import { getTimestamp } from "@/utils/timestamp";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface MainData {
@@ -93,10 +94,16 @@ export default function Home() {
               />
             </Section>
           </div>
-          <Section
-            titleHeader="오늘 식단 목록"
-            className="flex-1 flex flex-col gap-2"
-          >
+          <Section className="flex-1 flex flex-col gap-2">
+            <div className="w-full flex gap-3 flex-col sm:flex-row sm:items-center">
+              <p className="w-max text-lg">오늘 식단 목록</p>
+              <Link
+                href={"/mealplan/add"}
+                className="rounded-2xl sm:rounded-xl shadow-border bg-cuspoint text-cusorange sm:p-2 p-4 w-full sm:w-max"
+              >
+                식단 추가하기
+              </Link>
+            </div>
             <Table
               tHead={"시간"}
               tclassName="flex-1 flex flex-col justify-between"
