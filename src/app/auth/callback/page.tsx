@@ -28,10 +28,9 @@ export default function CallbackKakao() {
             sessionStorage.setItem("email", email);
             sessionStorage.setItem("nickName", nickName);
             sessionStorage.setItem("profile", String(profile));
-
-            if (agreement === 1) {
+            if (agreement === 0) {
               router.replace("/auth/consent");
-            } else if (collect === 1) {
+            } else if (collect === 0) {
               router.replace("/auth/user-info");
             } else {
               router.back();
