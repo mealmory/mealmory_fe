@@ -11,7 +11,7 @@ const Section = ({
 }) => {
   return (
     <div className={"w-full " + (className ?? "")}>
-      {titleHeader && <p>{titleHeader}</p>}
+      {titleHeader && <p className="text-lg">{titleHeader}</p>}
       {children}
     </div>
   );
