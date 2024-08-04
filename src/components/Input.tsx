@@ -23,6 +23,11 @@ const Input = ({
         min={type === "number" ? 0 : undefined}
         max={type === "number" ? 300 : undefined}
         id={uuid}
+        step={
+          type === "number" && (label === "weight" || label === "height")
+            ? "0.01"
+            : "1"
+        }
         value={type === "number" ? value?.toString() : value}
         onChange={handleChange}
         className=" outline-none shadow-border rounded-xl py-2 px-3 w-full text-xl disabled:text-gray-400"
