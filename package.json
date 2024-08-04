@@ -18,7 +18,7 @@
     "react-dom": "^18",
     "react-select": "^5.8.0",
     "return-fetch": "^0.4.6",
-    "sweetalert2": "^11.12.3",
+    "sweetalert2": "^11.4.8",
     "uuid": "^10.0.0",
     "zustand": "^4.5.4"
   },
