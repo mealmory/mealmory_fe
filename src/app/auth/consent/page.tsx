@@ -34,7 +34,7 @@ export default function Consent() {
         },
         body: {
           timestamp: getTimestamp(),
-          agreement: 0,
+          agreement: 1,
         },
       }).then((res) => {
         if (res.body.code === 0) {

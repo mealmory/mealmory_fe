@@ -68,7 +68,7 @@ export default function UserInfo() {
             },
             body: {
               timestamp: getTimestamp(),
-              collect: 0,
+              collect: 1,
             },
           }).then((res) => {
             if (res.body.code === 0) {
