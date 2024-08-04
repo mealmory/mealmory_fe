@@ -67,20 +67,36 @@ export default function Profile() {
     };
   }, []);
   function handleEdit() {
+    const changedInput = (() => {
+      const result: { [key: string]: number | string } = {};
+      Object.entries(inputValue).forEach(([key, value]) => {
+        const Key = key as keyof typeof inputValue;
+        if (userData && userData[Key] !== value) {
+          result[Key] = value;
+        }
+      });
+      Object.entries(selectedOption).forEach(([key, value]) => {
+        const Key = key as keyof typeof selectedOption;
+        if (userData && userData[Key] !== value) {
+          result[Key] = value;
+        }
+      });
+      return result;
+    })();
+    const editDTO = {
+      timestamp: getTimestamp(),
+      ...changedInput,
+    };
     fetcher("user/info/edit", {
       method: "PUT",
-      body: {
-        timestamp: getTimestamp(),
-        height: inputValue.height,
-        weight: inputValue.weight,
-      },
+      body: editDTO,
     }).then((res) => {
       if (res.body.code === 0) {
         successAlert(
           "수정 완료!",
           "프로필 데이터 수정을 완료하였습니다.",
           () => {
-            setIdEdit(true);
+            setIdEdit(false);
           }
         );
       }
