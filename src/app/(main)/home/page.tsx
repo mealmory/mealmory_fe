@@ -7,7 +7,7 @@ import { MAIN_LABELS } from "@/constants/mainConstants";
 import { errorAlert } from "@/utils/alertFns";
 import { checkBmi } from "@/utils/checkBmi";
 import { fetcher } from "@/utils/fetchClient";
-import { getTimestamp } from "@/utils/timestamp";
+import { getTimestamp, toFetchTimeString } from "@/utils/timestamp";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -29,8 +29,21 @@ interface MainData {
   date: string;
 }
 
+interface SimpleCalory {
+  id: number;
+  time: string;
+  type: number;
+  total: number;
+}
+interface SimpleCaloryResponse {
+  [key: string]: SimpleCalory[];
+}
+
 export default function Home() {
   const [mainData, setMainData] = useState<MainData>();
+  const [simpleCalory, setSimpleCalory] = useState<
+    Array<SimpleCalory & { empty: boolean }>
+  >([]);
   useEffect(() => {
     fetcher<MainData>(
       "main/home?" +
@@ -48,16 +61,24 @@ export default function Home() {
       .catch((e) => {
         errorAlert("데이터를 요청에 실패 했습니다.", "", () => {});
       });
+    const time = toFetchTimeString(new Date());
+    const params = new URLSearchParams({
+      timestamp: getTimestamp().toString(),
+      type: String(1),
+      time,
+    });
+    fetcher<SimpleCaloryResponse>("meal/search?" + params, {
+      method: "GET",
+    }).then((res) => {
+      if (res.body.code === 0) {
+        const data = res.body.data[time.split(" ")[0]].map((item) => ({
+          ...item,
+          empty: false,
+        }));
+        setSimpleCalory(data);
+      }
+    });
   }, []);
-
-  const mealPlanList = [
-    { id: 0, time: "08:00", calory: 21134, empty: false },
-    { id: 1, time: "09:00", calory: 21134, empty: false },
-    { id: 2, time: "10:00", calory: 21134, empty: false },
-    { id: 3, time: "11:00", calory: 21134, empty: false },
-    { id: 4, time: "12:00", calory: 21134, empty: false },
-    { id: 5, time: "13:00", calory: 21134, empty: false },
-  ];
 
   const { caloryData, avg, userAvg } = MAIN_LABELS;
 
@@ -107,7 +128,7 @@ export default function Home() {
             <Table
               tHead={"시간"}
               tclassName="flex-1 flex flex-col justify-between"
-              tDataList={mealPlanList}
+              tDataList={simpleCalory}
               period="day"
             />
           </Section>
