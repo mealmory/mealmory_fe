@@ -9,12 +9,12 @@ export interface MenuDTO {
   kcal: number;
   amount: number;
   unit: 1 | 0;
-  menu_spec?: {
+  menu_spec: {
     carbs: number;
     protein: number;
     fat: number;
   };
-  value?: number;
+  value: number;
 }
 
 export interface MealType extends MenuDTO {
@@ -27,18 +27,18 @@ export type MealItemType = "search" | "self";
 interface MealPlanStoreType {
   mealPlanList: Array<MealType>;
   cmid: string;
+  setCmid: (cmid: string) => void;
   reset: () => void;
   addMeal: (newMeal: { type: MealItemType } & Partial<MenuDTO>) => void;
   setMeal: (newMeal: MealType) => void;
   deleteMeal: (cmid: string) => void;
   editStart: (mealList: Array<MenuDTO>) => void;
-  addCPF: (cmid: string) => void;
-  deleteCPF: (cmid: string) => void;
 }
 
 const useMealPlanStore = create<MealPlanStoreType>((set) => ({
   mealPlanList: [],
   cmid: "",
+  setCmid: (cmid) => set({ cmid: cmid }),
   reset: () => set({ mealPlanList: [] }),
   editStart: (mealList) => {
     const cmid = uuid();
@@ -66,18 +66,14 @@ const useMealPlanStore = create<MealPlanStoreType>((set) => ({
           kcal: kcal ?? 0,
           amount: amount ?? 0,
           unit: unit ?? 1,
-          menu_spec:
-            type === "search"
-              ? {
-                  carbs: menu_spec?.carbs ?? 0,
-                  protein: menu_spec?.protein ?? 0,
-                  fat: menu_spec?.fat ?? 0,
-                }
-              : undefined,
-          value: type === "search" && value ? value : undefined,
+          menu_spec: {
+            carbs: menu_spec?.carbs ?? 0,
+            protein: menu_spec?.protein ?? 0,
+            fat: menu_spec?.fat ?? 0,
+          },
+          value: value ?? 0,
         },
       ],
-      cmid,
     }));
   },
   setMeal: (newMeal) => {
@@ -94,28 +90,6 @@ const useMealPlanStore = create<MealPlanStoreType>((set) => ({
         (meal) => meal?.id !== cmid
       );
       return { mealPlanList: deletedList };
-    });
-  },
-  addCPF: (cmid) => {
-    set((state) => {
-      const newList = state.mealPlanList.map((meal) =>
-        meal?.id === cmid && !meal.menu_spec
-          ? { ...meal, menu_spac: { carbs: 0, protein: 0, fat: 0 } }
-          : meal
-      );
-      return { mealPlanList: newList };
-    });
-  },
-  deleteCPF: (cmid) => {
-    set((state) => {
-      const newList = state.mealPlanList.map((meal) => {
-        if (meal?.id === cmid && meal.menu_spec) {
-          const { menu_spec, ...deletedCpfMeal } = meal;
-          return deletedCpfMeal;
-        }
-        return meal;
-      });
-      return { mealPlanList: newList };
     });
   },
 }));
