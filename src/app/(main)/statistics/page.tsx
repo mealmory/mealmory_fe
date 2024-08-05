@@ -1,12 +1,14 @@
 "use client";
 
 import useDate from "@/store/selectDateStore";
-import { fetchServer } from "@/utils/fetchClient";
+import { customFetch, fetchServer } from "@/utils/fetchClient";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import Table from "@/components/main/Table";
 import Podium from "./Podium";
 import Chart from "./Chart";
+import { SimpleCalory, SimpleCaloryResponse } from "../home/page";
+import { toFetchTimeString } from "@/utils/timestamp";
 
 interface StatisticsData {
   rank: {
@@ -102,37 +104,26 @@ export default function StatisticsPage() {
 
 const MealTable = ({ range }: { range: 1 | 7 | 30 }) => {
   const { selectedDate } = useDate();
-  const [tableData, setTableData] =
-    useState<Array<{ id: number; time: string; calory: number }>>();
+  const [tableData, setTableData] = useState<
+    Array<SimpleCalory & { empty: boolean }>
+  >([]);
   useEffect(() => {
-    setTableData([
-      {
-        id: 0,
-        time: "2024-04-12",
-        calory: 12345,
-      },
-      {
-        id: 1,
-        time: "2024-04-13",
-        calory: 12345,
-      },
-      {
-        id: 2,
-        time: "2024-04-14",
-        calory: 12345,
-      },
-      {
-        id: 3,
-        time: "2024-04-15",
-        calory: 12345,
-      },
-      {
-        id: 4,
-        time: "2024-04-16",
-        calory: 12345,
-      },
-    ]);
-  }, []);
+    customFetch
+      .get<SimpleCaloryResponse>("meal/search", {
+        type: range === 1 ? 1 : range === 7 ? 2 : 3,
+        time: toFetchTimeString(selectedDate),
+      })
+      .then((res) => {
+        if (res.body.code === 0) {
+          const key = toFetchTimeString(selectedDate).split(" ")[0];
+          const data = res.body.data[key].map((item) => ({
+            ...item,
+            empty: false,
+          }));
+          setTableData(data);
+        }
+      });
+  }, [selectedDate, range]);
   const tDataList = tableData?.map((item) => ({ ...item, empty: false }));
   const period = useMemo(() => {
     if (range === 1) return "day";
