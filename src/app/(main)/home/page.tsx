@@ -29,13 +29,13 @@ interface MainData {
   date: string;
 }
 
-interface SimpleCalory {
+export interface SimpleCalory {
   id: number;
   time: string;
   type: number;
   total: number;
 }
-interface SimpleCaloryResponse {
+export interface SimpleCaloryResponse {
   [key: string]: SimpleCalory[];
 }
 
