@@ -2,6 +2,7 @@ import { MEAL_ITEM_TITLE } from "@/constants/mainConstants";
 import useMealPlanStore, {
   MealItemType,
   MealType,
+  toFixeNumberTwo,
 } from "@/store/mealPlanStore";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { BsX } from "@react-icons/all-files/bs/BsX";
@@ -17,26 +18,35 @@ const MealPlanItem = ({
   last?: boolean;
 }) => {
   const { setMeal, addCPF, deleteCPF, deleteMeal } = useMealPlanStore();
-  const { id, menu, weight, calory, cpfData, type, unit } = data;
+  const { id, menu, amount, kcal, menu_spec, type, unit, value } = data;
   const router = useRouter();
   function handleChangeValue(
     key: keyof MealType,
-    value: string | number | { carbs: number; protein: number; fat: number }
+    targetValue:
+      | string
+      | number
+      | { carbs: number; protein: number; fat: number }
   ) {
-    const newMeal = { ...data, [key]: value };
+    const newMeal = { ...data, [key]: targetValue };
     setMeal(newMeal);
   }
 
   return (
     <div
       className={
-        "w-full group bg-cusbanana p-2 shadow-border pb-7 " +
-        (first ? "rounded-t-2xl" : last ? "rounded-b-2xl" : "")
+        "w-full group bg-cusbanana dark:bg-cusdarkbanana p-2 shadow-border pb-7 " +
+        (first
+          ? last
+            ? "rounded-2xl"
+            : "rounded-t-2xl"
+          : last
+          ? "rounded-b-2xl"
+          : "")
       }
     >
       <div className="sm:invisible sm:group-hover:visible mb-2">
         <button
-          className="p-1 rounded-full bg-cuspink text-cusorange"
+          className="p-1 rounded-full bg-cuspink text-cusorange dark:bg-zinc-700"
           onClick={() => deleteMeal(id)}
         >
           <BsX size={25} />
@@ -68,56 +78,65 @@ const MealPlanItem = ({
         <div className="w-full rounded-xl shadow-border bg-white dark:bg-cusdark p-3 my-4">
           <div className="w-full flex items-center justify-between gap-5 mb-3">
             <p>{MEAL_ITEM_TITLE.weight} :</p>
-            <div className="flex-1 flex items-center justify-between pr-2 point-value border-b border-black dark:border-gray-500">
+            <div className="flex-1 flex items-center justify-between pr-2 point-value border-b gap-2 border-black dark:border-gray-500">
               <input
-                className="flex-1"
+                className="flex-1 pl-2 rounded-lg "
                 type="number"
-                value={weight}
-                onChange={(e) => handleChangeValue("weight", e.target.value)}
+                value={amount}
+                onChange={(e) => handleChangeValue("amount", e.target.value)}
               />
               <p>{unit === 1 ? "g" : "ml"}</p>
             </div>
           </div>
-          {cpfData && (
+          {menu_spec && (
             <div className="w-full flex items-center gap-5">
-              {Object.entries(cpfData).map(([key, value]) => (
-                <CPFCard
-                  key={key}
-                  type={type}
-                  title={MEAL_ITEM_TITLE[key as keyof typeof cpfData]}
-                  value={value}
-                  handleChangeCPF={(cpfValue) => {
-                    const newCPF = {
-                      ...cpfData,
-                      [key]: cpfValue,
-                    };
-                    handleChangeValue("cpfData", newCPF);
-                  }}
-                />
-              ))}
+              {Object.entries(menu_spec).map(([key, specValue]) => {
+                return (
+                  <CPFCard
+                    key={key}
+                    type={type}
+                    title={MEAL_ITEM_TITLE[key as keyof typeof menu_spec]}
+                    value={
+                      type === "search"
+                        ? value
+                          ? toFixeNumberTwo((specValue / value) * amount)
+                          : specValue
+                        : specValue
+                    }
+                    handleChangeCPF={(cpfValue) => {
+                      const newCPF = {
+                        ...menu_spec,
+                        [key]: cpfValue,
+                      };
+                      handleChangeValue("menu_spec", newCPF);
+                    }}
+                  />
+                );
+              })}
             </div>
           )}
           {type === "self" && (
             <button
               className="w-full flex items-center justify-center gap-2 mt-3 text-cusorange"
-              onClick={() => (cpfData ? deleteCPF(id) : addCPF(id))}
+              onClick={() => (menu_spec ? deleteCPF(id) : addCPF(id))}
             >
-              <p>{cpfData ? "탄단지 제거" : "탄단지 입력"}</p>
-              <p className={cpfData ? "-rotate-90" : "rotate-90"}>&gt;</p>
+              <p>{menu_spec ? "탄단지 제거" : "탄단지 입력"}</p>
+              <p className={menu_spec ? "-rotate-90" : "rotate-90"}>&gt;</p>
             </button>
           )}
         </div>
         {type === "search" ? (
-          <p className="text-center">
-            {MEAL_ITEM_TITLE.calory}: {calory.toLocaleString()} kcal
+          <p className="text-center ">
+            {MEAL_ITEM_TITLE.calory}: {kcal.toLocaleString()} kcal
           </p>
         ) : (
           <div className="flex items-center justify-center gap-2">
             <input
               className="p-3 shadow-border rounded-2xl"
               type="number"
-              value={calory}
-              onChange={(e) => handleChangeValue("calory", e.target.value)}
+              step="0.01"
+              value={kcal}
+              onChange={(e) => handleChangeValue("kcal", e.target.value)}
             />
             <p>kcal</p>
           </div>

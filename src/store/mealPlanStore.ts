@@ -1,64 +1,83 @@
 import { create } from "zustand";
 import { v4 as uuid } from "uuid";
-import { MenuDTO } from "@/components/main/MealplanForm";
-export interface MealType {
-  id: string;
-  type: MealItemType;
+
+export interface MenuDTO {
+  did: number;
+  cid: number;
+  fid: number;
   menu: string;
-  calory: number;
-  weight: number;
+  kcal: number;
+  amount: number;
   unit: 1 | 0;
-  cpfData?: {
+  menu_spec?: {
     carbs: number;
     protein: number;
     fat: number;
   };
+  value?: number;
+}
+
+export interface MealType extends MenuDTO {
+  // client identifier
+  id: string;
+  type: MealItemType;
 }
 export type MealItemType = "search" | "self";
 
 interface MealPlanStoreType {
-  mealPlanList: Array<MealType | null>;
+  mealPlanList: Array<MealType>;
+  cmid: string;
   reset: () => void;
-  addMeal: (type: MealItemType) => void;
+  addMeal: (newMeal: { type: MealItemType } & Partial<MenuDTO>) => void;
   setMeal: (newMeal: MealType) => void;
-  deleteMeal: (id: string) => void;
+  deleteMeal: (cmid: string) => void;
   editStart: (mealList: Array<MenuDTO>) => void;
-  addCPF: (id: string) => void;
-  deleteCPF: (id: string) => void;
+  addCPF: (cmid: string) => void;
+  deleteCPF: (cmid: string) => void;
 }
 
 const useMealPlanStore = create<MealPlanStoreType>((set) => ({
   mealPlanList: [],
+  cmid: "",
   reset: () => set({ mealPlanList: [] }),
   editStart: (mealList) => {
+    const cmid = uuid();
     const newList = mealList.map((item) => ({
       ...item,
       type: "self" as MealItemType,
-      id: uuid(),
+      id: cmid,
     }));
-    set({ mealPlanList: newList });
+    set({ mealPlanList: newList, cmid });
   },
-  addMeal: (type) => {
+  addMeal: (newMeal) => {
+    const cmid = uuid();
+    const { type, did, cid, fid, menu, kcal, amount, unit, menu_spec, value } =
+      newMeal;
     set((state) => ({
       mealPlanList: [
         ...state.mealPlanList,
         {
-          id: uuid(),
+          id: cmid,
           type: type,
-          menu: "",
-          calory: 0,
-          weight: 0,
-          unit: 1,
-          cpfData:
+          did: did ?? 0,
+          cid: cid ?? 0,
+          fid: fid ?? 0,
+          menu: menu ?? "",
+          kcal: kcal ?? 0,
+          amount: amount ?? 0,
+          unit: unit ?? 1,
+          menu_spec:
             type === "search"
               ? {
-                  carbs: 0,
-                  protein: 0,
-                  fat: 0,
+                  carbs: menu_spec?.carbs ?? 0,
+                  protein: menu_spec?.protein ?? 0,
+                  fat: menu_spec?.fat ?? 0,
                 }
               : undefined,
+          value: type === "search" && value ? value : undefined,
         },
       ],
+      cmid,
     }));
   },
   setMeal: (newMeal) => {
@@ -69,27 +88,29 @@ const useMealPlanStore = create<MealPlanStoreType>((set) => ({
       return { mealPlanList: newList };
     });
   },
-  deleteMeal: (id) => {
+  deleteMeal: (cmid) => {
     set((state) => {
-      const deletedList = state.mealPlanList.filter((meal) => meal?.id !== id);
+      const deletedList = state.mealPlanList.filter(
+        (meal) => meal?.id !== cmid
+      );
       return { mealPlanList: deletedList };
     });
   },
-  addCPF: (id) => {
+  addCPF: (cmid) => {
     set((state) => {
       const newList = state.mealPlanList.map((meal) =>
-        meal?.id === id && !meal.cpfData
-          ? { ...meal, cpfData: { carbs: 0, protein: 0, fat: 0 } }
+        meal?.id === cmid && !meal.menu_spec
+          ? { ...meal, menu_spac: { carbs: 0, protein: 0, fat: 0 } }
           : meal
       );
       return { mealPlanList: newList };
     });
   },
-  deleteCPF: (id) => {
+  deleteCPF: (cmid) => {
     set((state) => {
       const newList = state.mealPlanList.map((meal) => {
-        if (meal?.id === id && meal.cpfData) {
-          const { cpfData, ...deletedCpfMeal } = meal;
+        if (meal?.id === cmid && meal.menu_spec) {
+          const { menu_spec, ...deletedCpfMeal } = meal;
           return deletedCpfMeal;
         }
         return meal;
@@ -100,3 +121,7 @@ const useMealPlanStore = create<MealPlanStoreType>((set) => ({
 }));
 
 export default useMealPlanStore;
+
+export function toFixeNumberTwo(num: number) {
+  return +num.toFixed(2);
+}
