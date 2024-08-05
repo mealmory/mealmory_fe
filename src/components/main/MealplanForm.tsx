@@ -13,7 +13,7 @@ import useDate from "@/store/selectDateStore";
 import MealPlanItem from "@/components/main/MealPlanItem";
 import { customFetch, fetchClient, fetcher } from "@/utils/fetchClient";
 import { MenuTypeStrToNum } from "@/utils/mealplanFns";
-import { getTimestamp, toFetchTimeString } from "@/utils/timestamp";
+import { toFetchTimeString } from "@/utils/timestamp";
 import Swal from "sweetalert2";
 
 interface MealDTO {
@@ -49,7 +49,6 @@ export default function MealplanForm({
 }) {
   const { mealPlanList, editStart, reset } = useMealPlanStore();
   const { selectedDate, init, changeDate } = useDate();
-  console.log("date", selectedDate.toLocaleString());
   const router = useRouter();
   const totalCalory =
     mealPlanList.length > 0 &&
@@ -152,13 +151,11 @@ export default function MealplanForm({
                     return undefined;
                   }
 
-                  const spec = menu_spec
-                    ? {
-                        carbs: calcMenuSpec(menu_spec.carbs),
-                        fat: calcMenuSpec(menu_spec.fat),
-                        protein: calcMenuSpec(menu_spec.protein),
-                      }
-                    : undefined;
+                  const spec = {
+                    carbs: calcMenuSpec(menu_spec.carbs),
+                    fat: calcMenuSpec(menu_spec.fat),
+                    protein: calcMenuSpec(menu_spec.protein),
+                  };
                   return {
                     menu,
                     kcal,
