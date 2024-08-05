@@ -55,7 +55,7 @@ const DivisionSelectComponent = () => {
           handleClickCategory={(id) => setMenuRegion("category", id)}
         />
       ) : (
-        <MenuSearchField />
+        <MenuSearchField handleClose={() => router.back()} />
       )}
     </div>
   );
