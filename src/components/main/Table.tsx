@@ -8,7 +8,8 @@ interface TableProps {
   tDataList: Array<{
     id: number;
     time: string;
-    calory: number;
+    total: number;
+    type: number;
     empty: boolean;
   }>;
   period: "day" | "week" | "month";
@@ -26,7 +27,7 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
       periodNum * page
     );
     while (caloryList.length < periodNum) {
-      caloryList.push({ id: 0, time: "", calory: 0, empty: true });
+      caloryList.push({ id: 0, time: "", total: 0, type: 0, empty: true });
     }
     return {
       caloryList: caloryList,
@@ -53,11 +54,11 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
         </thead>
         <tbody>
           {caloryList ? (
-            caloryList.map(({ id, time, calory, empty }) =>
+            caloryList.map(({ id, time, total, empty }) =>
               empty ? (
                 <tr key={`${id}${time}`}>
                   <td colSpan={2} className={thClass + " invisible"}>
-                    {calory}
+                    {total}
                   </td>
                 </tr>
               ) : (
@@ -71,7 +72,7 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
                       )
                     }
                   >
-                    {calory.toLocaleString() + " kcal"}
+                    {total.toLocaleString() + " kcal"}
                   </td>
                 </tr>
               )
