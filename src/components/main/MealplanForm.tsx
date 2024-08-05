@@ -12,7 +12,7 @@ import { usePathname, useRouter } from "next/navigation";
 import useDate from "@/store/selectDateStore";
 import MealPlanItem from "@/components/main/MealPlanItem";
 import { customFetch, fetchClient, fetcher } from "@/utils/fetchClient";
-import { MenuTypeStrToNum } from "@/utils/mealplanFns";
+import { menuTypeTransform } from "@/utils/mealplanFns";
 import { toFetchTimeString } from "@/utils/timestamp";
 import Swal from "sweetalert2";
 
@@ -61,7 +61,7 @@ export default function MealplanForm({
       fetchClient<MealInfoType>(`dummy/meal/info?id=${id}`)
         .then((res) => res.body.data)
         .then((data) => {
-          setSelectedType(MenuTypeStrToNum(data.type));
+          setSelectedType(menuTypeTransform(data.type));
           editStart(data.menuList);
           changeDate(new Date(data.date));
         });
