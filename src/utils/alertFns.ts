@@ -30,27 +30,29 @@ export const questionAlert = ({
 export const errorAlert = (
   errTitle: string,
   errText: string,
-  afterEffect: () => void
+  afterEffect?: () => void
 ) => {
   Swal.fire({
     title: errTitle,
     text: errText,
     icon: "error",
-  }).then(() => {
-    afterEffect();
+  }).then((result) => {
+    afterEffect && afterEffect();
+    return result;
   });
 };
 
 export const successAlert = (
   title: string,
   text: string,
-  afterEffect: () => void
+  afterEffect?: () => void
 ) => {
   Swal.fire({
     title,
     text,
     icon: "success",
-  }).then(() => {
-    afterEffect();
+  }).then((result) => {
+    afterEffect && afterEffect();
+    return result;
   });
 };
