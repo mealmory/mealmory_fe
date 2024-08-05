@@ -5,6 +5,7 @@ import useMenuRegion, { MenuRegion } from "@/store/menuRegionStore";
 import { useEffect } from "react";
 import { CATEGORY_ITEMS } from "@/constants/mainConstants";
 import MenuSearchField from "./MenuSearchField";
+import useMealPlanStore from "@/store/mealPlanStore";
 const DIVISION = [
   { did: 1, name: "가공 식품" },
   { did: 2, name: "가정식" },
@@ -13,6 +14,7 @@ const DIVISION = [
 const DivisionSelectComponent = () => {
   const router = useRouter();
   const { menuRegion, setMenuRegion, reset } = useMenuRegion();
+  const { addMeal } = useMealPlanStore();
   const regionKey =
     menuRegion.division === 1
       ? "processed"
@@ -48,14 +50,28 @@ const DivisionSelectComponent = () => {
       {menuRegion.division === 0 ? (
         <DivisionField
           handleClickDivision={(did) => setMenuRegion("division", did)}
+          handleSelfClick={() => {
+            addMeal({ type: "self", did: 4 });
+            router.back();
+          }}
         />
       ) : menuRegion.category === 0 ? (
         <CategoryField
           regionKey={regionKey}
           handleClickCategory={(id) => setMenuRegion("category", id)}
+          handleSelfClick={() => {
+            addMeal({ type: "self", did: 4 });
+            router.back();
+          }}
         />
       ) : (
-        <MenuSearchField handleClose={() => router.back()} />
+        <MenuSearchField
+          handleClose={() => router.back()}
+          handleSelfClick={() => {
+            addMeal({ type: "self", did: 4 });
+            router.back();
+          }}
+        />
       )}
     </div>
   );
@@ -65,11 +81,13 @@ export default DivisionSelectComponent;
 
 const DivisionField = ({
   handleClickDivision,
+  handleSelfClick,
 }: {
   handleClickDivision: (did: number) => void;
+  handleSelfClick: () => void;
 }) => {
   return (
-    <div className="w-full h-full grid grid-cols-3 p-3 gap-2">
+    <div className="w-full grid grid-cols-3 p-3 gap-2">
       {DIVISION.map(({ did, name }) => (
         <button
           key={did}
@@ -79,6 +97,12 @@ const DivisionField = ({
           {name}
         </button>
       ))}
+      <button
+        className="rounded-lg shadow-border p-2 h-20 point-value break-words"
+        onClick={handleSelfClick}
+      >
+        직접 입력
+      </button>
     </div>
   );
 };
@@ -86,9 +110,11 @@ const DivisionField = ({
 const CategoryField = ({
   regionKey,
   handleClickCategory,
+  handleSelfClick,
 }: {
   regionKey: keyof typeof CATEGORY_ITEMS;
   handleClickCategory: (id: number) => void;
+  handleSelfClick: () => void;
 }) => {
   return (
     <div className="w-full h-hull p-3 overflow-y-scroll grid grid-cols-4 gap-3">
@@ -103,6 +129,12 @@ const CategoryField = ({
           ))}
         </button>
       ))}
+      <button
+        className="rounded-lg shadow-border p-1 h-20 point-value break-words w-full flex flex-col items-center justify-center"
+        onClick={handleSelfClick}
+      >
+        직접 입력
+      </button>
     </div>
   );
 };

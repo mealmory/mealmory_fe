@@ -40,7 +40,13 @@ interface TempResult {
     fat: number;
   };
 }
-const MenuSearchField = ({ handleClose }: { handleClose: () => void }) => {
+const MenuSearchField = ({
+  handleClose,
+  handleSelfClick,
+}: {
+  handleClose: () => void;
+  handleSelfClick: () => void;
+}) => {
   const { menuRegion } = useMenuRegion();
   const [searchValue, setSearchValue] = useState("");
   const [searchResult, setSearchResult] = useState<SearchResultDTO[]>();
@@ -71,7 +77,7 @@ const MenuSearchField = ({ handleClose }: { handleClose: () => void }) => {
     <div className="w-[97%] h-[95%] mx-auto rounded-xl shadow-border overflow-x-hidden overflow-y-scroll pb-3">
       <div className="w-full border-b flex items-center p-3">
         <input
-          className="flex-1"
+          className="flex-1 dark:bg-cusdark"
           type="text"
           placeholder="검색할 메뉴 이름을 입력해주세요."
           value={searchValue}
@@ -79,8 +85,11 @@ const MenuSearchField = ({ handleClose }: { handleClose: () => void }) => {
         />
         <BsSearch size={20} />
       </div>
-      <div className="w-full px-3 bg-gray-50">
-        <button className="w-full border-b border-black p-2 py-3 flex items-center justify-between rounded-none">
+      <div className="w-full px-3 pb-2 bg-gray-50 rounded-b-2xl">
+        <button
+          className="w-full border-b border-black p-2 py-3 flex items-center justify-between rounded-none"
+          onClick={handleSelfClick}
+        >
           <p>직접 입력</p>
           <small className="text-xs">
             *검색 결과가 없는 경우 선택해주세요*
@@ -109,7 +118,7 @@ const ResultItem = ({
   foodData: SearchResultDTO;
   handleClose: () => void;
 }) => {
-  const { addMeal } = useMealPlanStore();
+  const { addMeal, cmid, setMeal, setCmid } = useMealPlanStore();
   function handleClick() {
     const {
       did,
@@ -124,22 +133,43 @@ const ResultItem = ({
       carbs,
       value,
     } = foodData;
-    addMeal({
-      type: "search",
-      did,
-      cid,
-      fid,
-      menu,
-      amount,
-      unit: unit === "g" ? 1 : 0,
-      kcal,
-      value,
-      menu_spec: {
-        fat: fat,
-        protein: protein,
-        carbs: carbs,
-      },
-    });
+    if (cmid === "") {
+      addMeal({
+        type: "search",
+        did,
+        cid,
+        fid,
+        menu,
+        amount,
+        unit: unit === "g" ? 1 : 0,
+        kcal,
+        value,
+        menu_spec: {
+          fat: fat,
+          protein: protein,
+          carbs: carbs,
+        },
+      });
+    } else {
+      setMeal({
+        id: cmid,
+        type: "search",
+        did,
+        cid,
+        fid,
+        menu,
+        amount,
+        unit: unit === "g" ? 1 : 0,
+        kcal,
+        value,
+        menu_spec: {
+          fat: fat,
+          protein: protein,
+          carbs: carbs,
+        },
+      });
+    }
+    setCmid("");
     handleClose();
   }
   return (
