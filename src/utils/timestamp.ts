@@ -4,6 +4,6 @@ export const getTimestamp = () => {
 };
 
 export const toFetchTimeString = (date: Date) => {
-  const time = new Date().toISOString().split("T");
+  const time = date.toISOString().split("T");
   return time[0] + " " + time[1].slice(0, 8);
 };
