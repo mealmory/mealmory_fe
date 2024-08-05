@@ -2,26 +2,19 @@
 
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Selector from "@/components/Selector";
-import useMealPlanStore from "@/store/mealPlanStore";
+import useMealPlanStore, {
+  MenuDTO,
+  toFixeNumberTwo,
+} from "@/store/mealPlanStore";
 
 import { MEAL_ITEM_TITLE } from "@/constants/mainConstants";
 import { usePathname, useRouter } from "next/navigation";
 import useDate from "@/store/selectDateStore";
 import MealPlanItem from "@/components/main/MealPlanItem";
-import { fetchClient } from "@/utils/fetchClient";
+import { customFetch, fetchClient, fetcher } from "@/utils/fetchClient";
 import { MenuTypeStrToNum } from "@/utils/mealplanFns";
-
-export interface MenuDTO {
-  menu: string;
-  calory: number;
-  weight: number;
-  unit: 1 | 0;
-  cpfData?: {
-    carbs: number;
-    protein: number;
-    fat: number;
-  };
-}
+import { getTimestamp, toFetchTimeString } from "@/utils/timestamp";
+import Swal from "sweetalert2";
 
 interface MealDTO {
   date: string;
@@ -56,10 +49,11 @@ export default function MealplanForm({
 }) {
   const { mealPlanList, editStart, reset } = useMealPlanStore();
   const { selectedDate, init, changeDate } = useDate();
+  console.log("date", selectedDate.toLocaleString());
   const router = useRouter();
   const totalCalory =
     mealPlanList.length > 0 &&
-    mealPlanList.map((meal) => meal?.calory).reduce((a, b) => a && b && a + b);
+    mealPlanList.map((meal) => meal?.kcal).reduce((a, b) => a && b && a + b);
   const pathname = usePathname();
   useEffect(() => {
     if (edit) {
@@ -91,7 +85,7 @@ export default function MealplanForm({
           }
         />
         <button
-          className="flex-1 shadow-border p-4 w-full"
+          className="flex-1 shadow-border p-4 w-full dark:bg-cusdarkbanana"
           suppressHydrationWarning
           onClick={() => router.push("/calendar", { scroll: false })}
         >
@@ -116,9 +110,9 @@ export default function MealplanForm({
       <div className="w-full max-w-96 mx-auto flex flex-col gap-5">
         <button
           className="w-full border-2 border-cusorange text-cusorange p-2"
-          onClick={() =>
-            router.push("/mealplan/add/division", { scroll: false })
-          }
+          onClick={() => {
+            router.push("/mealplan/add/division", { scroll: false });
+          }}
         >
           메뉴 추가하기
         </button>
@@ -129,7 +123,72 @@ export default function MealplanForm({
           </span>{" "}
           kcal
         </p>
-        <button className="w-full bg-cuspoint text-cusorange p-2">
+        <button
+          className="w-full bg-cuspoint text-cusorange p-2"
+          onClick={() => {
+            if (mealPlanList.length > 0 && typeof totalCalory === "number") {
+              const menuList = mealPlanList.map(
+                ({
+                  menu,
+                  kcal,
+                  did,
+                  cid,
+                  fid,
+                  menu_spec,
+                  unit,
+                  amount,
+                  type,
+                  value,
+                }) => {
+                  function calcMenuSpec(num?: number) {
+                    if (num) {
+                      if (type === "search") {
+                        return value
+                          ? toFixeNumberTwo((num / value) * amount)
+                          : num;
+                      }
+                      return num;
+                    }
+                    return undefined;
+                  }
+
+                  const spec = menu_spec
+                    ? {
+                        carbs: calcMenuSpec(menu_spec.carbs),
+                        fat: calcMenuSpec(menu_spec.fat),
+                        protein: calcMenuSpec(menu_spec.protein),
+                      }
+                    : undefined;
+                  return {
+                    menu,
+                    kcal,
+                    amount,
+                    did,
+                    cid,
+                    fid,
+                    menu_spec: spec,
+                    unit,
+                  };
+                }
+              );
+              const result = {
+                time: toFetchTimeString(selectedDate),
+                total: totalCalory,
+                type: selectedType,
+                menuList: JSON.stringify(menuList),
+              };
+              customFetch.post("meal/add", result).then((res) => {
+                const ok = res.body.code === 0;
+                Swal.fire({
+                  title: ok
+                    ? "식단을 성공적으로 저장했습니다."
+                    : "식단 저장에 실패햇습니다. 잠시 후 다시 시도해 주세요",
+                  icon: ok ? "success" : "error",
+                });
+              });
+            }
+          }}
+        >
           식단 저장하기
         </button>
       </div>
