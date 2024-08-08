@@ -4,13 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
-
-export const redirectUri = process.env.NEXT_PUBLIC_KAKAO_REDIRECT;
-export const scope = [
-  "profile_nickname",
-  "profile_image",
-  "account_email",
-].join(",");
+import { redirectUri, scope } from "./kakaoConst";
 
 export default function Login() {
   const router = useRouter();

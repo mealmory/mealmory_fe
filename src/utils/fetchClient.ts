@@ -3,8 +3,8 @@ import returnFetch, {
   ReturnFetchDefaultOptions,
 } from "return-fetch";
 import Cookies from "js-cookie";
-import { redirectUri, scope } from "@/app/auth/page";
 import { getTimestamp } from "./timestamp";
+import { redirectUri, scope } from "@/app/auth/kakaoConst";
 type JsonRequestInit = Omit<NonNullable<FetchArgs[1]>, "body"> & {
   body?: object;
 };
