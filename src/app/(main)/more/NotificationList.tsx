@@ -2,6 +2,7 @@
 
 import Pagination from "@/components/main/Pagination";
 import { customFetch } from "@/utils/fetchClient";
+import { isAdmin } from "@/utils/noticeFns";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -37,7 +38,17 @@ const NotificationList = () => {
 
   return (
     <div className="w-full flex flex-col items-center gap-2 py-3">
-      <p className="text-xl sm:text-2xl mb-2">공지사항</p>
+      <div className="w-full relative">
+        <p className="text-xl sm:text-2xl mb-2 text-center">공지사항</p>
+        {isAdmin && (
+          <Link
+            className=" absolute right-2 top-1/2 -translate-y-2/3 shadow-border rounded-xl p-2 bg-cusorange text-white"
+            href="/notice/add"
+          >
+            공지 추가
+          </Link>
+        )}
+      </div>
       {noticeData.length < 1 ? (
         <div className="w-full rounded-xl shadow-border p-3 sm:p-6 flex justify-center items-center">
           <p>공지사항이 없습니다.</p>
