@@ -25,9 +25,9 @@ export default function CallbackKakao() {
           if (res.body.code === 0) {
             const { email, nickName, profile, agreement, collect } =
               res.body.data;
-            sessionStorage.setItem("email", email);
-            sessionStorage.setItem("nickName", nickName);
-            sessionStorage.setItem("profile", String(profile));
+            localStorage.setItem("email", email);
+            localStorage.setItem("nickName", nickName);
+            localStorage.setItem("profile", String(profile));
             if (agreement === 0) {
               router.replace("/auth/consent");
             } else if (collect === 0) {

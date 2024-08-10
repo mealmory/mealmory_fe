@@ -53,7 +53,7 @@ export default function Home() {
       .then((res) => {
         if (res.body.code === 0) {
           setMainData(res.body.data);
-          sessionStorage.setItem("sud", res.body.data.date);
+          localStorage.setItem("sud", res.body.data.date);
           return res.body.data;
         }
         throw new Error("데이터 요청 실패");

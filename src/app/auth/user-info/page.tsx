@@ -31,10 +31,10 @@ export default function UserInfo() {
   });
   useEffect(() => {
     setTimeout(() => {
-      if (sessionStorage) {
+      if (localStorage) {
         const newData = {
-          image: sessionStorage.getItem("profile"),
-          email: sessionStorage.getItem("email"),
+          image: localStorage.getItem("profile"),
+          email: localStorage.getItem("email"),
           nickName: localStorage.getItem("nickName"),
         };
         setUserData({
