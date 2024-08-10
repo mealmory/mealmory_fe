@@ -9,47 +9,76 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
-const NoticeAddForm = () => {
+const NoticeAddForm = ({ isEdit }: { isEdit?: boolean }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const router = useRouter();
+  const pointWord = isEdit ? "수정" : "추가";
+
   useEffect(() => {
     if (!isAdmin) router.back();
+    else if (isEdit && typeof window !== undefined) {
+      setTitle(localStorage.getItem("ntl") || "");
+      setDescription(localStorage.getItem("nds") || "");
+    }
     return () => {
       setTitle("");
       setDescription("");
+      if (isEdit) {
+        localStorage.removeItem("ntl");
+        localStorage.removeItem("nds");
+        localStorage.removeItem("ndx");
+        localStorage.removeItem("ndt");
+      }
     };
   }, []);
   function handleSaveClick() {
     if (title.length > 0 && description.length > 0) {
+      const afterEffect = isEdit
+        ? () => {
+            const id =
+              typeof window !== "undefined"
+                ? localStorage.getItem("ndx")
+                : null;
+            if (id) {
+              customFetch.put("notice/edit", {
+                title,
+                description,
+                id: Number(id),
+              });
+            }
+          }
+        : () => {
+            customFetch
+              .post("notice/add", {
+                title,
+                description,
+              })
+              .then((res) => {
+                if (res.body.code !== 0) {
+                  throw new Error();
+                }
+              });
+          };
       questionAlert({
-        title: "공지사항을 추가하시겠습니까?",
+        title: `공지사항을 ${pointWord}하시겠습니까?`,
         text: "",
-        confirmText: "추가",
-        afterEffect: () => {
-          customFetch
-            .post("notice/add", {
-              title,
-              description,
-            })
-            .then((res) => {
-              if (res.body.code !== 0) {
-                throw new Error();
-              }
-            });
-        },
+        confirmText: pointWord,
+        afterEffect,
       })
         .then((result) => {
           if (result.isConfirmed) {
             Swal.fire({
-              title: "성공적으로 공지사항을 추가하였습니다.",
+              title: `성공적으로 공지사항을 ${pointWord}하였습니다.`,
               icon: "success",
+            }).then(() => {
+              router.back();
             });
           }
         })
         .catch((e) => {
           Swal.fire({
-            title: "공지사항을 추가하지 못했습니다.",
+            title: `공지사항을 ${pointWord}하지 못했습니다.`,
             icon: "error",
           });
         });
@@ -68,14 +97,18 @@ const NoticeAddForm = () => {
         label="제목"
         value={title}
         handleChange={(e) => setTitle(e.target.value)}
+        suppressHydrationWarning
       />
       <TextArea
         value={description}
         label="본문"
         handleChange={(e) => setDescription(e.target.value)}
         className="flex-1"
+        suppressHydrationWarning
       />
-      <button onClick={handleSaveClick}>추가하기</button>
+      <button onClick={handleSaveClick} suppressHydrationWarning>
+        {pointWord}하기
+      </button>
     </div>
   );
 };
