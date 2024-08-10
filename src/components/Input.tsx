@@ -6,11 +6,13 @@ const Input = ({
   value,
   handleChange,
   disabled,
+  suppressHydrationWarning,
 }: {
   label: string;
   type: HTMLInputTypeAttribute;
   value?: number | string;
   disabled?: boolean;
+  suppressHydrationWarning?: boolean;
   handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }) => {
   const uuid = useId();
@@ -32,6 +34,7 @@ const Input = ({
         onChange={handleChange}
         className=" outline-none shadow-border rounded-xl py-2 px-3 w-full text-xl disabled:text-gray-400"
         disabled={disabled}
+        suppressHydrationWarning={suppressHydrationWarning}
       />
     </div>
   );
