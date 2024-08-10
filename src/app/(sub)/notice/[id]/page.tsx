@@ -1,44 +1,79 @@
-import { getTimestamp } from "@/utils/timestamp";
+"use client";
 
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { customFetch } from "@/utils/fetchClient";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { isAdmin } from "@/utils/noticeFns";
+import { errorAlert } from "@/utils/alertFns";
+import dynamic from "next/dynamic";
 
-export default async function NoticeDetail({
-  params,
-}: {
-  params: { id: string };
-}) {
+const DetailAdminUseButtons = dynamic(
+  () => import("@/app/(sub)/notice/[id]/DetilAdminUseButtons")
+);
+
+interface NoticeDetail {
+  title: string;
+  date: string;
+  description: string;
+  id: number;
+}
+
+export default function NoticeDetail({ params }: { params: { id: string } }) {
   const { id } = params;
-  const noticeData = await fetch(
-    `${process.env.NEXT_PUBLIC_BASEURL}notice/info?${new URLSearchParams({
-      timestamp: getTimestamp().toString(),
-      id: id,
-    })}`,
-    {
-      method: "GET",
-      headers: {
-        authorization: `Bearer ${cookies().get("act")?.value}`,
-      },
+  const [noticeData, setNoticeData] = useState<NoticeDetail>();
+  const router = useRouter();
+  useEffect(() => {
+    customFetch
+      .get<NoticeDetail[]>("notice/info", { id: id })
+      .then((res) => {
+        if (res.body.code === 0) {
+          setNoticeData(res.body.data[0]);
+        } else {
+          throw new Error("존재하지 않는 공지사항");
+        }
+      })
+      .catch((err) => {
+        return router.back();
+      });
+    return () => {
+      setNoticeData(undefined);
+    };
+  }, []);
+
+  function handleEditClick() {
+    if (isAdmin && noticeData) {
+      localStorage.setItem("ntl", noticeData.title);
+      localStorage.setItem("nds", noticeData.description);
+      localStorage.setItem("ndx", noticeData.id.toString());
+      localStorage.setItem("ndt", noticeData.date);
+      router.push("/notice/edit", { scroll: false });
     }
-  )
-    .then((res) => res.json())
-    .then((body) => {
-      if (body.code === 0) return body.data[0];
-      throw new Error("존재하지 않는 공지사항");
-    })
-    .catch((err) => {
-      return redirect("/more");
-    });
+  }
+
+  function handleDeleteClick() {
+    if (isAdmin && noticeData) {
+      customFetch.delete("notice/delete", { id: noticeData.id }).then((res) => {
+        if (res.body.code === 0) router.back();
+        else {
+          errorAlert("공지사항 삭제에 실패했습니다.", "");
+        }
+      });
+    }
+  }
 
   return (
     <main className="w-full h-full ">
+      <DetailAdminUseButtons
+        handleDeleteClick={handleDeleteClick}
+        handleEditClick={handleEditClick}
+      />
       <div className="w-full h-full min-h-[calc(100vh-55px)] sm:rounded-xl shadow-border overflow-hidden">
         <div className="border-b bg-cusbanana p-5">
-          <h1 className=" sm:text-2xl">{noticeData.title}</h1>
-          <p>{noticeData.date}</p>
+          <h1 className=" sm:text-2xl">{noticeData?.title}</h1>
+          <p className="text-end">{noticeData?.date}</p>
         </div>
         <div className="w-full h-full p-3">
-          <p className=" break-words">{noticeData.description}</p>
+          <p className=" break-words">{noticeData?.description}</p>
         </div>
       </div>
     </main>
