@@ -26,7 +26,7 @@ const TextArea = ({
         value={value}
         onChange={handleChange}
         className={
-          "outline-none shadow-border h-[calc(100%-26px)] rounded-xl py-2 px-3 w-full text-xl disabled:text-gray-400 "
+          "outline-none shadow-border h-[calc(100%-26px)] rounded-xl py-2 px-3 w-full text-xl disabled:text-gray-400 resize-none overflow-y-scroll"
         }
         disabled={disabled}
         suppressHydrationWarning={suppressHydrationWarning}
