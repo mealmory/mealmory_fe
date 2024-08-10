@@ -212,7 +212,7 @@ class Fetcher {
     });
   }
 
-  put<T>(url: string, body: any, init?: JsonRequestInit) {
+  put<T>(url: string, body: object, init?: JsonRequestInit) {
     return this.fetcher<T>(url, {
       ...init,
       method: "PUT",
@@ -223,8 +223,12 @@ class Fetcher {
     });
   }
 
-  delete<T>(url: string, init?: JsonRequestInit) {
-    return this.fetcher<T>(url, { ...init, method: "DELETE" });
+  delete<T>(url: string, body: object, init?: JsonRequestInit) {
+    return this.fetcher<T>(url, {
+      ...init,
+      method: "DELETE",
+      body: { timestamp: getTimestamp(), ...body },
+    });
   }
 }
 
