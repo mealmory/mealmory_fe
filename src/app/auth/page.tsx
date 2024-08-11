@@ -26,11 +26,14 @@ export default function Login() {
       <button
         className="flex gap-2 rounded-xl bg-[#FEE500] text-[rgba(0,0,0,0.85)] p-3 items-center active:bg-[rgb(233,216,66)] mt-5"
         onClick={() => {
-          window.Kakao &&
-            window.Kakao.Auth.authorize({
-              redirectUri,
-              scope,
-            });
+          if (typeof window !== undefined) {
+            sessionStorage.setItem("klclck", "Y");
+            window.Kakao &&
+              window.Kakao.Auth.authorize({
+                redirectUri,
+                scope,
+              });
+          }
         }}
       >
         <Image

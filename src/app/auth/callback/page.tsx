@@ -33,7 +33,13 @@ export default function CallbackKakao() {
             } else if (collect === 0) {
               router.replace("/auth/user-info");
             } else {
-              router.back();
+              if (
+                typeof window !== undefined &&
+                sessionStorage.getItem("klclck") === "Y"
+              ) {
+                sessionStorage.removeItem("klclck");
+                router.replace("/home");
+              } else router.back();
             }
           } else {
             throw new Error("로그인 실패");
