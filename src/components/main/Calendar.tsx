@@ -17,16 +17,20 @@ interface CalendarProps {
 const WEEK_NAMES = ["일", "월", "화", "수", "목", "금", "토"];
 
 const Calendar = ({
-  min,
-  max,
   endDate,
   handleDateChange,
   startDate,
   timeSelect,
 }: CalendarProps) => {
   const router = useRouter();
-  const maxDate = max ?? new Date();
-  const minDate = min ?? new Date("2023-3-14");
+  const maxDate = new Date();
+  if (typeof window !== "undefined" && localStorage.getItem("max") === "1") {
+    maxDate.setDate(maxDate.getDate() - 1);
+  }
+  const min =
+    typeof window !== "undefined" ? localStorage.getItem("sud") : undefined;
+
+  const minDate = min ? new Date(min) : new Date("2023-3-14");
   const [currentYear, setCurrentYear] = useState(
     endDate.getFullYear() || maxDate.getFullYear()
   );
