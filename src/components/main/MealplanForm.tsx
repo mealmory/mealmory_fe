@@ -206,7 +206,9 @@ export default function MealplanForm({
         <button
           className="flex-1 shadow-border p-4 w-full dark:bg-cusdarkbanana disabled:bg-zinc-100"
           suppressHydrationWarning
-          onClick={() => router.push("/calendar", { scroll: false })}
+          onClick={() =>
+            router.push("/calendar?select=time", { scroll: false })
+          }
           disabled={edit}
         >
           {toKRLocaleString(selectedDate)}
