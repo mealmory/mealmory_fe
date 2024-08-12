@@ -174,6 +174,7 @@ class Fetcher {
         return newResponse;
       } else {
         window.Kakao &&
+          window.Kakao.isInitialized() &&
           window.Kakao.Auth.authorize({
             redirectUri,
             scope,
