@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Selector from "../Selector";
 import { formattedNumber, getDaysInMonth } from "@/utils/calendarFns";
 import TimeDropdown from "./TimeDropdown";
@@ -25,20 +25,31 @@ const Calendar = ({
   const router = useRouter();
   const searchParams = useSearchParams();
   const timeSelect = searchParams.get("select") === "time";
-  const maxDate = new Date();
-  if (typeof window !== "undefined" && localStorage.getItem("max") === "1") {
-    maxDate.setDate(maxDate.getDate() - 1);
-  }
-  const min =
-    typeof window !== "undefined" ? localStorage.getItem("sud") : undefined;
 
-  const minDate = min ? new Date(min) : new Date("2023-3-14");
+  const [maxDate, setMaxDate] = useState(new Date());
+
+  const [minDate, setMinDate] = useState(new Date("2023-3-14"));
   const [currentYear, setCurrentYear] = useState(
     endDate.getFullYear() || maxDate.getFullYear()
   );
   const [currentMonth, setCurrentMonth] = useState(
     endDate.getMonth() + 1 || maxDate.getMonth() + 1
   );
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (typeof window !== "undefined") {
+        if (localStorage.getItem("max") === "1") {
+          const newMax = new Date(maxDate);
+          newMax.setDate(maxDate.getDate() - 1);
+          setMaxDate(newMax);
+        }
+        const min = localStorage.getItem("sud");
+        min && setMinDate(new Date(min));
+      }
+    }, 150);
+  }, []);
+
   function handlePrevMonth() {
     if (currentMonth === 1) {
       setCurrentYear(currentYear - 1);
