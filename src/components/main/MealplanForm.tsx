@@ -97,7 +97,7 @@ export default function MealplanForm({
     }
     return () => {
       init();
-      if (edit) reset();
+      reset();
     };
   }, []);
 
@@ -140,13 +140,14 @@ export default function MealplanForm({
           };
         }
       );
-      // console.log(menuList);
+
       const result = {
         time: edit ? undefined : toFetchTimeString(selectedDate),
         total: totalCalory,
         type: edit ? undefined : selectedType,
         menuList: JSON.stringify(menuList),
       };
+
       if (edit) {
         id &&
           customFetch.put("meal/edit", { ...result, id }).then((res) => {
@@ -157,10 +158,22 @@ export default function MealplanForm({
                 : "식단 수정에 실패햇습니다. 잠시 후 다시 시도해 주세요",
               icon: ok ? "success" : "error",
             }).then(() => {
-              router.back();
+              ok && router.back();
             });
           });
       } else {
+        const nullData = menuList.length === 0 || selectedType === 0;
+        if (nullData) {
+          const text =
+            menuList.length === 0
+              ? "식사 메뉴가 필요합니다."
+              : selectedType === 0
+              ? "식사 종류를 선택해 주세요."
+              : "잘못된 입력값입니다.";
+
+          Swal.fire({ text, icon: "error" });
+          return;
+        }
         customFetch.post("meal/add", result).then((res) => {
           const ok = res.body.code === 0;
           Swal.fire({
@@ -169,7 +182,7 @@ export default function MealplanForm({
               : "식단 저장에 실패햇습니다. 잠시 후 다시 시도해 주세요",
             icon: ok ? "success" : "error",
           }).then(() => {
-            router.back();
+            ok && router.back();
           });
         });
       }
