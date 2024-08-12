@@ -6,7 +6,7 @@ import Table from "@/components/main/Table";
 import { MAIN_LABELS } from "@/constants/mainConstants";
 import { errorAlert } from "@/utils/alertFns";
 import { checkBmi } from "@/utils/checkBmi";
-import { fetcher } from "@/utils/fetchClient";
+import { customFetch, fetcher } from "@/utils/fetchClient";
 import { getTimestamp, toFetchTimeString } from "@/utils/timestamp";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -45,11 +45,8 @@ export default function Home() {
     Array<SimpleCalory & { empty: boolean }>
   >([]);
   useEffect(() => {
-    fetcher<MainData>(
-      "main/home?" +
-        new URLSearchParams({ timestamp: getTimestamp().toString() }),
-      { method: "GET" }
-    )
+    customFetch
+      .get<MainData>("main/home")
       .then((res) => {
         if (res.body.code === 0) {
           setMainData(res.body.data);
@@ -62,22 +59,18 @@ export default function Home() {
         errorAlert("데이터를 요청에 실패 했습니다.", "", () => {});
       });
     const time = toFetchTimeString(new Date());
-    const params = new URLSearchParams({
-      timestamp: getTimestamp().toString(),
-      type: String(1),
-      time,
-    });
-    fetcher<SimpleCaloryResponse>("meal/search?" + params, {
-      method: "GET",
-    }).then((res) => {
-      if (res.body.code === 0) {
-        const data = res.body.data[time.split(" ")[0]].map((item) => ({
-          ...item,
-          empty: false,
-        }));
-        setSimpleCalory(data);
-      }
-    });
+
+    customFetch
+      .get<SimpleCaloryResponse>("meal/search", { type: 1, time })
+      .then((res) => {
+        if (res.body.code === 0) {
+          const data = res.body.data[time.split(" ")[0]].map((item) => ({
+            ...item,
+            empty: false,
+          }));
+          setSimpleCalory(data);
+        }
+      });
   }, []);
 
   const { caloryData, avg, userAvg } = MAIN_LABELS;
