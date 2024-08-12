@@ -9,7 +9,7 @@ const DatePicker = () => {
   const { selectedDate, changeDate } = useDate();
   return (
     <>
-      <div className="w-full flex justify-end">
+      <div className="w-full flex justify-end pt-2 pr-3">
         <button onClick={() => router.back()}>X</button>
       </div>
       <div>
