@@ -21,3 +21,13 @@ export const getDaysInMonth = (year: number, month: number) => {
 export const formattedNumber = (num: number) => {
   return num < 10 ? `0${num}` : String(num);
 };
+
+export const toKRLocaleString = (date: Date) => {
+  return date.toLocaleString("ko-KR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
