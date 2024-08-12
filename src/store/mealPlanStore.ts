@@ -1,28 +1,6 @@
 import { create } from "zustand";
 import { v4 as uuid } from "uuid";
-
-export interface MenuDTO {
-  did: number;
-  cid: number;
-  fid: number;
-  menu: string;
-  kcal: number;
-  amount: number;
-  unit: 1 | 0;
-  menu_spec: {
-    carbs: number;
-    protein: number;
-    fat: number;
-  };
-  value: number;
-}
-
-export interface MealType extends MenuDTO {
-  // client identifier
-  id: string;
-  type: MealItemType;
-}
-export type MealItemType = "search" | "self";
+import { MealType, MealItemType, MenuDTO } from "@/app/(sub)/mealplan/mealType";
 
 interface MealPlanStoreType {
   mealPlanList: Array<MealType>;
@@ -44,7 +22,7 @@ const useMealPlanStore = create<MealPlanStoreType>((set) => ({
     const cmid = uuid();
     const newList = mealList.map((item) => ({
       ...item,
-      type: "self" as MealItemType,
+      type: item.did === 4 ? ("self" as MealItemType) : "search",
       id: cmid,
     }));
     set({ mealPlanList: newList, cmid });

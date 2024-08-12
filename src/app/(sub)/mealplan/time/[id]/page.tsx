@@ -7,25 +7,7 @@ import { useEffect, useState } from "react";
 import { menuTypeTransform } from "@/utils/mealplanFns";
 import { errorAlert } from "@/utils/alertFns";
 import { useRouter } from "next/navigation";
-
-export interface MealDetailDTO {
-  did: number;
-  cid: number;
-  fid: number;
-  menu: string;
-  kcal: number;
-  amount: number;
-  unit: string;
-  carbs: number;
-  protein: number;
-  fat: number;
-}
-export interface MealPlanDetailResponse {
-  type: number;
-  date: string;
-  menuList: Array<MealDetailDTO>;
-  total: number;
-}
+import { MealPlanDetailResponse } from "../../mealType";
 
 export default function MealPlanDetail({ params }: { params: { id: string } }) {
   const { id } = params;

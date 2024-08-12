@@ -1,7 +1,7 @@
 "use client";
 
 import FlipItem from "../../FlipItem";
-import { MealDetailDTO } from "./page";
+import { MealDetailDTO } from "../../mealType";
 
 const MenuItem = ({
   menu,
