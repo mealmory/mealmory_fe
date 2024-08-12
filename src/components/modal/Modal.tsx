@@ -6,9 +6,11 @@ import { ReactNode } from "react";
 const Modal = ({
   children,
   maxContent,
+  maxWidth,
 }: {
   children: ReactNode;
   maxContent?: boolean;
+  maxWidth?: boolean;
 }) => {
   const router = useRouter();
 
@@ -19,8 +21,9 @@ const Modal = ({
     >
       <div
         className={
-          "w-full h-full md:w-[360px] overflow-hidden bg-white dark:bg-cusdark sm:rounded-2xl " +
-          (maxContent ? "sm:max-h-[680px] sm:h-max" : "sm:h-[680px]")
+          "w-full h-full overflow-hidden bg-white dark:bg-cusdark sm:rounded-2xl " +
+          (maxContent ? "sm:max-h-[680px] sm:h-max " : "sm:h-[680px] ") +
+          (maxWidth ? "md:w-max" : "md:w-[360px]")
         }
         onClick={(e) => e.stopPropagation()}
       >
