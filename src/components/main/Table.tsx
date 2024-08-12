@@ -64,7 +64,9 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
                 </tr>
               ) : (
                 <tr key={`${id}${time}`}>
-                  <td className={thClass}>{time}</td>
+                  <td className={thClass} suppressHydrationWarning>
+                    {tHead === "날짜" ? time.split(" ")[0] : time.split(" ")[1]}
+                  </td>
                   <td
                     className={`${thClass} font-semibold underline text-cusorange cursor-pointer`}
                     onClick={() =>
