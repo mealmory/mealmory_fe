@@ -16,16 +16,14 @@ export interface MealDetailDTO {
   kcal: number;
   amount: number;
   unit: string;
-  menu_spec: {
-    carbs: number;
-    protein: number;
-    fat: number;
-  };
+  carbs: number;
+  protein: number;
+  fat: number;
 }
-interface MealPlanDetailResponse {
+export interface MealPlanDetailResponse {
   type: number;
   date: string;
-  list: Array<MealDetailDTO>;
+  menuList: Array<MealDetailDTO>;
   total: number;
 }
 
@@ -56,7 +54,7 @@ export default function MealPlanDetail({ params }: { params: { id: string } }) {
       });
   }, [id]);
   const mealType = data ? menuTypeTransform(data.type) : "";
-
+  console.log(data);
   return (
     <main className="w-full min-h-[calc(100vh-55px)] p-2 flex flex-col items-center justify-between gap-5">
       {/* 메뉴 이름 수정, 삭제 버튼 */}
@@ -70,13 +68,13 @@ export default function MealPlanDetail({ params }: { params: { id: string } }) {
         </div>
         {/* 메뉴 플립 리스트  */}
         <div className="rounded-xl shadow-border bg-cusbanana dark:bg-cusdarkbanana overflow-hidden w-full h-fulls">
-          {data?.list &&
-            data.list.length > 0 &&
-            data.list.map((item, i) => (
+          {data?.menuList &&
+            data.menuList.length > 0 &&
+            data.menuList.map((item, i) => (
               <MenuItem
                 key={item.menu + i}
                 {...item}
-                last={i === data.list.length - 1 ? true : undefined}
+                last={i === data.menuList.length - 1 ? true : undefined}
                 first={i === 0 ? true : undefined}
               />
             ))}
