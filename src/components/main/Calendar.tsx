@@ -89,7 +89,6 @@ const Calendar = ({
 
   function handleDayClick(day: number) {
     handleDateChange(new Date(currentYear, currentMonth - 1, day));
-    router.back();
   }
 
   const years = Array.from(
