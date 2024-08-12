@@ -49,7 +49,6 @@ export default function MealplanForm({
           .get<MealPlanDetailResponse[]>("meal/info", { id: id })
           .then((res) => {
             if (res.body.code === 0) {
-              console.log(res.body.data);
               const data = res.body.data[0].menuList.map((items) => {
                 const { carbs, protein, fat, unit, ...item } = items;
                 const value = item.did === 4 ? 0 : 100;
@@ -81,7 +80,6 @@ export default function MealplanForm({
               });
               editStart(data);
             } else {
-              init();
               const code = res.body.code;
               errorAlert(
                 String(code)[0] === "2" || String(code)[0] === "3"
@@ -95,6 +93,8 @@ export default function MealplanForm({
               );
             }
           });
+    } else {
+      init();
     }
     return () => {
       reset();
