@@ -26,10 +26,19 @@ interface StatisticsData {
 }
 
 export default function StatisticsPage() {
-  const { selectedDate, init } = useDate();
+  const { selectedDate, changeDate } = useDate();
   const [selectedRange, setSelectedRange] = useState<1 | 7 | 30>(1);
   const [statisticsData, setStatisticsData] = useState<StatisticsData>();
   const router = useRouter();
+  useEffect(() => {
+    typeof window !== "undefined" && localStorage.setItem("max", "1");
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    changeDate(yesterday);
+    return () => {
+      typeof window !== "undefined" && localStorage.removeItem("max");
+    };
+  }, []);
   useEffect(() => {
     const date = selectedDate.toLocaleDateString().replaceAll(". ", "-");
     fetchServer<StatisticsData>(

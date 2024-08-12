@@ -81,6 +81,7 @@ export default function MealplanForm({
               });
               editStart(data);
             } else {
+              init();
               const code = res.body.code;
               errorAlert(
                 String(code)[0] === "2" || String(code)[0] === "3"
@@ -96,7 +97,6 @@ export default function MealplanForm({
           });
     }
     return () => {
-      init();
       reset();
     };
   }, []);
