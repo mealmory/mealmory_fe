@@ -1,6 +1,7 @@
 import { MealType, MealItemType } from "@/app/(sub)/mealplan/mealType";
 import { MEAL_ITEM_TITLE } from "@/constants/mainConstants";
-import useMealPlanStore, { toFixeNumberTwo } from "@/store/mealPlanStore";
+import useMealPlanStore from "@/store/mealPlanStore";
+import { toFixeNumberTwo } from "@/utils/mealplanFns";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { BsX } from "@react-icons/all-files/bs/BsX";
 import { useRouter } from "next/navigation";

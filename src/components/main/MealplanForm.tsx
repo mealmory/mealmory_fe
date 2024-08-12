@@ -1,34 +1,20 @@
 "use client";
 
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import Selector from "@/components/Selector";
-import useMealPlanStore, {
-  MenuDTO,
-  toFixeNumberTwo,
-} from "@/store/mealPlanStore";
+import useMealPlanStore from "@/store/mealPlanStore";
 
 import { MEAL_ITEM_TITLE } from "@/constants/mainConstants";
 import { usePathname, useRouter } from "next/navigation";
 import useDate from "@/store/selectDateStore";
 import MealPlanItem from "@/components/main/MealPlanItem";
-import { customFetch, fetchClient, fetcher } from "@/utils/fetchClient";
-import { menuTypeTransform } from "@/utils/mealplanFns";
+import { customFetch } from "@/utils/fetchClient";
 import { toFetchTimeString } from "@/utils/timestamp";
 import Swal from "sweetalert2";
-
-interface MealDTO {
-  date: string;
-  type: 1 | 2 | 3 | 4 | 5;
-  total: number;
-  menuList: Array<MenuDTO>;
-}
-
-interface MealInfoType {
-  type: "아침" | "점심" | "져녁" | "야식" | "간식";
-  date: string;
-  total: number;
-  menuList: Array<MenuDTO>;
-}
+import { errorAlert } from "@/utils/alertFns";
+import { MealPlanDetailResponse } from "@/app/(sub)/mealplan/mealType";
+import { calcMenuSpec, reCalcMenuSpec } from "@/utils/mealplanFns";
+import { toKRLocaleString } from "@/utils/calendarFns";
 
 const MEAL_TYPES = [
   { name: "아침", optionValue: 1 },
@@ -54,41 +40,163 @@ export default function MealplanForm({
     mealPlanList.length > 0 &&
     mealPlanList.map((meal) => meal?.kcal).reduce((a, b) => a && b && a + b);
   const pathname = usePathname();
+  const id = edit ? pathname.split("/").at(-1) : undefined;
   useEffect(() => {
     if (edit) {
       // fetch response setState
-      const id = pathname.split("/").at(-1);
-      fetchClient<MealInfoType>(`dummy/meal/info?id=${id}`)
-        .then((res) => res.body.data)
-        .then((data) => {
-          setSelectedType(menuTypeTransform(data.type));
-          editStart(data.menuList);
-          changeDate(new Date(data.date));
-        });
+      id &&
+        customFetch
+          .get<MealPlanDetailResponse[]>("meal/info", { id: id })
+          .then((res) => {
+            if (res.body.code === 0) {
+              console.log(res.body.data);
+              const data = res.body.data[0].menuList.map((items) => {
+                const { carbs, protein, fat, unit, ...item } = items;
+                const value = item.did === 4 ? 0 : 100;
+                return {
+                  ...item,
+                  menu_spec: {
+                    carbs: reCalcMenuSpec(
+                      item.did !== 4,
+                      value,
+                      item.amount,
+                      carbs
+                    ),
+                    protein: reCalcMenuSpec(
+                      item.did !== 4,
+                      value,
+                      item.amount,
+                      protein
+                    ),
+                    fat: reCalcMenuSpec(
+                      item.did !== 4,
+                      value,
+                      item.amount,
+                      fat
+                    ),
+                  },
+                  unit: unit === "g" ? (1 as 1 | 0) : 0,
+                  value,
+                };
+              });
+              editStart(data);
+            } else {
+              const code = res.body.code;
+              errorAlert(
+                String(code)[0] === "2" || String(code)[0] === "3"
+                  ? "잘못된 접근입니다."
+                  : "데이터를 가져올 수 없습니다.",
+                "",
+                () => {
+                  (String(code)[0] === "2" || String(code)[0] === "3") &&
+                    router.back();
+                }
+              );
+            }
+          });
     }
     return () => {
       init();
       if (edit) reset();
     };
   }, []);
+
+  function handleSaveClick() {
+    if (mealPlanList.length > 0 && typeof totalCalory === "number") {
+      const menuList = mealPlanList.map(
+        ({
+          menu,
+          kcal,
+          did,
+          cid,
+          fid,
+          menu_spec,
+          unit,
+          amount,
+          type,
+          value,
+        }) => {
+          return {
+            menu,
+            kcal,
+            amount,
+            did,
+            cid,
+            fid,
+            carbs: calcMenuSpec(
+              type === "search",
+              value,
+              amount,
+              menu_spec.carbs
+            ),
+            fat: calcMenuSpec(type === "search", value, amount, menu_spec.fat),
+            protein: calcMenuSpec(
+              type === "search",
+              value,
+              amount,
+              menu_spec.protein
+            ),
+            unit,
+          };
+        }
+      );
+      // console.log(menuList);
+      const result = {
+        time: edit ? undefined : toFetchTimeString(selectedDate),
+        total: totalCalory,
+        type: edit ? undefined : selectedType,
+        menuList: JSON.stringify(menuList),
+      };
+      if (edit) {
+        id &&
+          customFetch.put("meal/edit", { ...result, id }).then((res) => {
+            const ok = res.body.code === 0;
+            Swal.fire({
+              title: ok
+                ? "식단을 성공적으로 수정했습니다."
+                : "식단 수정에 실패햇습니다. 잠시 후 다시 시도해 주세요",
+              icon: ok ? "success" : "error",
+            }).then(() => {
+              router.back();
+            });
+          });
+      } else {
+        customFetch.post("meal/add", result).then((res) => {
+          const ok = res.body.code === 0;
+          Swal.fire({
+            title: ok
+              ? "식단을 성공적으로 저장했습니다."
+              : "식단 저장에 실패햇습니다. 잠시 후 다시 시도해 주세요",
+            icon: ok ? "success" : "error",
+          }).then(() => {
+            router.back();
+          });
+        });
+      }
+    }
+  }
+
   return (
     <div className="min-h-[calc(100vh-55px)] h-full w-full py-2 sm:px-2">
       <div className="flex flex-col-reverse sm:flex-row items-center gap-3 sm:gap-8 w-[96%] mx-auto sm:w-full sm:mx-0">
         {/* meal type , datepicker */}
-        <Selector
-          className="flex-1 w-full shadow-border rounded-xl p-3 dark:bg-black"
-          options={[{ name: "식사 종류", optionValue: 0 }, ...MEAL_TYPES]}
-          value={selectedType}
-          handleClick={(value: number | string) =>
-            typeof value === "number" ? setSelectedType(value) : null
-          }
-        />
+        {!edit && (
+          <Selector
+            className="flex-1 w-full shadow-border rounded-xl p-3 dark:bg-black"
+            options={[{ name: "식사 종류", optionValue: 0 }, ...MEAL_TYPES]}
+            value={selectedType}
+            handleClick={(value: number | string) =>
+              typeof value === "number" ? setSelectedType(value) : null
+            }
+          />
+        )}
         <button
-          className="flex-1 shadow-border p-4 w-full dark:bg-cusdarkbanana"
+          className="flex-1 shadow-border p-4 w-full dark:bg-cusdarkbanana disabled:bg-zinc-100"
           suppressHydrationWarning
           onClick={() => router.push("/calendar", { scroll: false })}
+          disabled={edit}
         >
-          {selectedDate.toLocaleString()}
+          {toKRLocaleString(selectedDate)}
         </button>
       </div>
       <div className="my-5">
@@ -124,67 +232,7 @@ export default function MealplanForm({
         </p>
         <button
           className="w-full bg-cuspoint text-cusorange p-2"
-          onClick={() => {
-            if (mealPlanList.length > 0 && typeof totalCalory === "number") {
-              const menuList = mealPlanList.map(
-                ({
-                  menu,
-                  kcal,
-                  did,
-                  cid,
-                  fid,
-                  menu_spec,
-                  unit,
-                  amount,
-                  type,
-                  value,
-                }) => {
-                  function calcMenuSpec(num?: number) {
-                    if (num) {
-                      if (type === "search") {
-                        return value
-                          ? toFixeNumberTwo((num / value) * amount)
-                          : num;
-                      }
-                      return num;
-                    }
-                    return undefined;
-                  }
-
-                  const spec = {
-                    carbs: calcMenuSpec(menu_spec.carbs),
-                    fat: calcMenuSpec(menu_spec.fat),
-                    protein: calcMenuSpec(menu_spec.protein),
-                  };
-                  return {
-                    menu,
-                    kcal,
-                    amount,
-                    did,
-                    cid,
-                    fid,
-                    menu_spec: spec,
-                    unit,
-                  };
-                }
-              );
-              const result = {
-                time: toFetchTimeString(selectedDate),
-                total: totalCalory,
-                type: selectedType,
-                menuList: JSON.stringify(menuList),
-              };
-              customFetch.post("meal/add", result).then((res) => {
-                const ok = res.body.code === 0;
-                Swal.fire({
-                  title: ok
-                    ? "식단을 성공적으로 저장했습니다."
-                    : "식단 저장에 실패햇습니다. 잠시 후 다시 시도해 주세요",
-                  icon: ok ? "success" : "error",
-                });
-              });
-            }
-          }}
+          onClick={handleSaveClick}
         >
           식단 저장하기
         </button>

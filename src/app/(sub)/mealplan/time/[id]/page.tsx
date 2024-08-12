@@ -36,7 +36,7 @@ export default function MealPlanDetail({ params }: { params: { id: string } }) {
       });
   }, [id]);
   const mealType = data ? menuTypeTransform(data.type) : "";
-  console.log(data);
+
   return (
     <main className="w-full min-h-[calc(100vh-55px)] p-2 flex flex-col items-center justify-between gap-5">
       {/* 메뉴 이름 수정, 삭제 버튼 */}
