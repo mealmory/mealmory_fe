@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import Calendar from "@/components/main/Calendar";
 import useDate from "@/store/selectDateStore";
+import { BsX } from "@react-icons/all-files/bs/BsX";
 
 const DatePicker = () => {
   const router = useRouter();
@@ -10,10 +11,12 @@ const DatePicker = () => {
   return (
     <>
       <div className="w-full flex justify-end pt-2 pr-3">
-        <button onClick={() => router.back()}>X</button>
+        <button className="text-4xl md:text-2xl" onClick={() => router.back()}>
+          <BsX />
+        </button>
       </div>
-      <div>
-        <Calendar endDate={selectedDate} handleDateChange={changeDate} />
+      <div className="h-2/3 md:h-full">
+        <Calendar endDate={selectedDate} handleDateChange={changeDate} inline />
       </div>
     </>
   );
