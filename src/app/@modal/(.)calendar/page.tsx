@@ -3,7 +3,7 @@ import Modal from "@/components/modal/Modal";
 
 export default function MealPlanCalendar() {
   return (
-    <Modal maxContent>
+    <Modal maxContent maxWidth>
       <DatePicker />
     </Modal>
   );
