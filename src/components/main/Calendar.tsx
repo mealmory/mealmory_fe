@@ -4,6 +4,7 @@ import { useState } from "react";
 import Selector from "../Selector";
 import { formattedNumber, getDaysInMonth } from "@/utils/calendarFns";
 import TimeDropdown from "./TimeDropdown";
+import { useRouter } from "next/navigation";
 
 interface CalendarProps {
   min?: Date;
@@ -23,6 +24,7 @@ const Calendar = ({
   startDate,
   timeSelect,
 }: CalendarProps) => {
+  const router = useRouter();
   const maxDate = max ?? new Date();
   const minDate = min ?? new Date("2023-3-14");
   const [currentYear, setCurrentYear] = useState(
@@ -70,6 +72,7 @@ const Calendar = ({
 
   function handleDayClick(day: number) {
     handleDateChange(new Date(currentYear, currentMonth - 1, day));
+    router.back();
   }
 
   const years = Array.from(
