@@ -73,7 +73,7 @@ const MealPlanItem = ({
               </p>
             ) : (
               <input
-                className="flex-1 outline-none border-b border-black dark:border-gray-500 rounded-lg pl-2"
+                className="flex-1 outline-none border-b border-black dark:border-gray-500 dark:rounded-lg pl-2"
                 type="text"
                 value={menu}
                 onChange={(e) => handleChangeValue("menu", e.target.value)}
