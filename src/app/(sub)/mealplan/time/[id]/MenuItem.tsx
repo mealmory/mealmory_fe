@@ -8,7 +8,9 @@ const MenuItem = ({
   kcal,
   amount,
   unit,
-  menu_spec,
+  carbs,
+  protein,
+  fat,
   last,
   first,
 }: MealDetailDTO & { last?: boolean; first?: boolean }) => {
@@ -34,10 +36,10 @@ const MenuItem = ({
         <div className="rounded-xl shadow-border overflow-hidden">
           <table className="text-center border-collapse border-hidden w-full">
             <tbody>
-              {Object.entries(menu_spec).map(([key, value]) => (
+              {Object.entries({ carbs, protein, fat }).map(([key, value]) => (
                 <tr key={key}>
                   <th className="border w-[40%] p-2 font-normal">
-                    {translationCdfTitle(key as keyof typeof menu_spec)}
+                    {translationCdfTitle(key as "carbs" | "protein" | "fat")}
                   </th>
                   <td className="border w-[60%] p-2 font-medium">{value} g</td>
                 </tr>
