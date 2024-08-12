@@ -198,7 +198,8 @@ class Fetcher {
       leng++;
     }
 
-    const fullUrl = leng > 0 ? url + "?" + new URLSearchParams(params) : url;
+    const fullUrl = url + "?" + new URLSearchParams(params);
+
     return this.fetcher<T>(fullUrl, { ...init, method: "GET" });
   }
 
