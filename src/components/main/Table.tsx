@@ -26,8 +26,9 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
       periodNum * page - periodNum,
       periodNum * page
     );
+    let i = 0;
     while (caloryList.length < periodNum) {
-      caloryList.push({ id: 0, time: "", total: 0, type: 0, empty: true });
+      caloryList.push({ id: i++, time: "", total: 0, type: 0, empty: true });
     }
     return {
       caloryList: caloryList,
