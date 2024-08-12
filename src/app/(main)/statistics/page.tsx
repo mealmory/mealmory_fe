@@ -141,7 +141,7 @@ const MealTable = ({ range }: { range: 1 | 7 | 30 }) => {
   }, [range]);
   return tDataList ? (
     <Table
-      tHead="날짜"
+      tHead={range === 1 ? "시간" : "날짜"}
       tDataList={tDataList}
       period={period}
       tclassName="flex-1 flex flex-col justify-between"
