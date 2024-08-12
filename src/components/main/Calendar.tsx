@@ -4,7 +4,7 @@ import { useState } from "react";
 import Selector from "../Selector";
 import { formattedNumber, getDaysInMonth } from "@/utils/calendarFns";
 import TimeDropdown from "./TimeDropdown";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface CalendarProps {
   min?: Date;
@@ -12,7 +12,7 @@ interface CalendarProps {
   endDate: Date;
   startDate?: Date;
   handleDateChange: (target: Date) => void;
-  timeSelect?: boolean;
+  inline?: boolean;
 }
 const WEEK_NAMES = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -20,9 +20,11 @@ const Calendar = ({
   endDate,
   handleDateChange,
   startDate,
-  timeSelect,
+  inline,
 }: CalendarProps) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const timeSelect = searchParams.get("select") === "time";
   const maxDate = new Date();
   if (typeof window !== "undefined" && localStorage.getItem("max") === "1") {
     maxDate.setDate(maxDate.getDate() - 1);
@@ -151,88 +153,98 @@ const Calendar = ({
     };
   }
   return (
-    <div className="w-full max-w-md mx-auto p-4 text-gray-500 dark:text-white">
-      <div className="flex justify-between items-center mb-4">
-        <ArrowButton
-          handleClick={handlePrevMonth}
-          isNext={false}
-          disabled={
-            currentYear === minDate.getFullYear() &&
-            currentMonth === minDate.getMonth() + 1
-          }
-        />
-        <div className="flex items-center justify-center">
-          {selectOptions.map((item) => {
-            if (item.key === "slash")
-              return (
-                <div
-                  key={item.key}
-                  className="h-6 w-[3px] rounded-md bg-cusorange -skew-x-[20deg] mr-2"
-                />
-              );
-            else {
-              const { key, value, options, handleClick } = item;
-              if (options && handleClick)
+    <div className="w-full max-w-md mx-auto p-4 text-gray-500 dark:text-white flex h-full flex-col md:flex-row justify-between md:w-[820px]  gap-8 ">
+      <div className="w-full h-full max-w-md mx-auto md:w-[360px] flex-1">
+        <div className="flex justify-between items-center mb-4">
+          <ArrowButton
+            handleClick={handlePrevMonth}
+            isNext={false}
+            disabled={
+              currentYear === minDate.getFullYear() &&
+              currentMonth === minDate.getMonth() + 1
+            }
+          />
+          <div className="flex items-center justify-center">
+            {selectOptions.map((item) => {
+              if (item.key === "slash")
                 return (
-                  <Selector
-                    key={key}
-                    titleClass="text-lg text-cusorange"
-                    optionsClassName="max-h-40 overflow-y-scroll"
-                    value={value}
-                    options={options}
-                    handleClick={handleClick}
+                  <div
+                    key={item.key}
+                    className="h-6 w-[3px] rounded-md bg-cusorange -skew-x-[20deg] mr-2"
                   />
                 );
+              else {
+                const { key, value, options, handleClick } = item;
+                if (options && handleClick)
+                  return (
+                    <Selector
+                      key={key}
+                      titleClass="text-lg text-cusorange"
+                      optionsClassName="max-h-40 overflow-y-scroll"
+                      value={value}
+                      options={options}
+                      handleClick={handleClick}
+                    />
+                  );
+              }
+            })}
+          </div>
+          <ArrowButton
+            handleClick={handleNextMonth}
+            disabled={
+              currentYear === maxDate.getFullYear() &&
+              currentMonth === maxDate.getMonth() + 1
             }
+            isNext={true}
+          />
+        </div>
+        <div className="h-[24px] grid grid-cols-7 gap-1">
+          {WEEK_NAMES.map((day) => (
+            <div key={day} className="text-center font-bold h-[24px] ">
+              {day}
+            </div>
+          ))}
+        </div>
+        <div
+          className={
+            "h-[calc(100%-70px)] grid grid-cols-7 gap-1 " +
+            (timeSelect ? "mb-2" : "")
+          }
+        >
+          {days.map((day, index) => {
+            const isCurrentMonth = index >= firstDayOfMonth;
+            const { selected, disabled, inRange } = genDayFlag(day);
+
+            return (
+              <div
+                key={index}
+                className={`text-center p-2 cursor-pointer aria-disabled:text-gray-300 aria-disabled:cursor-default w-[40px] ${
+                  selected
+                    ? "bg-cuspoint text-cusorange shadow-border rounded-2xl"
+                    : !isCurrentMonth
+                    ? "cursor-default"
+                    : inRange
+                    ? "rounded-2xl bg-cusbanana shadow-border"
+                    : "text-gray-500 dark:text-white"
+                }`}
+                onClick={() => {
+                  if (isCurrentMonth && !disabled) {
+                    handleDayClick(day);
+                  }
+                }}
+                aria-disabled={disabled}
+              >
+                {day === 0 ? "" : day}
+              </div>
+            );
           })}
         </div>
-        <ArrowButton
-          handleClick={handleNextMonth}
-          disabled={
-            currentYear === maxDate.getFullYear() &&
-            currentMonth === maxDate.getMonth() + 1
-          }
-          isNext={true}
-        />
-      </div>
-      <div className={"grid grid-cols-7 gap-1 " + (timeSelect ? "mb-2" : "")}>
-        {WEEK_NAMES.map((day) => (
-          <div key={day} className="text-center font-bold ">
-            {day}
-          </div>
-        ))}
-        {days.map((day, index) => {
-          const isCurrentMonth = index >= firstDayOfMonth;
-          const { selected, disabled, inRange } = genDayFlag(day);
-
-          return (
-            <div
-              key={index}
-              className={`text-center p-2 cursor-pointer aria-disabled:text-gray-300 aria-disabled:cursor-default ${
-                selected
-                  ? "bg-cuspoint text-cusorange shadow-border rounded-2xl"
-                  : !isCurrentMonth
-                  ? "cursor-default"
-                  : inRange
-                  ? "rounded-2xl bg-cusbanana shadow-border"
-                  : "text-gray-500 dark:text-white"
-              }`}
-              onClick={() => {
-                if (isCurrentMonth && !disabled) {
-                  handleDayClick(day);
-                }
-              }}
-              aria-disabled={disabled}
-            >
-              {day === 0 ? "" : day}
-            </div>
-          );
-        })}
       </div>
       {timeSelect && (
         <TimeDropdown
           currentDate={endDate}
           handleDateChange={handleDateChange}
+          inline={inline}
         />
       )}
     </div>
