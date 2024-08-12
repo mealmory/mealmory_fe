@@ -25,7 +25,7 @@ const useMealPlanStore = create<MealPlanStoreType>((set) => ({
       type: item.did === 4 ? ("self" as MealItemType) : "search",
       id: cmid,
     }));
-    set({ mealPlanList: newList, cmid });
+    set({ mealPlanList: newList });
   },
   addMeal: (newMeal) => {
     const cmid = uuid();
@@ -73,7 +73,3 @@ const useMealPlanStore = create<MealPlanStoreType>((set) => ({
 }));
 
 export default useMealPlanStore;
-
-export function toFixeNumberTwo(num: number) {
-  return +num.toFixed(2);
-}

@@ -33,3 +33,31 @@ export function menuTypeTransform(value: string | number): number | string {
     }
   }
 }
+
+export function toFixeNumberTwo(num: number) {
+  return +num.toFixed(2);
+}
+
+export function calcMenuSpec(
+  isSearch: boolean,
+  value: number,
+  amount: number,
+  num: number
+) {
+  if (isSearch) {
+    return value !== 0 ? toFixeNumberTwo((num / value) * amount) : num;
+  }
+  return num;
+}
+
+export function reCalcMenuSpec(
+  isSearch: boolean,
+  value: number,
+  amount: number,
+  num: number
+) {
+  if (isSearch) {
+    return value !== 0 ? toFixeNumberTwo((num * value) / amount) : num;
+  }
+  return num;
+}
