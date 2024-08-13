@@ -33,7 +33,7 @@ export default function MealPlanDetail({ params }: { params: { id: string } }) {
           );
         }
       });
-  }, [id]);
+  }, []);
 
   return (
     <main className="w-full min-h-[calc(100vh-55px)] p-2 flex flex-col items-center justify-between gap-5">
