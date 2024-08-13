@@ -124,15 +124,32 @@ const MealTable = ({ range }: { range: 1 | 7 | 30 }) => {
       })
       .then((res) => {
         if (res.body.code === 0) {
-          const key = toFetchTimeString(selectedDate).split(" ")[0];
-          const data = res.body.data[key].map((item) => ({
-            ...item,
-            empty: false,
-          }));
-          setTableData(data);
+          if (range === 1) {
+            const key = toFetchTimeString(selectedDate).split(" ")[0];
+            const data = res.body.data[key].map((item) => ({
+              ...item,
+              empty: false,
+            }));
+            setTableData(data);
+          } else {
+            const data = Object.values(res.body.data)
+              .map((value) => {
+                if (value.length > 0) {
+                  const result = value.reduce((a, b) => ({
+                    ...a,
+                    total: a.total + b.total,
+                  }));
+                  return { ...result, empty: false };
+                }
+                return;
+              })
+              .filter((item) => item !== undefined);
+            setTableData(data);
+          }
         }
       });
   }, [selectedDate, range]);
+
   const tDataList = tableData?.map((item) => ({ ...item, empty: false }));
   const period = useMemo(() => {
     if (range === 1) return "day";
