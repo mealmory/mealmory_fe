@@ -9,11 +9,13 @@ const FlipItem = ({
   last,
   first,
   children,
+  maxContent,
 }: {
   title: string;
   last?: boolean;
   first?: boolean;
   children: Readonly<ReactNode>;
+  maxContent?: boolean;
 }) => {
   const [flip, setFlip] = useState(first ? false : true);
 
@@ -33,7 +35,13 @@ const FlipItem = ({
       <div
         className={
           "w-full bg-white border-y dark:border-y-0 overflow-hidden transition-[height] ease-in-out duration-75 delay-0 " +
-          (flip ? (last ? "border-y-0 h-0" : " h-0") : "h-[234px]")
+          (flip
+            ? last
+              ? "border-y-0 h-0"
+              : " h-0"
+            : maxContent
+            ? "h-[234px]"
+            : "h-[380px]")
         }
       >
         {children}
