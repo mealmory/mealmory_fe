@@ -71,7 +71,9 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
                     className={`${thClass} font-semibold underline text-cusorange cursor-pointer`}
                     onClick={() =>
                       router.push(
-                        `/mealplan/${period === "day" ? "time" : "day"}/${id}`
+                        `/mealplan/${period === "day" ? "time" : "day"}/${
+                          period === "day" ? id : time.split(" ")[0]
+                        }`
                       )
                     }
                   >
