@@ -1,10 +1,9 @@
 "use client";
 
-import { customFetch, fetchClient } from "@/utils/fetchClient";
+import { customFetch } from "@/utils/fetchClient";
 import MenuItem from "./MenuItem";
 import DetailController from "./DetailController";
 import { useEffect, useState } from "react";
-import { menuTypeTransform } from "@/utils/mealplanFns";
 import { errorAlert } from "@/utils/alertFns";
 import { useRouter } from "next/navigation";
 import { MealPlanDetailResponse } from "../../mealType";
@@ -35,14 +34,13 @@ export default function MealPlanDetail({ params }: { params: { id: string } }) {
         }
       });
   }, [id]);
-  const mealType = data ? menuTypeTransform(data.type) : "";
 
   return (
     <main className="w-full min-h-[calc(100vh-55px)] p-2 flex flex-col items-center justify-between gap-5">
       {/* 메뉴 이름 수정, 삭제 버튼 */}
       <div className="w-full h-full flex flex-col items-center gap-5">
         <div className="flex justify-between items-center w-full">
-          <p className="text-xl sm:text-2xl pl-2">{mealType}</p>
+          <p className="text-xl sm:text-2xl pl-2">{data?.type}</p>
           <DetailController
             className="hidden sm:flex items-center gap-2 w-1/4"
             id={id}
