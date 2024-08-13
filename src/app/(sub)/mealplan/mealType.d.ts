@@ -12,7 +12,7 @@ export interface MealDetailDTO {
 }
 export interface MealPlanDetailResponse {
   type: number;
-  date: string;
+  time: string;
   menuList: Array<MealDetailDTO>;
   total: number;
 }
