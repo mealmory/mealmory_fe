@@ -21,7 +21,11 @@ const FlipItem = ({
 
   return (
     <div>
-      <label className={"w-full flex items-center justify-between p-4 "}>
+      <label
+        className={
+          "w-full flex items-center justify-between p-4 cursor-pointer"
+        }
+      >
         <p className="pl-2 font-semibold">{title}</p>
         <input
           type="checkbox"
