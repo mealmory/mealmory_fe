@@ -52,6 +52,17 @@ body {
   display: none;
 }
 
+.scroll-visible {
+  overflow: auto; 
+  scrollbar-width: thin; 
+  scrollbar-color: inherit rgb(100, 100, 100);
+  -ms-overflow-style: auto; 
+}
+
+.scroll-visible::-webkit-scrollbar {
+  display: block; 
+}
+
 button {
   cursor: pointer;
   border-radius: 12px;
