@@ -6,8 +6,9 @@ import Table from "@/components/main/Table";
 import { MAIN_LABELS } from "@/constants/mainConstants";
 import { errorAlert } from "@/utils/alertFns";
 import { checkBmi } from "@/utils/checkBmi";
-import { customFetch, fetcher } from "@/utils/fetchClient";
-import { getTimestamp, toFetchTimeString } from "@/utils/timestamp";
+import { customFetch } from "@/utils/fetchClient";
+import { storageSet } from "@/utils/storageFns";
+import { toFetchTimeString } from "@/utils/timestamp";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -50,7 +51,7 @@ export default function Home() {
       .then((res) => {
         if (res.body.code === 0) {
           setMainData(res.body.data);
-          localStorage.setItem("sud", res.body.data.date);
+          storageSet("sud", res.body.data.date);
           return res.body.data;
         }
         throw new Error("데이터 요청 실패");

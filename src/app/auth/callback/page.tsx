@@ -1,6 +1,7 @@
 "use client";
 
 import { fetchServer } from "@/utils/fetchClient";
+import { storageSet } from "@/utils/storageFns";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 interface LoginResponse {
@@ -25,9 +26,9 @@ export default function CallbackKakao() {
           if (res.body.code === 0) {
             const { email, nickName, profile, agreement, collect } =
               res.body.data;
-            localStorage.setItem("email", email);
-            localStorage.setItem("nickName", nickName);
-            localStorage.setItem("profile", String(profile));
+            storageSet("email", email);
+            storageSet("nickName", nickName);
+            storageSet("profile", String(profile));
             if (agreement === 0) {
               router.replace("/auth/consent");
             } else if (collect === 0) {

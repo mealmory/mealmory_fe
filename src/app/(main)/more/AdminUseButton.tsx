@@ -1,7 +1,8 @@
-import { isAdmin } from "@/utils/noticeFns";
+import { useVerification } from "@/hook/useVerification";
 import Link from "next/link";
 
 const AdminUseButton = () => {
+  const { isAdmin } = useVerification();
   return isAdmin ? (
     <Link
       className=" absolute right-2 top-1/2 -translate-y-2/3 shadow-border rounded-xl p-2 bg-cusorange text-white"

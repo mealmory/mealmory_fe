@@ -9,6 +9,7 @@ import Podium from "./Podium";
 import Chart from "./Chart";
 import { SimpleCalory, SimpleCaloryResponse } from "../home/page";
 import { toFetchTimeString } from "@/utils/timestamp";
+import { storageRemove, storageSet } from "@/utils/storageFns";
 
 interface StatisticsData {
   rank: {
@@ -31,12 +32,12 @@ export default function StatisticsPage() {
   const [statisticsData, setStatisticsData] = useState<StatisticsData>();
   const router = useRouter();
   useEffect(() => {
-    typeof window !== "undefined" && localStorage.setItem("max", "1");
+    storageSet("max", "1");
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     changeDate(yesterday);
     return () => {
-      typeof window !== "undefined" && localStorage.removeItem("max");
+      storageRemove("max");
     };
   }, []);
   useEffect(() => {

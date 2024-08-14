@@ -5,6 +5,7 @@ import Selector from "../Selector";
 import { formattedNumber, getDaysInMonth } from "@/utils/calendarFns";
 import TimeDropdown from "./TimeDropdown";
 import { useRouter, useSearchParams } from "next/navigation";
+import { storageGet } from "@/utils/storageFns";
 
 interface CalendarProps {
   min?: Date;
@@ -37,16 +38,15 @@ const Calendar = ({
   );
 
   useEffect(() => {
-    setTimeout(() => {
-      if (typeof window !== "undefined") {
-        if (localStorage.getItem("max") === "1") {
-          const newMax = new Date(maxDate);
-          newMax.setDate(maxDate.getDate() - 1);
-          setMaxDate(newMax);
-        }
-        const min = localStorage.getItem("sud");
-        min && setMinDate(new Date(min));
+    setTimeout(async () => {
+      const max = await storageGet("max");
+      if (max === "1") {
+        const newMax = new Date(maxDate);
+        newMax.setDate(maxDate.getDate() - 1);
+        setMaxDate(newMax);
       }
+      const min = await storageGet("sud");
+      min && setMinDate(new Date(min));
     }, 150);
   }, []);
 

@@ -6,6 +6,7 @@ import UserProfileInfo from "@/components/userInfo/UserProfileInfo";
 import { USER_INFO_FORM_LABEL } from "@/constants/userConstants";
 import { errorAlert } from "@/utils/alertFns";
 import { fetcher } from "@/utils/fetchClient";
+import { storageGet } from "@/utils/storageFns";
 import { getTimestamp } from "@/utils/timestamp";
 import { useRouter } from "next/navigation";
 import { useState, FormEvent, useEffect } from "react";
@@ -30,19 +31,17 @@ export default function UserInfo() {
     weight: 0,
   });
   useEffect(() => {
-    setTimeout(() => {
-      if (localStorage) {
-        const newData = {
-          image: localStorage.getItem("profile"),
-          email: localStorage.getItem("email"),
-          nickName: localStorage.getItem("nickName"),
-        };
-        setUserData({
-          image: newData.image ?? undefined,
-          email: newData.email ?? undefined,
-          nickName: newData.nickName ?? undefined,
-        });
-      }
+    setTimeout(async () => {
+      const newData = {
+        image: await storageGet("profile"),
+        email: await storageGet("email"),
+        nickName: await storageGet("nickName"),
+      };
+      setUserData({
+        image: newData.image,
+        email: newData.email,
+        nickName: newData.nickName,
+      });
     }, 100);
   }, []);
   const router = useRouter();

@@ -3,9 +3,10 @@
 import { customFetch } from "@/utils/fetchClient";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { isAdmin } from "@/utils/noticeFns";
 import { errorAlert } from "@/utils/alertFns";
 import dynamic from "next/dynamic";
+import { storageSet } from "@/utils/storageFns";
+import { useVerification } from "@/hook/useVerification";
 
 const DetailAdminUseButtons = dynamic(
   () => import("@/app/(sub)/notice/[id]/DetilAdminUseButtons")
@@ -21,6 +22,7 @@ interface NoticeDetail {
 export default function NoticeDetail({ params }: { params: { id: string } }) {
   const { id } = params;
   const [noticeData, setNoticeData] = useState<NoticeDetail>();
+  const { isAdmin } = useVerification();
   const router = useRouter();
   useEffect(() => {
     customFetch
@@ -42,10 +44,10 @@ export default function NoticeDetail({ params }: { params: { id: string } }) {
 
   function handleEditClick() {
     if (isAdmin && noticeData) {
-      localStorage.setItem("ntl", noticeData.title);
-      localStorage.setItem("nds", noticeData.description);
-      localStorage.setItem("ndx", noticeData.id.toString());
-      localStorage.setItem("ndt", noticeData.date);
+      storageSet("ntl", noticeData.title);
+      storageSet("nds", noticeData.description);
+      storageSet("ndx", noticeData.id.toString());
+      storageSet("ndt", noticeData.date);
       router.push("/notice/edit", { scroll: false });
     }
   }

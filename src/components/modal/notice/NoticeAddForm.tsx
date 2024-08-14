@@ -2,9 +2,10 @@
 
 import Input from "@/components/Input";
 import TextArea from "@/components/TextArea";
+import { useVerification } from "@/hook/useVerification";
 import { questionAlert } from "@/utils/alertFns";
 import { customFetch } from "@/utils/fetchClient";
-import { isAdmin } from "@/utils/noticeFns";
+import { storageGet, storageRemove } from "@/utils/storageFns";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -14,21 +15,22 @@ const NoticeAddForm = ({ isEdit }: { isEdit?: boolean }) => {
   const [description, setDescription] = useState("");
   const router = useRouter();
   const pointWord = isEdit ? "수정" : "추가";
+  const { isAdmin } = useVerification();
 
   useEffect(() => {
     if (!isAdmin) router.back();
-    else if (isEdit && typeof window !== undefined) {
-      setTitle(localStorage.getItem("ntl") || "");
-      setDescription(localStorage.getItem("nds") || "");
+    else if (isEdit) {
+      storageGet("ntl")?.then((result) => setTitle(result || ""));
+      storageGet("nds")?.then((result) => setDescription(result || ""));
     }
     return () => {
       setTitle("");
       setDescription("");
       if (isEdit) {
-        localStorage.removeItem("ntl");
-        localStorage.removeItem("nds");
-        localStorage.removeItem("ndx");
-        localStorage.removeItem("ndt");
+        storageRemove("ntl");
+        storageRemove("nds");
+        storageRemove("ndx");
+        storageRemove("ndt");
       }
     };
   }, []);
@@ -36,17 +38,13 @@ const NoticeAddForm = ({ isEdit }: { isEdit?: boolean }) => {
     if (title.length > 0 && description.length > 0) {
       const afterEffect = isEdit
         ? () => {
-            const id =
-              typeof window !== "undefined"
-                ? localStorage.getItem("ndx")
-                : null;
-            if (id) {
+            storageGet("ndx")?.then((id) => {
               customFetch.put("notice/edit", {
                 title,
                 description,
                 id: Number(id),
               });
-            }
+            });
           }
         : () => {
             customFetch
