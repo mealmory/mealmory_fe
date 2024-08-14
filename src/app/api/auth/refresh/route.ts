@@ -38,9 +38,13 @@ export async function POST(req: NextRequest) {
         });
         return response;
       }
+      cookies().delete("act");
+      cookies().delete("rft");
     }
     throw new Error();
   } catch (e) {
+    cookies().delete("act");
+    cookies().delete("rft");
     return NextResponse.json({
       code: 4004,
       result: "N",

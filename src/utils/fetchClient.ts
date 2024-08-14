@@ -5,6 +5,7 @@ import returnFetch, {
 import Cookies from "js-cookie";
 import { getTimestamp } from "./timestamp";
 import { redirectUri, scope } from "@/app/auth/kakaoConst";
+import { errorAlert } from "./alertFns";
 type JsonRequestInit = Omit<NonNullable<FetchArgs[1]>, "body"> & {
   body?: object;
 };
@@ -117,6 +118,26 @@ export const fetcher = async <T>(url: FetchArgs[0], init?: JsonRequestInit) => {
   return res;
 };
 
+function authErrorHandler(code: number) {
+  const authErroTitle =
+    code === 1004
+      ? "로그인 세션이 만료되었습니다."
+      : code === 1005 || code === 1006
+      ? "인증 오류가 발생했습니다."
+      : "";
+  const authErroText =
+    code === 1004
+      ? "다시 로그인 해주세요."
+      : code === 1005 || code === 1006
+      ? "다시 로그인 해주세요."
+      : "";
+  errorAlert(authErroTitle, authErroText, () => {
+    Cookies.remove("rft");
+    Cookies.remove("act");
+    window.location.href = "/auth";
+  });
+}
+
 class Fetcher {
   private clientSideBaseUrl: string;
   private serverSideBaseUrl: string;
@@ -169,19 +190,24 @@ class Fetcher {
         credentials: "same-origin",
       });
       if (newResponse.body.code === 0) {
-        const secondRes = await fetchClient<T>(url, init);
+        const secondRes = await this.requestClient<T>(url, init);
         if (secondRes.body.code === 0) return secondRes;
         return newResponse;
       } else {
-        window.Kakao &&
-          window.Kakao.isInitialized() &&
-          window.Kakao.Auth.authorize({
-            redirectUri,
-            scope,
-          });
+        const code = newResponse.body.code;
+        authErrorHandler(code);
       }
+    } else if (code !== 0) {
+      authErrorHandler(code);
     }
     return res;
+  }
+
+  refresh() {
+    this.requestServer("auth/refresh", {
+      method: "POST",
+      credentials: "same-origin",
+    });
   }
 
   get<T>(
