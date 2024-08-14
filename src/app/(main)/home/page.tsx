@@ -114,7 +114,7 @@ export default function Home() {
               <p className="w-max text-lg">오늘 식단 목록</p>
               <Link
                 href={"/mealplan/add"}
-                className="rounded-2xl sm:rounded-xl shadow-border bg-cuspoint text-cusorange sm:p-2 p-4 w-full sm:w-max"
+                className="rounded-2xl text-center sm:rounded-xl shadow-border bg-cuspoint text-cusorange sm:p-2 p-4 w-full sm:w-max"
               >
                 식단 추가하기
               </Link>
@@ -154,13 +154,13 @@ const AvgCardList = <T extends {}>({
           value += ` | ${text}`;
           valueClass =
             status === "less"
-              ? "text-bmiLess"
+              ? "text-bmiLess dark:text-dbmiLess"
               : status === "safe"
-              ? "text-bmiSafe"
+              ? "text-bmiSafe dark:text-dbmiSafe"
               : status === "warning"
-              ? "text-bmiWraning"
+              ? "text-bmiWarning dark:text-dbmiWarning"
               : status === "danger"
-              ? "text-bmiDanger"
+              ? "text-bmiDanger dark:text-dbmiDanger"
               : "point-value";
         } else if (target === "bmr") {
           value += " kcal";
@@ -197,8 +197,8 @@ const CaloryBar = ({
       <div
         className={
           (isAmr
-            ? "bg-cusyellow sm:border-r-4 sm:border-l-4 sm:border-cusyellow sm:rounded-none sm:bg-inherit sm:h-6 "
-            : "bg-cuspink ") +
+            ? "bg-cusyellow dark:bg-dcusyellow sm:border-r-4 sm:border-l-4 sm:border-cusyellow sm:rounded-none sm:bg-inherit sm:h-6 "
+            : "bg-cuspink dark:bg-dcuspink ") +
           `h-11 rounded-xl relative flex justify-center items-center`
         }
         style={{ width: `${percent}%` }}
