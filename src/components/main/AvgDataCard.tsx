@@ -19,7 +19,7 @@ const AvgDataCard = ({
     >
       <p className={"-translate-y-4 " + (labelClass ?? "")}>{label}</p>
 
-      <p className={valueClass ?? ""}>{value}</p>
+      <p className={"text-xl " + (valueClass ?? "")}>{value}</p>
     </div>
   );
 };
