@@ -7,14 +7,14 @@ const ADMINISTRATORS = [
 ];
 
 export const useVerification = () => {
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(true);
   useEffect(() => {
     storageGet("email")
       ?.then(
         (email) => typeof email === "string" && ADMINISTRATORS.includes(email)
       )
       .then((flag) => {
-        if (flag) setIsAdmin(true);
+        if (!flag) setIsAdmin(false);
       });
   }, []);
 
