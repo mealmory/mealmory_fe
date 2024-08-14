@@ -2,7 +2,6 @@
 
 import Pagination from "@/components/main/Pagination";
 import { customFetch } from "@/utils/fetchClient";
-import { isAdmin } from "@/utils/noticeFns";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useState } from "react";
