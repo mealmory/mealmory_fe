@@ -205,7 +205,7 @@ const CaloryBar = ({
         style={{ width: `${percent}%` }}
       >
         {isAmr && (
-          <span className=" hidden sm:block w-full bg-cusyellow h-2"></span>
+          <span className=" hidden sm:block w-full bg-cusyellow dark:bg-dcusyellow h-2"></span>
         )}
         <span
           className={
