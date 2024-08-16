@@ -5,6 +5,7 @@ type QuestionAlert = {
   title: string;
   text?: string;
   confirmText: string;
+  cancelText?: string;
 };
 
 export const questionAlert = ({
@@ -12,6 +13,7 @@ export const questionAlert = ({
   title,
   text,
   confirmText,
+  cancelText,
 }: QuestionAlert) => {
   return Swal.fire({
     title,
@@ -21,7 +23,7 @@ export const questionAlert = ({
     confirmButtonColor: "#88858586",
     cancelButtonColor: "#eac407",
     confirmButtonText: confirmText,
-    cancelButtonText: "취소",
+    cancelButtonText: cancelText ?? "취소",
     preConfirm: afterEffect,
     allowOutsideClick: () => false,
   });
