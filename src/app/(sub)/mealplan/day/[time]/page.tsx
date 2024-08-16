@@ -5,6 +5,7 @@ import FlipItem from "../../FlipItem";
 import { useEffect, useState } from "react";
 import { MealPlanDetailResponse } from "../../mealType";
 import { customFetch } from "@/utils/fetchClient";
+import RowScrollItems from "@/components/main/RowScrollItems";
 
 type MealPlanDetailOfDay = Array<
   MealPlanDetailResponse & { id: number; type: string }
@@ -88,11 +89,11 @@ export default function MealPlanOfDay({
                       </table>
                     </div>
                   </div>
-                  <div className="flex gap-2 w-full p-5 overflow-x-scroll bg-zinc-100 dark:bg-zinc-800">
+                  <RowScrollItems className="flex gap-2 w-full p-5 bg-zinc-100 dark:bg-zinc-800">
                     {menuList.map(({ menu, kcal, amount, unit }, i) => (
                       <div
                         key={menu + i}
-                        className=" rounded-xl shadow-border p-3 basis-[100%] md:basis-[376px] flex-grow-0 flex-shrink-0  bg-white dark:bg-cusdarkbanana text-center"
+                        className=" rounded-xl shadow-border p-3 basis-[100%] md:basis-[376px] flex-grow-0 flex-shrink-0  bg-white dark:bg-cusdarkbanana text-center select-none"
                       >
                         <p className="text-center mb-1 text-lg">{menu}</p>
                         <p>칼로리 : {kcal.toLocaleString()} kcal</p>
@@ -101,7 +102,7 @@ export default function MealPlanOfDay({
                         </p>
                       </div>
                     ))}
-                  </div>
+                  </RowScrollItems>
                 </FlipItem>
               );
             } else {
