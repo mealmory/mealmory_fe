@@ -197,8 +197,6 @@ class Fetcher {
         const code = newResponse.body.code;
         authErrorHandler(code);
       }
-    } else if (code !== 0) {
-      authErrorHandler(code);
     }
     return res;
   }
