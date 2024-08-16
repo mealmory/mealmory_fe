@@ -1,6 +1,21 @@
+"use client";
+
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import Cookies from "js-cookie";
 
 export default function Root() {
+  const router = useRouter();
+
+  useEffect(() => {
+    if (Cookies.get("act")) {
+      router.replace("/home");
+    } else {
+      router.replace("/auth");
+    }
+  }, []);
+
   return (
     <div className="w-full h-full flex flex-col justify-center items-center gap-2">
       <Image

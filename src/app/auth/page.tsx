@@ -9,7 +9,7 @@ import { redirectUri, scope } from "./kakaoConst";
 export default function Login() {
   const router = useRouter();
   useEffect(() => {
-    if (Cookies.get("act")) router.replace("/home");
+    if (Cookies.get("act")) router.replace("/");
   }, []);
   return (
     <div className="w-full h-full flex flex-col justify-center items-center gap-2">

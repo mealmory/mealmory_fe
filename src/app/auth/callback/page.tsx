@@ -34,14 +34,14 @@ export default function CallbackKakao() {
             } else if (collect === 0) {
               router.replace("/auth/user-info");
             } else {
-              router.replace("/home");
+              router.replace("/");
             }
           } else {
             throw new Error("로그인 실패");
           }
         })
         .catch((e) => {
-          router.replace("/auth");
+          router.replace("/");
         });
     }
   }, [code, router]);
