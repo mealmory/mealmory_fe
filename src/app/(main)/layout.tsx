@@ -1,5 +1,4 @@
 import Header from "./Header";
-import Footer from "./Footer";
 
 export default function MainLayout({
   children,
@@ -10,7 +9,6 @@ export default function MainLayout({
     <div className="w-full min-h-screen relative sm:pl-40 sm:pt-0 sm:pb-0 pt-[45px] pb-[55px]">
       <Header />
       <main className="h-full w-full">{children}</main>
-      <Footer />
     </div>
   );
 }

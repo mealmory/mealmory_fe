@@ -1,6 +1,8 @@
 import { LINK_ITEMS } from "@/constants/navConstants";
 import { IconType } from "@react-icons/all-files";
+import { HiLogout } from "@react-icons/all-files/hi/HiLogout";
 import Link from "next/link";
+import { CSSProperties } from "react";
 
 interface NavigatorProps {
   pathname: string;
@@ -8,6 +10,8 @@ interface NavigatorProps {
   middleClass?: string;
   itemClass?: string;
   iconSize?: number | string;
+  navFlip: () => void;
+  navTransition: CSSProperties;
 }
 
 export default function Navigator({
@@ -16,10 +20,15 @@ export default function Navigator({
   middleClass,
   itemClass,
   iconSize,
+  navFlip,
+  navTransition,
 }: NavigatorProps) {
   return (
-    <nav className={navClass}>
+    <nav className={navClass} style={navTransition}>
       <div className={middleClass}>
+        <button className="self-end sm:hidden" onClick={navFlip}>
+          <HiLogout size={30} />
+        </button>
         {LINK_ITEMS.map(({ title, link, icon }) => (
           <NavItem
             key={title}
