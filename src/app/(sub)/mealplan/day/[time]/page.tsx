@@ -51,6 +51,7 @@ export default function MealPlanOfDay({
                 fat: a.fat + b.fat,
               }));
               const menu_spec = { carbs, protein, fat };
+              const hhmm = time.substring(11, 16);
               return (
                 <FlipItem
                   title={type}
@@ -62,10 +63,10 @@ export default function MealPlanOfDay({
                     <p>
                       식사 시간 :{" "}
                       <Link
-                        href={`/mealplan/time/${id}`}
+                        href={`/mealplan/time/${id}?time=${hhmm}`}
                         className="font-semibold text-cusorange underline cursor-pointer"
                       >
-                        {time.substring(11, 16)}
+                        {hhmm}
                       </Link>
                     </p>
                     <p>칼로리 : {total.toLocaleString()} kcal</p>

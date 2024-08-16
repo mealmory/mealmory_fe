@@ -1,17 +1,23 @@
 "use client";
 
 import { HiChevronLeft } from "@react-icons/all-files/hi/HiChevronLeft";
-import { useRouter, useSelectedLayoutSegments } from "next/navigation";
+import {
+  useRouter,
+  useSearchParams,
+  useSelectedLayoutSegments,
+} from "next/navigation";
 
 export default function SubHeader() {
   const router = useRouter();
+  const searchParam = useSearchParams();
   const segments = useSelectedLayoutSegments();
 
   const title = (() => {
     if (segments[0] === "mealplan") {
       if (segments[1] === "add") return "식단 추가";
       if (segments[1] === "edit") return "식단 수정";
-      return "식단 상세";
+      if (segments[1] === "time") return searchParam.get("time");
+      if (segments[1] === "day") return segments.at(-1);
     }
     if (segments[0] === "notice") return "공지 사항";
     return "title 미정";
