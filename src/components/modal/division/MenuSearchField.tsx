@@ -2,10 +2,11 @@
 
 import useMealPlanStore from "@/store/mealPlanStore";
 import useMenuRegion from "@/store/menuRegionStore";
-import { errorAlert } from "@/utils/alertFns";
+import { errorAlert, questionAlert } from "@/utils/alertFns";
 import { customFetch } from "@/utils/fetchClient";
 import { checkSpecialCharacters } from "@/utils/inputFns";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
+import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 
 interface SearchResultDTO {
@@ -38,7 +39,7 @@ const MenuSearchField = ({
   const { menuRegion } = useMenuRegion();
   const [searchValue, setSearchValue] = useState("");
   const [searchResult, setSearchResult] = useState<SearchResultDTO[]>();
-  useEffect(() => {}, []);
+  const router = useRouter();
   function handleSearchClick(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (checkSpecialCharacters(searchValue) || searchValue.length === 0) {
@@ -57,8 +58,27 @@ const MenuSearchField = ({
           name: searchValue,
         })
         .then((res) => {
-          const ok = res.body.code === 0;
-          setSearchResult(ok ? res.body.data : []);
+          const { code } = res.body;
+          if (code === 0) setSearchResult(res.body.data);
+          else if (code === 2002) {
+            questionAlert({
+              title: "검색한 음식을 찾을 수 없습니다.",
+              text: "메뉴를 직접 입력하거나 다른 메뉴를 검색하시겠습니까?",
+              confirmText: "직접 입력",
+              cancelText: "다른 메뉴 검색",
+              afterEffect: () => {
+                handleSelfClick();
+              },
+            });
+          } else {
+            errorAlert(
+              "오류가 발생했습니다.",
+              "잠시 후 다시 시도해 주세요",
+              () => {
+                router.back();
+              }
+            );
+          }
         });
     }
   }
