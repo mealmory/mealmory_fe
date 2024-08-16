@@ -45,6 +45,7 @@ export default function Home() {
   const [simpleCalory, setSimpleCalory] = useState<
     Array<SimpleCalory & { empty: boolean }>
   >([]);
+
   useEffect(() => {
     customFetch
       .get<MainData>("main/home")
@@ -208,7 +209,7 @@ const CaloryBar = ({
         )}
         <span
           className={
-            "point-value" +
+            "point-value w-max " +
             (isAmr
               ? " sm:absolute sm:right-2 sm:-top-5"
               : percent < 50
