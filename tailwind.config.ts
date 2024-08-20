@@ -39,6 +39,96 @@ const config: Config = {
       gridTemplateColumns: {
         80: "repeat(4, minmax(80px, 1fr))",
       },
+      keyframes: {
+        float: {
+          from: {
+            transform: "translateY(20px)",
+            opacity: "0",
+          },
+          to: {
+            transform: "none",
+            opacity: "1",
+          },
+        },
+        "float-1": {
+          from: {
+            transform: "translateY(20px)",
+            opacity: "0",
+          },
+          "15%": {
+            transform: "translateY(20px)",
+            opacity: "0",
+          },
+          to: {
+            transform: "none",
+            opacity: "1",
+          },
+        },
+        "float-2": {
+          from: {
+            transform: "translateY(20px)",
+            opacity: "0",
+          },
+          "30%": {
+            transform: "translateY(20px)",
+            opacity: "0",
+          },
+          to: {
+            transform: "none",
+            opacity: "1",
+          },
+        },
+        "float-3": {
+          from: {
+            transform: "translateY(20px)",
+            opacity: "0",
+          },
+          "45%": {
+            transform: "translateY(20px)",
+            opacity: "0",
+          },
+          to: {
+            transform: "none",
+            opacity: "1",
+          },
+        },
+        "float-4": {
+          from: {
+            transform: "translateY(20px)",
+            opacity: "0",
+          },
+          "60%": {
+            transform: "translateY(20px)",
+            opacity: "0",
+          },
+          to: {
+            transform: "none",
+            opacity: "1",
+          },
+        },
+        "float-5": {
+          from: {
+            transform: "translateY(20px)",
+            opacity: "0",
+          },
+          "75%": {
+            transform: "translateY(20px)",
+            opacity: "0",
+          },
+          to: {
+            transform: "none",
+            opacity: "1",
+          },
+        },
+      },
+      animation: {
+        float: "float 0.5s ease-in-out",
+        "float-1": "float-1 0.5s ease-in-out",
+        "float-2": "float-2 0.5s ease-in-out",
+        "float-3": "float-3 0.5s ease-in-out",
+        "float-4": "float-4 0.5s ease-in-out",
+        "float-5": "float-5 0.5s ease-in-out",
+      },
     },
   },
   plugins: [],
