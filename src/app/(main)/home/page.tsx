@@ -98,10 +98,10 @@ export default function Home() {
               );
             })}
           </Section>
-          <Section titleHeader="나의 데이터">
+          <Section titleHeader="나의 데이터" className="animate-float">
             <AvgCardList avgDatas={mainData.user} avgTitles={userAvg} />
           </Section>
-          <div className="w-ful md:flex flex-row gap-2">
+          <div className="w-ful md:flex flex-row gap-2 animate-float-2">
             <Section titleHeader="동일 연령대 평균 데이터">
               <AvgCardList
                 avgDatas={mainData.avg}
@@ -110,7 +110,7 @@ export default function Home() {
               />
             </Section>
           </div>
-          <Section className="flex-1 flex flex-col gap-2">
+          <Section className="flex-1 flex flex-col gap-2 animate-float-4">
             <div className="w-full flex gap-3 flex-col sm:flex-row sm:items-center">
               <p className="w-max text-lg">오늘 식단 목록</p>
               <Link
@@ -198,7 +198,7 @@ const CaloryBar = ({
       <div
         className={
           (isAmr
-            ? "bg-cusyellow dark:bg-dcusyellow sm:border-r-4 sm:border-l-4 sm:border-cusyellow sm:rounded-none sm:bg-inherit sm:h-6 "
+            ? "bg-cusyellow dark:bg-dcusyellow sm:border-r-4 sm:border-l-4 sm:border-cusyellow sm:rounded-none sm:bg-inherit dark:sm:bg-inherit sm:h-6 "
             : "bg-cuspink dark:bg-dcuspink ") +
           `h-11 rounded-xl relative flex justify-center items-center`
         }

@@ -9,7 +9,7 @@ const SERVICE_INFO_ITEMS = [
 
 const ServiceInfoList = () => {
   return (
-    <div className="w-full py-5 border-t-2">
+    <div className="w-full py-5 border-t-2 animate-float-2">
       <p className="text-center text-xl sm:text-2xl mb-2">서비스 정보</p>
       <div className="flex flex-col gap-2 w-full">
         {SERVICE_INFO_ITEMS.map(({ title, link }) => (

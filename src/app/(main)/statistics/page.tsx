@@ -162,7 +162,7 @@ const MealTable = ({ range }: { range: 1 | 7 | 30 }) => {
       tHead={range === 1 ? "시간" : "날짜"}
       tDataList={tDataList}
       period={period}
-      tclassName="flex-1 flex flex-col justify-between"
+      tclassName="flex-1 flex flex-col justify-between animate-float-3"
     />
   ) : (
     <div className="w-full h-full shadow-border rounded-xl bg-cusbanana dark:bg-cusdarkbanana overflow-hidden flex-1"></div>

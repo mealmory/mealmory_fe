@@ -55,7 +55,7 @@ const Chart = ({ labels, dataList, dataLabel, color, line }: ChartProps) => {
   const { gridColor, ticksColor } = colors;
 
   return (
-    <div className="rounded-2xl bg-cusbanana dark:bg-cusdarkbanana shadow-border p-2 basis-1/2 flex-1 w-full min-h-[23.16vw] flex items-center justify-center">
+    <div className="rounded-2xl bg-cusbanana dark:bg-cusdarkbanana shadow-border p-2 basis-1/2 flex-1 w-full min-h-[23.16vw] flex items-center justify-center animate-float-2">
       {dataList && labels ? (
         line ? (
           <Line

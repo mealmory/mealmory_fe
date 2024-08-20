@@ -25,7 +25,7 @@ const Podium = ({
       })
     : undefined;
   return (
-    <div className="rounded-2xl bg-cusbanana dark:bg-cusdarkbanana shadow-border p-5 min-h-[23.12vw] h-max w-full basis-1/2 flex-1 flex items-end">
+    <div className="rounded-2xl bg-cusbanana dark:bg-cusdarkbanana shadow-border p-5 min-h-[23.12vw] h-max w-full basis-1/2 flex-1 flex items-end animate-float">
       {rankResult ? (
         period === 1 ? (
           <DayTopCharacter topCharacter={rankResult[0]} />

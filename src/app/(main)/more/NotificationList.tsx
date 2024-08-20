@@ -40,7 +40,7 @@ const NotificationList = () => {
     : 1;
 
   return (
-    <div className="w-full flex flex-col items-center gap-2 py-3">
+    <div className="w-full flex flex-col items-center gap-2 py-3 animate-float">
       <div className="w-full relative">
         <p className="text-xl sm:text-2xl mb-2 text-center">공지사항</p>
         <AdminUseButton />
