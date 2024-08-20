@@ -1,6 +1,6 @@
 import { LINK_ITEMS } from "@/constants/navConstants";
 import { IconType } from "@react-icons/all-files";
-import { HiLogout } from "@react-icons/all-files/hi/HiLogout";
+import { HiDownload } from "@react-icons/all-files/hi/HiDownload";
 import Link from "next/link";
 import { CSSProperties } from "react";
 
@@ -27,7 +27,7 @@ export default function Navigator({
     <nav className={navClass} style={navTransition}>
       <div className={middleClass}>
         <button className="self-end sm:hidden" onClick={navFlip}>
-          <HiLogout size={30} />
+          <HiDownload size={30} className=" -rotate-90" />
         </button>
         {LINK_ITEMS.map(({ title, link, icon }) => (
           <NavItem
