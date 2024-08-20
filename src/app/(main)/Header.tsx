@@ -2,7 +2,7 @@
 import Navigator from "@/components/main/Navigator";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { HiDownload } from "@react-icons/all-files/hi/HiDownload";
+import { HiLogout } from "@react-icons/all-files/hi/HiLogout";
 import { useEffect, useState } from "react";
 
 export default function Header() {
@@ -26,7 +26,7 @@ export default function Header() {
           <p>MealMory</p>
         </div>
         <button className="sm:hidden " onClick={() => setMenuFlip(false)}>
-          <HiDownload size={30} className=" -rotate-90" />
+          <HiLogout size={30} />
         </button>
       </div>
       <Navigator
