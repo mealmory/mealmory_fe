@@ -108,7 +108,13 @@ export default function Profile() {
       <UserProfileInfo
         profileData={{ email: userData?.email, image: userData?.profile }}
       />
-      <form className="w-full flex flex-col gap-4">
+      <form
+        className="w-full flex flex-col gap-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleEdit();
+        }}
+      >
         {[
           { label: "닉네임", name: "nickName", type: "string" },
           ...USER_INFO_FORM_LABEL.inputList,
@@ -137,11 +143,10 @@ export default function Profile() {
             key={props.label}
             {...props}
             value={selectedOption[props.name as keyof typeof selectedOption]}
-            handleChange={(e) => {
-              const event = e as { label: string; value: number };
+            handleClick={(optionValue) => {
               setSelectedOption((prev) => ({
                 ...prev,
-                [props.name as keyof typeof selectedOption]: event.value,
+                [props.name as keyof typeof selectedOption]: optionValue,
               }));
             }}
             disabled={!isEdit}
@@ -152,10 +157,6 @@ export default function Profile() {
             <button
               type="submit"
               className={btnClass + "bg-cuspoint text-cusorange flex-1"}
-              onClick={(e) => {
-                e.preventDefault();
-                handleEdit();
-              }}
             >
               저장
             </button>

@@ -110,11 +110,10 @@ export default function UserInfo() {
             key={props.label}
             {...props}
             value={selectedOption[props.name as keyof typeof selectedOption]}
-            handleChange={(e) => {
-              const event = e as { label: string; value: number };
+            handleClick={(optionValue) => {
               setSelectedOption((prev) => ({
                 ...prev,
-                [props.name as keyof typeof selectedOption]: event.value,
+                [props.name as keyof typeof selectedOption]: optionValue,
               }));
             }}
           />
