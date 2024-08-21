@@ -10,12 +10,14 @@ const Selector = ({
   value,
   handleClick,
   optionsClassName,
+  disabled,
 }: {
   className?: string;
   titleClass?: string;
   optionsClassName?: string;
   options: Array<{ name: string; optionValue: number }>;
   value: number | string;
+  disabled?: boolean;
   handleClick: (value: number) => void;
 }) => {
   const [flip, setFlip] = useState(true);
@@ -45,23 +47,35 @@ const Selector = ({
     };
   }, [flip, options]);
   return (
-    <div className={"relative " + (className ?? "")}>
+    <div
+      className={
+        "relative " +
+        (disabled
+          ? "bg-zinc-50 dark:bg-black dark:bg-opacity-10 text-gray-400 "
+          : "") +
+        (className ?? "")
+      }
+    >
       <button
         className={
           "flex items-center justify-between w-full " + (titleClass ?? "")
         }
+        type="button"
+        disabled={disabled}
         onClick={() => setFlip((prev) => !prev)}
         ref={(el) => {
           optionRefs.current[0] = el;
         }}
       >
-        <p>{selectedOption?.name}</p>
+        <p className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+          {selectedOption?.name}
+        </p>
         <HiChevronRight className="rotate-90" size={30} />
       </button>
       {!flip && (
         <ul
           className={
-            "rounded-lg absolute -bottom-1 left-0 translate-y-full w-full border bg-white dark:bg-cusdark " +
+            "rounded-lg absolute -bottom-1 left-0 translate-y-full w-full border bg-white dark:bg-cusdark z-50 " +
             (optionsClassName ?? "overflow-hidden")
           }
         >
