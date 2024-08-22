@@ -10,6 +10,7 @@ import { customFetch } from "@/utils/fetchClient";
 import { storageSet } from "@/utils/storageFns";
 import { toFetchTimeString } from "@/utils/timestamp";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface MainData {
@@ -45,6 +46,7 @@ export default function Home() {
   const [simpleCalory, setSimpleCalory] = useState<
     Array<SimpleCalory & { empty: boolean }>
   >([]);
+  const router = useRouter();
 
   useEffect(() => {
     customFetch
@@ -53,25 +55,25 @@ export default function Home() {
         if (res.body.code === 0) {
           setMainData(res.body.data);
           storageSet("sud", res.body.data.date);
+          const time = toFetchTimeString(new Date());
+          customFetch
+            .get<SimpleCaloryResponse>("meal/search", { type: 1, time })
+            .then((res) => {
+              if (res.body.code === 0) {
+                const data = res.body.data[time.split(" ")[0]].map((item) => ({
+                  ...item,
+                  empty: false,
+                }));
+                setSimpleCalory(data);
+              }
+            });
           return res.body.data;
         }
-        throw new Error("데이터 요청 실패");
       })
       .catch((e) => {
-        errorAlert("데이터를 요청에 실패 했습니다.", "", () => {});
-      });
-    const time = toFetchTimeString(new Date());
-
-    customFetch
-      .get<SimpleCaloryResponse>("meal/search", { type: 1, time })
-      .then((res) => {
-        if (res.body.code === 0) {
-          const data = res.body.data[time.split(" ")[0]].map((item) => ({
-            ...item,
-            empty: false,
-          }));
-          setSimpleCalory(data);
-        }
+        errorAlert("데이터 요청에 실패 했습니다.", "", () => {
+          router.refresh();
+        });
       });
   }, []);
 
