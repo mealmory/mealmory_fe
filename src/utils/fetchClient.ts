@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import { getTimestamp } from "./timestamp";
 import { redirectUri, scope } from "@/app/auth/kakaoConst";
 import { errorAlert } from "./alertFns";
+
 type JsonRequestInit = Omit<NonNullable<FetchArgs[1]>, "body"> & {
   body?: object;
 };
@@ -119,18 +120,14 @@ export const fetcher = async <T>(url: FetchArgs[0], init?: JsonRequestInit) => {
 };
 
 function authErrorHandler(code: number) {
+  if (code !== 1004 && code !== 1005 && code !== 1006 && code !== 4004) return;
   const authErroTitle =
     code === 1004
       ? "로그인 세션이 만료되었습니다."
-      : code === 1005 || code === 1006
+      : code === 1005 || code === 1006 || code === 4004
       ? "인증 오류가 발생했습니다."
-      : "";
-  const authErroText =
-    code === 1004
-      ? "다시 로그인 해주세요."
-      : code === 1005 || code === 1006
-      ? "다시 로그인 해주세요."
-      : "";
+      : "오류가 발생했습니다.";
+  const authErroText = "다시 로그인 해주세요.";
   errorAlert(authErroTitle, authErroText, () => {
     Cookies.remove("rft");
     Cookies.remove("act");
@@ -139,72 +136,30 @@ function authErrorHandler(code: number) {
 }
 
 class Fetcher {
-  private clientSideBaseUrl: string;
-  private serverSideBaseUrl: string;
-
-  constructor() {
-    this.clientSideBaseUrl = process.env.NEXT_PUBLIC_BASEURL || "";
-    this.serverSideBaseUrl = "http://localhost:3000/api/";
-  }
-
-  private async requestClient<T>(
-    url: FetchArgs[0],
-    init?: JsonRequestInit
-  ): Promise<JsonResponse<ApiResponse<T>>> {
-    const fetch = returnFetchJson({
-      baseUrl: this.clientSideBaseUrl,
-      interceptors: {
-        async request(requestArgs) {
-          const accessToken = Cookies.get("act");
-          if (accessToken) {
-            requestArgs[1] = {
-              ...requestArgs[1],
-              headers: {
-                ...requestArgs[1]?.headers,
-                authorization: `Bearer ${accessToken}`,
-                "Content-Type": "application/json",
-              },
-            };
-          }
-          return requestArgs;
-        },
-      },
-    });
-    return fetch(url, init);
-  }
-  private async requestServer<T>(
-    url: FetchArgs[0],
-    init?: JsonRequestInit
-  ): Promise<JsonResponse<ApiResponse<T>>> {
-    const fetch = returnFetchJson({
-      baseUrl: this.serverSideBaseUrl,
-    });
-    return fetch(url, init);
-  }
   private async fetcher<T>(url: FetchArgs[0], init?: JsonRequestInit) {
-    const res = await this.requestClient<T>(url, init);
+    const res = await fetchClient<T>(url, init);
     const { code } = res.body;
-    if (code === 1007) {
-      const newResponse = await this.requestServer<T>("auth/refresh", {
-        method: "POST",
-        credentials: "same-origin",
-      });
-      if (newResponse.body.code === 0) {
-        const secondRes = await this.requestClient<T>(url, init);
+    if (code === 1007 || code === 1004) {
+      const refreshRes = await this.refresh();
+      if (refreshRes.body.code === 0) {
+        const secondRes = await fetchClient<T>(url, init);
+
         if (secondRes.body.code === 0) return secondRes;
-        return newResponse;
-      } else {
-        const code = newResponse.body.code;
-        authErrorHandler(code);
       }
+    } else if (code === 1005 || code === 1006) {
+      authErrorHandler(code);
     }
     return res;
   }
 
-  refresh() {
-    this.requestServer("auth/refresh", {
+  async refresh() {
+    return fetchServer("auth/refresh", {
       method: "POST",
       credentials: "same-origin",
+    }).then((res) => {
+      const { code } = res.body;
+      authErrorHandler(code);
+      return res;
     });
   }
 
