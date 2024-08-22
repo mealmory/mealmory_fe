@@ -4,8 +4,8 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 interface RefreshAuth {
-  accessToken: string;
-  refreshToken: string;
+  access_token: string;
+  refresh_token: string;
 }
 export async function POST(req: NextRequest) {
   try {
@@ -25,17 +25,22 @@ export async function POST(req: NextRequest) {
         const response = NextResponse.json(returnData);
         response.headers.set("Access-Control-Allow-Credentials", "true");
 
-        response.cookies.set("act", data.accessToken, {
+        response.cookies.set({
+          name: "act",
+          value: data.access_token,
           // expires: new Date(Date.now() + data.expires_in),
           secure: process.env.NODE_ENV === "production",
           path: "/",
         });
-        response.cookies.set("rft", data.refreshToken, {
+        response.cookies.set({
+          name: "rft",
+          value: data.refresh_token,
           // expires: new Date(Date.now() + data.refresh_token_expires_in),
           secure: process.env.NODE_ENV === "production",
           httpOnly: process.env.NODE_ENV === "production",
           path: "/",
         });
+
         return response;
       }
       cookies().delete("act");
