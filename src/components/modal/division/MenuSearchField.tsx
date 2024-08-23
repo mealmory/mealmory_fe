@@ -7,7 +7,7 @@ import { customFetch } from "@/utils/fetchClient";
 import { checkSpecialCharacters } from "@/utils/inputFns";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { useRouter } from "next/navigation";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
 
 interface SearchResultDTO {
   amount: number;
@@ -29,6 +29,11 @@ interface SearchResultDTO {
   value: number;
 }
 
+interface SearchResponse {
+  count: number;
+  list: SearchResultDTO[];
+}
+
 const MenuSearchField = ({
   handleClose,
   handleSelfClick,
@@ -38,10 +43,14 @@ const MenuSearchField = ({
 }) => {
   const { menuRegion } = useMenuRegion();
   const [searchValue, setSearchValue] = useState("");
-  const [searchResult, setSearchResult] = useState<SearchResultDTO[]>();
+  const [searchResult, setSearchResult] = useState<SearchResponse>({
+    count: 0,
+    list: [],
+  });
+  const [page, setPage] = useState(1);
   const router = useRouter();
-  function handleSearchClick(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+
+  function searchResultUpdate(isPutData: boolean) {
     if (checkSpecialCharacters(searchValue) || searchValue.length === 0) {
       const errorTitle =
         searchValue.length === 0
@@ -52,14 +61,21 @@ const MenuSearchField = ({
       });
     } else {
       customFetch
-        .get<SearchResultDTO[]>("meal/food", {
+        .get<SearchResponse>("meal/food", {
           did: menuRegion.division,
           cid: menuRegion.category,
           name: searchValue,
+          page,
         })
         .then((res) => {
           const { code } = res.body;
-          if (code === 0) setSearchResult(res.body.data);
+          if (code === 0)
+            setSearchResult((prev) => ({
+              count: res.body.data.count,
+              list: isPutData
+                ? res.body.data.list
+                : [...prev.list, ...res.body.data.list],
+            }));
           else if (code === 2002) {
             questionAlert({
               title: "검색한 음식을 찾을 수 없습니다.",
@@ -82,6 +98,26 @@ const MenuSearchField = ({
         });
     }
   }
+
+  function handleSearchClick(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    searchResultUpdate(true);
+  }
+
+  useEffect(() => {
+    if (searchResult.list.length > 0 && page > 1) {
+      searchResultUpdate(false);
+    }
+  }, [page]);
+
+  useEffect(() => {
+    return () => {
+      setPage(1);
+      setSearchValue("");
+      setSearchResult({ count: 0, list: [] });
+    };
+  }, []);
+
   return (
     <div className="w-[97%] h-[95%] pb-1 mx-auto rounded-xl shadow-border overflow-hidden">
       <form
@@ -111,22 +147,80 @@ const MenuSearchField = ({
           </small>
         </button>
         {/* 검색 결과 */}
-        <div className="w-full h-[calc(100%-49px)] pb-2 px-1 overflow-y-scroll overflow-x-hidden scroll-visible ">
-          {searchResult &&
-            searchResult.map((item) => (
-              <ResultItem
-                key={item.id}
-                foodData={item}
-                handleClose={handleClose}
-              />
-            ))}
-        </div>
+        <SearchedList
+          searchResult={searchResult}
+          setSearchResult={setSearchResult}
+          setPage={setPage}
+          page={page}
+          handleClose={handleClose}
+          isInfinity={searchResult.list.length > 0}
+        />
       </div>
     </div>
   );
 };
 
 export default MenuSearchField;
+
+const SearchedList = ({
+  searchResult,
+  setPage,
+  page,
+  handleClose,
+  isInfinity,
+}: {
+  isInfinity: boolean;
+  page: number;
+  searchResult: SearchResponse;
+  setPage: (value: SetStateAction<number>) => void;
+  setSearchResult: (value: SetStateAction<SearchResponse>) => void;
+  handleClose: () => void;
+}) => {
+  const infinifyRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  useEffect(() => {
+    const target = infinifyRef.current;
+
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
+
+    if (target) {
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          const [entry] = entries;
+          if (
+            entry.isIntersecting &&
+            isInfinity &&
+            page < Math.ceil(searchResult.count / 10)
+          ) {
+            setPage((prev) => prev + 1);
+          }
+        },
+        {
+          threshold: 0.3,
+        }
+      );
+      observerRef.current.observe(target);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, [isInfinity]);
+
+  return (
+    <div className="w-full h-[calc(100%-49px)] pb-2 px-1 overflow-y-scroll overflow-x-hidden scroll-visible ">
+      {isInfinity &&
+        searchResult.list.map((item) => (
+          <ResultItem key={item.id} foodData={item} handleClose={handleClose} />
+        ))}
+      <div className=" w-full h-1" ref={infinifyRef}></div>
+    </div>
+  );
+};
 
 const ResultItem = ({
   foodData,
