@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { CharName } from "./page";
 
 const Podium = ({
   rank,
@@ -7,20 +8,26 @@ const Podium = ({
   rank: { [key: string | number]: string } | undefined;
   period: 1 | 7 | 30;
 }) => {
+  function transCharictorKey(charName: CharName): "fat" | "normal" | "skinny" {
+    if (charName === "과식") return "fat";
+    if (charName === "보통") return "normal";
+    return "skinny";
+  }
   const rankResult = rank
     ? Object.entries(rank).map(([key, value]) => {
+        const charKey = transCharictorKey(value as CharName);
         const src =
-            value === "fat"
+            charKey === "fat"
               ? "/fatAvt.svg"
-              : value === "normal"
+              : charKey === "normal"
               ? "/normalAvt.svg"
               : "/skinnyAvt.svg",
-          alt = `${value} avatar`;
+          alt = `${charKey} avatar`;
         return {
           src,
           alt,
           rank: key,
-          type: value as "fat" | "normal" | "skinny",
+          type: charKey,
         };
       })
     : undefined;
