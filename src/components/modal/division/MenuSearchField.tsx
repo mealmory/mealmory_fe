@@ -215,7 +215,11 @@ const SearchedList = ({
     <div className="w-full h-[calc(100%-49px)] pb-2 px-1 overflow-y-scroll overflow-x-hidden scroll-visible ">
       {isInfinity &&
         searchResult.list.map((item) => (
-          <ResultItem key={item.id} foodData={item} handleClose={handleClose} />
+          <ResultItem
+            key={`${item.cid}${item.id}${item.name}`}
+            foodData={item}
+            handleClose={handleClose}
+          />
         ))}
       <div className=" w-full h-1" ref={infinifyRef}></div>
     </div>
