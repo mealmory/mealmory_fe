@@ -1,19 +1,21 @@
 "use client";
 
 import useDate from "@/store/selectDateStore";
-import { customFetch, fetchServer } from "@/utils/fetchClient";
+import { customFetch } from "@/utils/fetchClient";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import Table from "@/components/main/Table";
 import Podium from "./Podium";
-import Chart from "./Chart";
+import { DoughnutChart, LineChart } from "./Chart";
 import { SimpleCalory, SimpleCaloryResponse } from "../home/page";
 import { toFetchTimeString } from "@/utils/timestamp";
 import { storageRemove, storageSet } from "@/utils/storageFns";
 
+export type CharName = "보통" | "과식" | "소식";
+
 interface StatisticsData {
   rank: {
-    [key: number]: "fat" | "normal" | "skinny";
+    [key: number]: CharName;
   };
   cpfGraph: {
     carbs: number;
@@ -26,6 +28,59 @@ interface StatisticsData {
   };
 }
 
+export type CPFKey = "carbs" | "protein" | "fat" | "calory";
+
+export function transCPFKey(cfpKey: CPFKey) {
+  if (cfpKey === "carbs") return "탄수화물";
+  if (cfpKey === "protein") return "단백질";
+  if (cfpKey === "fat") return "지방";
+  return "기타";
+}
+
+export function transGramOrKcal(
+  value: number,
+  type: Exclude<CPFKey, "calory">,
+  toKcal: boolean
+) {
+  // 1g 당 탄수화물 4kcal, 단백질 4kcal, 지방 9kcal
+
+  if (toKcal) {
+    switch (type) {
+      case "carbs":
+        return value * 4;
+      case "protein":
+        return value * 4;
+      case "fat":
+        return value * 9;
+      default:
+        return value;
+    }
+  } else {
+    switch (type) {
+      case "carbs":
+        return value / 4;
+      case "protein":
+        return value / 4;
+      case "fat":
+        return value / 9;
+      default:
+        return value;
+    }
+  }
+}
+
+function genDoughnutColor(label: CPFKey) {
+  switch (label) {
+    case "carbs":
+      return "#6CFD8C" as const;
+    case "protein":
+      return "#2FB4FF" as const;
+    case "fat":
+      return "#FBD925" as const;
+    default:
+      return "#D3D3D3" as const;
+  }
+}
 export default function StatisticsPage() {
   const { selectedDate, changeDate } = useDate();
   const [selectedRange, setSelectedRange] = useState<1 | 7 | 30>(1);
@@ -40,26 +95,67 @@ export default function StatisticsPage() {
       storageRemove("max");
     };
   }, []);
+
   useEffect(() => {
     const date = selectedDate.toLocaleDateString().replaceAll(". ", "-");
-    fetchServer<StatisticsData>(
-      "dummy/statistics?" +
-        new URLSearchParams({
-          date: date.substring(0, date.length - 1),
-          type: "1",
-        }),
-      { method: "GET" }
-    )
-      .then((res) => res.body)
-      .then((data) => setStatisticsData(data.data));
-    return () => {};
+    const type = selectedRange === 1 ? 1 : selectedRange === 7 ? 2 : 3;
+    customFetch
+      .get<StatisticsData>("stat", {
+        type,
+        date: date.substring(0, date.length - 1),
+      })
+      .then((res) => {
+        if (res.body.code === 0) {
+          setStatisticsData(res.body.data);
+        }
+      });
+    return () => {
+      setStatisticsData(undefined);
+    };
   }, [selectedDate, selectedRange]);
 
+  function genMealChartProps(dataLabel: "칼로리 섭취량" | "탄단지 섭취량") {
+    let labels: string[] | undefined = [],
+      dataList: number[] | undefined = [],
+      colors: string[] | undefined = [];
+    if (dataLabel === "칼로리 섭취량") {
+      statisticsData
+        ? Object.entries(statisticsData.dailyGraph).forEach(([key, value]) => {
+            labels && labels.push(key.substring(5, key.length));
+            dataList && dataList.push(value);
+          })
+        : ((labels = undefined), (dataList = undefined), (colors = undefined));
+    } else {
+      statisticsData
+        ? Object.entries(statisticsData.cpfGraph).forEach(([key, value]) => {
+            labels && labels.push(transCPFKey(key as CPFKey));
+            dataList &&
+              dataList.push(
+                key === "calory"
+                  ? value
+                  : +transGramOrKcal(
+                      value,
+                      key as Exclude<CPFKey, "calory">,
+                      true
+                    ).toFixed(2)
+              );
+            colors && colors.push(genDoughnutColor(key as CPFKey));
+          })
+        : ((labels = undefined), (dataList = undefined), (colors = undefined));
+    }
+    return {
+      dataLabel,
+      labels,
+      dataList,
+      colors,
+    };
+  }
+
   return (
-    <div className="w-full min-h-screen h-full p-2 sm:p-5 flex flex-col gap-9">
-      <div className="flex flex-col sm:flex-row gap-6 w-full sm:w-max">
+    <div className="w-full min-h-screen h-full p-2 md:p-5 flex flex-col gap-9 md:gap-6">
+      <div className="flex flex-col md:flex-row gap-6 w-full md:w-max">
         {/* date, range */}
-        <div className="flex items-center w-full sm:w-[280px] bg-cuspoint shadow-border rounded-2xl overflow-hidden px-2 py-1 sm:gap-3">
+        <div className="flex items-center w-full md:w-[280px] bg-cuspoint shadow-border rounded-2xl overflow-hidden px-2 py-1 md:gap-3">
           {[1, 7, 30].map((value) => {
             const text =
               value === 1 ? "하루" : value === 7 ? "지난 7일" : "지난 30일";
@@ -85,27 +181,17 @@ export default function StatisticsPage() {
           {selectedDate.toLocaleDateString()}
         </button>
       </div>
-      <div className="flex flex-col sm:flex-row items-center w-full gap-5 h-max">
+      <div
+        // className="flex flex-col md:flex-row items-center w-full gap-5 h-max"
+        className="grid grid-cols-1 md:grid-cols-2 gap-5 h-max"
+      >
         {/* ranking, chart */}
 
         <Podium rank={statisticsData?.rank} period={selectedRange} />
-        <Chart
-          dataLabel="칼로리 섭취량"
-          labels={
-            statisticsData
-              ? Object.keys(statisticsData.dailyGraph).map((value) =>
-                  value.substring(5, value.length)
-                )
-              : undefined
-          }
-          dataList={
-            statisticsData
-              ? Object.values(statisticsData.dailyGraph)
-              : undefined
-          }
-          color={"#52e0c8"}
-          line
-        />
+        {selectedRange !== 1 && (
+          <LineChart {...genMealChartProps("칼로리 섭취량")} />
+        )}
+        <DoughnutChart {...genMealChartProps("탄단지 섭취량")} />
       </div>
       <MealTable range={selectedRange} />
     </div>
