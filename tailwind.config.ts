@@ -23,6 +23,10 @@ const config: Config = {
         cusdarkbanana: "#6C6C6C",
         dcusyellow: "#E3D342",
         dcuspink: "#E6CDB6",
+        carbs: "#6CFD8C",
+        protein: "#2FB4FF",
+        fat: "#FBD925",
+        etc: "#D3D3D3",
       },
       colors: {
         cusorange: "#FFB800",
