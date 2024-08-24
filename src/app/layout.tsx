@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Jua } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/ThemeProvider";
+import { ThemeProvider } from "@/app/ThemeProvider";
 import KakaoScript from "./KakaoScript";
 import { Suspense } from "react";
 

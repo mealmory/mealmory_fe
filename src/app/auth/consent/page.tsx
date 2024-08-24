@@ -1,6 +1,6 @@
 "use client";
 
-import CheckBox from "@/components/auth/CheckBox";
+import CheckBox from "@/components/atoms/CheckBox";
 import { fetcher, fetchServer } from "@/utils/fetchClient";
 import { getTimestamp } from "@/utils/timestamp";
 import { useRouter } from "next/navigation";

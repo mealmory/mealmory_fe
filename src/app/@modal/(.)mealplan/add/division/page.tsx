@@ -1,5 +1,5 @@
-import DivisionSelectComponent from "@/components/modal/division/DivistionSelectComponent";
-import Modal from "@/components/modal/Modal";
+import DivisionSelectComponent from "@/app/(sub)/mealplan/add/division/DivistionSelectComponent";
+import Modal from "@/app/@modal/Modal";
 
 export default function DivisionModalPage() {
   return (

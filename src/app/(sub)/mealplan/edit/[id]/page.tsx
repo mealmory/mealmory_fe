@@ -1,6 +1,6 @@
 "use client";
 
-import MealplanForm from "@/components/main/MealplanForm";
+import MealplanForm from "@/app/(sub)/mealplan/MealplanForm";
 import { useState } from "react";
 
 export default function MealEditPage() {

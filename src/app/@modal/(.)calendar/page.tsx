@@ -1,5 +1,5 @@
-import DatePicker from "@/components/modal/calendar/DatePicker";
-import Modal from "@/components/modal/Modal";
+import DatePicker from "@/app/(sub)/calendar/DatePicker";
+import Modal from "@/app/@modal/Modal";
 
 export default function MealPlanCalendar() {
   return (

@@ -1,7 +1,7 @@
 "use client";
 
-import Input from "@/components/Input";
-import TextArea from "@/components/TextArea";
+import Input from "@/components/atoms/Input";
+import TextArea from "@/components/atoms/TextArea";
 import { useVerification } from "@/hook/useVerification";
 import { questionAlert } from "@/utils/alertFns";
 import { customFetch } from "@/utils/fetchClient";

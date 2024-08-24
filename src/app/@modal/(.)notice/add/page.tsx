@@ -1,5 +1,5 @@
-import Modal from "@/components/modal/Modal";
-import NoticeAddForm from "@/components/modal/notice/NoticeAddForm";
+import Modal from "@/app/@modal/Modal";
+import NoticeAddForm from "@/app/(sub)/notice/NoticeAddForm";
 
 export default function NoticeAdd() {
   return (

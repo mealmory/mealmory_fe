@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import useMenuRegion, { MenuRegion } from "@/store/menuRegionStore";
 import { useEffect } from "react";
 import { CATEGORY_ITEMS } from "@/constants/mainConstants";
-import MenuSearchField from "./MenuSearchField";
 import useMealPlanStore from "@/store/mealPlanStore";
+import MenuSearchField from "./MenuSearchField";
 const DIVISION = [
   { did: 1, name: "가공 식품" },
   { did: 2, name: "가정식" },

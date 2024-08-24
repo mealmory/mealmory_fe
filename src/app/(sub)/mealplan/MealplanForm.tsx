@@ -1,13 +1,12 @@
 "use client";
 
 import { Dispatch, SetStateAction, useEffect } from "react";
-import Selector from "@/components/Selector";
+import Selector from "@/components/atoms/Selector";
 import useMealPlanStore from "@/store/mealPlanStore";
 
 import { MEAL_ITEM_TITLE } from "@/constants/mainConstants";
 import { usePathname, useRouter } from "next/navigation";
 import useDate from "@/store/selectDateStore";
-import MealPlanItem from "@/components/main/MealPlanItem";
 import { customFetch } from "@/utils/fetchClient";
 import { toFetchTimeString } from "@/utils/timestamp";
 import Swal from "sweetalert2";
@@ -15,6 +14,7 @@ import { errorAlert } from "@/utils/alertFns";
 import { MealPlanDetailResponse } from "@/app/(sub)/mealplan/mealType";
 import { calcMenuSpec, reCalcMenuSpec } from "@/utils/mealplanFns";
 import { toKRLocaleString } from "@/utils/calendarFns";
+import MealPlanItem from "../_componenets/MealPlanItem";
 
 const MEAL_TYPES = [
   { name: "아침", optionValue: 1 },

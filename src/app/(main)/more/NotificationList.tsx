@@ -1,6 +1,6 @@
 "use client";
 
-import Pagination from "@/components/main/Pagination";
+import Pagination from "@/components/Pagination";
 import { customFetch } from "@/utils/fetchClient";
 import dynamic from "next/dynamic";
 import Link from "next/link";
