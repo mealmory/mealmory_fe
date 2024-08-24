@@ -1,4 +1,4 @@
-import { checkBmi } from "@/utils/checkBmi";
+import { checkBmi } from "../util";
 
 interface AvgCardList<T> {
   avgDatas: { [key in keyof T]: number };
