@@ -1,10 +1,10 @@
 "use client";
 
+import { checkSpecialCharacters } from "@/app/(sub)/util";
 import useMealPlanStore from "@/store/mealPlanStore";
 import useMenuRegion from "@/store/menuRegionStore";
 import { errorAlert, questionAlert } from "@/utils/alertFns";
 import { customFetch } from "@/utils/fetchClient";
-import { checkSpecialCharacters } from "@/utils/inputFns";
 import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { useRouter } from "next/navigation";
 import { FormEvent, SetStateAction, useEffect, useRef, useState } from "react";

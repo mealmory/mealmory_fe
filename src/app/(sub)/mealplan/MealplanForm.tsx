@@ -12,9 +12,8 @@ import { toFetchTimeString } from "@/utils/timestamp";
 import Swal from "sweetalert2";
 import { errorAlert } from "@/utils/alertFns";
 import { MealPlanDetailResponse } from "@/app/(sub)/mealplan/mealType";
-import { calcMenuSpec, reCalcMenuSpec } from "@/utils/mealplanFns";
-import { toKRLocaleString } from "@/utils/calendarFns";
 import MealPlanItem from "../_componenets/MealPlanItem";
+import { reCalcMenuSpec, calcMenuSpec, toKRLocaleString } from "../util";
 
 const MEAL_TYPES = [
   { name: "아침", optionValue: 1 },
