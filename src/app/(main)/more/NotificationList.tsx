@@ -1,12 +1,12 @@
 "use client";
 
-import Pagination from "@/components/main/Pagination";
+import Pagination from "@/components/Pagination";
 import { customFetch } from "@/utils/fetchClient";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 const AdminUseButton = dynamic(
-  () => import("@/app/(main)/more/AdminUseButton"),
+  () => import("@/app/(main)/_components/AdminUseButton"),
   { ssr: false }
 );
 type Notice = { id: number; title: string; date: string };

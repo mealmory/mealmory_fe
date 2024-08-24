@@ -1,5 +1,5 @@
 "use client";
-import Navigator from "@/components/main/Navigator";
+import Navigator from "@/app/(main)/_components/Navigator";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { HiLogout } from "@react-icons/all-files/hi/HiLogout";

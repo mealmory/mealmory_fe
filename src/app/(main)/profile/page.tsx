@@ -1,8 +1,8 @@
 "use client";
 
-import Input from "@/components/Input";
-import SelectMenu from "@/components/auth/SelectMenu";
-import UserProfileInfo from "@/components/userInfo/UserProfileInfo";
+import Input from "@/components/atoms/Input";
+import SelectMenu from "@/components/SelectMenu";
+import UserProfileInfo from "@/components/UserProfileInfo";
 import { USER_INFO_FORM_LABEL } from "@/constants/userConstants";
 import { successAlert } from "@/utils/alertFns";
 import { fetcher } from "@/utils/fetchClient";

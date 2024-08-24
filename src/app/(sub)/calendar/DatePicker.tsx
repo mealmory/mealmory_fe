@@ -1,9 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Calendar from "@/components/main/Calendar";
 import useDate from "@/store/selectDateStore";
 import { BsX } from "@react-icons/all-files/bs/BsX";
+import Calendar from "../_componenets/Calendar";
 
 const DatePicker = () => {
   const router = useRouter();

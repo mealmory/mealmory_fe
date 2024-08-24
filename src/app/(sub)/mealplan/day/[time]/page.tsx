@@ -5,7 +5,7 @@ import FlipItem from "../../FlipItem";
 import { useEffect, useState } from "react";
 import { MealPlanDetailResponse } from "../../mealType";
 import { customFetch } from "@/utils/fetchClient";
-import RowScrollItems from "@/components/main/RowScrollItems";
+import RowScrollItems from "@/app/(sub)/_componenets/RowScrollItems";
 
 type MealPlanDetailOfDay = Array<
   MealPlanDetailResponse & { id: number; type: string }

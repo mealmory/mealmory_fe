@@ -4,12 +4,12 @@ import useDate from "@/store/selectDateStore";
 import { customFetch } from "@/utils/fetchClient";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import Table from "@/components/main/Table";
 import Podium from "./Podium";
 import { DoughnutChart, LineChart } from "./Chart";
 import { SimpleCalory, SimpleCaloryResponse } from "../home/page";
 import { toFetchTimeString } from "@/utils/timestamp";
 import { storageRemove, storageSet } from "@/utils/storageFns";
+import Table from "../_components/Table";
 
 export type CharName = "보통" | "과식" | "소식";
 

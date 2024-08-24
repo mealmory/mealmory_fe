@@ -1,6 +1,6 @@
 "use client";
 
-import Selector from "../Selector";
+import Selector from "./atoms/Selector";
 
 interface SelectMenuProps {
   label: string;

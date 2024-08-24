@@ -1,7 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
-import Pagination from "./Pagination";
 import { useRouter } from "next/navigation";
+import Pagination from "@/components/Pagination";
 interface TableProps {
   tHead: string;
   tclassName?: string;

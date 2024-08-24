@@ -1,6 +1,6 @@
 "use client";
-import { formattedNumber } from "@/utils/calendarFns";
-import { useState, useRef, useEffect, ReactNode } from "react";
+import { useState, useRef, useEffect } from "react";
+import { formattedNumber } from "../util";
 
 const HOURS = Array.from({ length: 24 }, (_, i) => ({
   name: formattedNumber(i),

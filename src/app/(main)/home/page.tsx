@@ -1,17 +1,16 @@
 "use client";
 
-import AvgDataCard from "@/components/main/AvgDataCard";
-import Section from "@/components/main/Section";
-import Table from "@/components/main/Table";
 import { MAIN_LABELS } from "@/constants/mainConstants";
 import { errorAlert } from "@/utils/alertFns";
-import { checkBmi } from "@/utils/checkBmi";
 import { customFetch } from "@/utils/fetchClient";
 import { storageSet } from "@/utils/storageFns";
 import { toFetchTimeString } from "@/utils/timestamp";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Section from "./Section";
+import Table from "../_components/Table";
+import AvgCardList from "./AvgCardList";
 
 interface MainData {
   avg: {
@@ -134,55 +133,6 @@ export default function Home() {
     </div>
   );
 }
-
-interface AvgCardList<T> {
-  avgDatas: { [key in keyof T]: number };
-  avgTitles: T;
-  clasName?: string;
-}
-
-const AvgCardList = <T extends {}>({
-  avgDatas,
-  avgTitles,
-  clasName,
-}: AvgCardList<T>) => {
-  return (
-    <div className={"flex items-center gap-2 p-1 " + (clasName ?? "")}>
-      {Object.keys(avgTitles).map((key) => {
-        const target = key as keyof typeof avgTitles;
-        let value = avgDatas[target].toLocaleString();
-        let valueClass = "point-value";
-        if (target === "bmi") {
-          const { text, status } = checkBmi(avgDatas[target]);
-          value += ` | ${text}`;
-          valueClass =
-            status === "less"
-              ? "text-bmiLess dark:text-dbmiLess"
-              : status === "safe"
-              ? "text-bmiSafe dark:text-dbmiSafe"
-              : status === "warning"
-              ? "text-bmiWarning dark:text-dbmiWarning"
-              : status === "danger"
-              ? "text-bmiDanger dark:text-dbmiDanger"
-              : "point-value";
-        } else if (target === "bmr") {
-          value += " kcal";
-        } else if (target === "weight") {
-          value += " kg";
-        }
-        return (
-          <AvgDataCard
-            key={key}
-            label={avgTitles[target] as string}
-            value={value}
-            className="basis-36 flex-grow flex-shrink-0 flex-col p-2 h-40 gap-3 justify-center items-center rounded-xl"
-            valueClass={valueClass}
-          />
-        );
-      })}
-    </div>
-  );
-};
 
 const CaloryBar = ({
   percent,
