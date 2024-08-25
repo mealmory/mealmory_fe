@@ -23,6 +23,67 @@ export const formattedNumber = (num: number) => {
   return num < 10 ? `0${num}` : String(num);
 };
 
+export const compareDate = (
+  baseDate: Date,
+  targetDate: Date,
+  comparisonType?: "time" | "date"
+) => {
+  const [baseYear, baseMonth, baseDay, baseHour, baseMinute] = [
+    baseDate.getFullYear(),
+    baseDate.getMonth(),
+    baseDate.getDate(),
+    comparisonType === "time" ? baseDate.getHours() : undefined,
+    comparisonType === "time" ? baseDate.getMinutes() : undefined,
+  ];
+  const [targetYear, targetMonth, targetDay, targetHour, targetMinute] = [
+    targetDate.getFullYear(),
+    targetDate.getMonth(),
+    targetDate.getDate(),
+    comparisonType === "time" ? targetDate.getHours() : undefined,
+    comparisonType === "time" ? targetDate.getMinutes() : undefined,
+  ];
+  if (comparisonType === "time") {
+    return {
+      under: baseDate > targetDate,
+      over: baseDate < targetDate,
+      same:
+        baseYear === targetYear &&
+        baseMonth === targetMonth &&
+        baseDay === targetDay &&
+        baseHour === targetHour &&
+        baseMinute === targetMinute,
+    };
+  }
+  const normalizedBase = new Date(baseYear, baseMonth, baseDay);
+  const normalizedTarget = new Date(targetYear, targetMonth, targetDay);
+  return {
+    under: normalizedBase > normalizedTarget,
+    over: normalizedBase < normalizedTarget,
+    same:
+      baseYear === targetYear &&
+      baseMonth === targetMonth &&
+      baseDay === targetDay,
+  };
+};
+
+export const compareTime = (
+  baseTime: [number, number],
+  targetTime: [number, number]
+) => {
+  const [baseHour, baseMinute] = baseTime;
+  const [targetHour, targetMinute] = targetTime;
+
+  return {
+    same: baseHour === targetHour && baseMinute === targetMinute,
+    under:
+      baseHour > targetHour ||
+      (baseHour === targetHour && baseMinute > targetMinute),
+    over:
+      baseHour < targetHour ||
+      (baseHour === targetHour && baseMinute < targetMinute),
+  };
+};
+
 // mealplan fns
 
 export const toKRLocaleString = (date: Date) => {
