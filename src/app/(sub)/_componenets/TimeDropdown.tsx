@@ -1,40 +1,29 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { formattedNumber } from "../util";
+import { compareDate, formattedNumber } from "../util";
+import useDate from "@/store/selectDateStore";
 
-const HOURS = Array.from({ length: 24 }, (_, i) => ({
-  name: formattedNumber(i),
-  optionValue: i,
-}));
-const MINUTES = Array.from({ length: 60 }, (_, i) => ({
-  name: formattedNumber(i),
-  optionValue: i,
-}));
+type TimeKey = "hour" | "minute";
 
 const TimeDropdown = ({
-  currentDate,
   className,
-  handleDateChange,
   inline,
+  min,
+  max,
 }: {
-  currentDate: Date;
-  handleDateChange: (target: Date) => void;
   className?: string;
   inline?: boolean;
+  min: Date;
+  max: Date;
 }) => {
   const [flip, setFlip] = useState(inline ? false : true);
   const actionRefs = useRef<(HTMLElement | null)[]>([]);
-
-  const hour = currentDate.getHours(),
-    minute = currentDate.getMinutes();
-
+  const { time, changeTime, selectedDate } = useDate();
+  const [hour, minute] = time;
   function handleTimeClick(type: "hour" | "minute", value: number) {
-    const year = currentDate.getFullYear(),
-      month = currentDate.getMonth(),
-      day = currentDate.getDate(),
-      hour = type === "hour" ? value : currentDate.getHours(),
-      minute = type === "minute" ? value : currentDate.getMinutes();
-    handleDateChange(new Date(year, month, day, hour, minute));
+    const newHour = type === "hour" ? value : hour,
+      newMinute = type === "minute" ? value : minute;
+    changeTime(newHour, newMinute);
   }
 
   useEffect(() => {
@@ -56,6 +45,41 @@ const TimeDropdown = ({
       document.removeEventListener("mousedown", handleOutSideClick);
     };
   }, [flip]);
+
+  function checkTimeDesabled(type: TimeKey, value: number) {
+    const isMinDate = compareDate(min, selectedDate).same;
+    const isMaxDate = compareDate(max, selectedDate).same;
+    const [minHour, minMinute] = [min.getHours(), min.getMinutes()];
+    const [maxHour, maxMinute] = [max.getHours(), max.getMinutes()];
+    // 최소일이거나 최대일이거나
+    if (isMinDate && !isMaxDate) {
+      // hour
+      if (type === "hour") return value < minHour;
+      // minute
+      if (hour < minHour) return true;
+      if (hour === minHour) return value < minMinute;
+      return false;
+    }
+    if (isMaxDate && !isMinDate) {
+      if (type === "hour") return value > maxHour;
+      // minute
+      if (hour > maxHour) return true;
+      if (hour === maxHour) return value > maxMinute;
+      return false;
+    }
+    return false;
+  }
+
+  const HOURS = Array.from({ length: 24 }, (_, i) => ({
+    name: formattedNumber(i),
+    optionValue: i,
+    disabled: checkTimeDesabled("hour", i),
+  }));
+  const MINUTES = Array.from({ length: 60 }, (_, i) => ({
+    name: formattedNumber(i),
+    optionValue: i,
+    disabled: checkTimeDesabled("minute", i),
+  }));
 
   return (
     <div className="flex items-center relative w-full md:w-[120px] h-max justify-center">
@@ -93,6 +117,7 @@ const TimeDropdown = ({
             targetValue={targetValue}
             flip={flip}
             handleClick={handleTimeClick}
+            list={type === "hour" ? HOURS : MINUTES}
           />
         ))}
       </div>
@@ -106,15 +131,16 @@ const Ul = ({
   targetValue,
   type,
   handleClick,
+  list,
 }: {
   flip: boolean;
   targetValue: number;
   type: "hour" | "minute";
+  list: { name: string; optionValue: number; disabled: boolean }[];
   handleClick: (type: "hour" | "minute", value: number) => void;
 }) => {
   const ulRef = useRef<HTMLUListElement>(null);
   const liRefs = useRef<(HTMLElement | null)[]>([]);
-  const list = type === "hour" ? HOURS : MINUTES;
   useEffect(() => {
     const target = liRefs.current.find((el) => {
       return el?.dataset.selected === "true";
@@ -134,20 +160,22 @@ const Ul = ({
       ref={ulRef}
       className="max-h-40 md:max-h-60 overflow-y-scroll flex-1 scroll-hide"
     >
-      {list.map(({ name, optionValue }, i) => (
+      {list.map(({ name, optionValue, disabled }, i) => (
         <li
           key={`${name}${optionValue}`}
           ref={(el) => {
             liRefs.current[i + 1] = el;
           }}
           className={
-            "p-3 cursor-pointer text-center " +
+            "p-3 text-center " +
             (targetValue === optionValue
-              ? "bg-cuspoint text-cusorange "
-              : " dark:bg-black hover:bg-cusgray dark:hover:bg-gray-700")
+              ? "bg-cuspoint text-cusorange cursor-pointer "
+              : disabled
+              ? "bg-gray-100 dark:bg-gray-400 cursor-default"
+              : " dark:bg-black hover:bg-cusgray dark:hover:bg-gray-700 cursor-pointer")
           }
           onClick={() => {
-            handleClick(type, optionValue);
+            !disabled && handleClick(type, optionValue);
           }}
           data-selected={targetValue === optionValue}
         >
