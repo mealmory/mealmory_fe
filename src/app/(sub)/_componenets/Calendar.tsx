@@ -1,48 +1,50 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { storageGet } from "@/utils/storageFns";
 import TimeDropdown from "./TimeDropdown";
 import Selector from "@/components/atoms/Selector";
-import { formattedNumber, getDaysInMonth } from "../util";
+import {
+  compareDate,
+  compareTime,
+  formattedNumber,
+  getDaysInMonth,
+} from "../util";
+import useDate from "@/store/selectDateStore";
 
 interface CalendarProps {
   min?: Date;
   max?: Date;
-  endDate: Date;
   startDate?: Date;
-  handleDateChange: (target: Date) => void;
   inline?: boolean;
 }
 const WEEK_NAMES = ["일", "월", "화", "수", "목", "금", "토"];
 
-const Calendar = ({
-  endDate,
-  handleDateChange,
-  startDate,
-  inline,
-}: CalendarProps) => {
-  const router = useRouter();
+const Calendar = ({ inline }: CalendarProps) => {
   const searchParams = useSearchParams();
+  const { period, selectedDate, changeDate, changeFullDate, time } = useDate();
   const timeSelect = searchParams.get("select") === "time";
 
   const [maxDate, setMaxDate] = useState(new Date());
 
   const [minDate, setMinDate] = useState(new Date("2023-3-14"));
   const [currentYear, setCurrentYear] = useState(
-    endDate.getFullYear() || maxDate.getFullYear()
+    selectedDate.getFullYear() || maxDate.getFullYear()
   );
   const [currentMonth, setCurrentMonth] = useState(
-    endDate.getMonth() + 1 || maxDate.getMonth() + 1
+    selectedDate.getMonth() + 1 || maxDate.getMonth() + 1
   );
 
   useEffect(() => {
     setTimeout(async () => {
       const max = await storageGet("max");
       if (max === "1") {
-        const newMax = new Date(maxDate);
-        newMax.setDate(maxDate.getDate() - 1);
+        const newMax = new Date(
+          maxDate.getFullYear(),
+          maxDate.getMonth(),
+          maxDate.getDate() - 1
+        );
         setMaxDate(newMax);
       }
       const min = await storageGet("sud");
@@ -87,8 +89,25 @@ const Calendar = ({
     };
   }
 
-  function handleDayClick(day: number) {
-    handleDateChange(new Date(currentYear, currentMonth - 1, day));
+  function handleDayClick(day: Date) {
+    if (timeSelect) {
+      const { same: compareResultMin } = compareDate(minDate, day);
+      const { same: compareResultMax } = compareDate(maxDate, day);
+      if (compareResultMin) {
+        const { under: CompareResultMinTime } = compareTime(
+          [minDate.getHours(), minDate.getMinutes()],
+          time
+        );
+        if (CompareResultMinTime) changeFullDate(minDate);
+      } else if (compareResultMax) {
+        const { over: CompareResultMaxTime } = compareTime(
+          [maxDate.getHours(), maxDate.getMinutes()],
+          time
+        );
+        if (CompareResultMaxTime) changeFullDate(maxDate);
+      }
+    }
+    changeDate(day);
   }
 
   const years = Array.from(
@@ -129,37 +148,72 @@ const Calendar = ({
     },
   ];
 
-  const firstDayOfMonth = new Date(currentYear, currentMonth - 1, 1).getDay();
+  const startDayOfWeek = new Date(currentYear, currentMonth - 1, 1).getDay();
+  const endDayOfWeek = new Date(currentYear, currentMonth, 0).getDay();
+
   const daysInMonth = getDaysInMonth(currentYear, currentMonth);
-  const days = [];
-  for (let i = 0; i < firstDayOfMonth; i++) {
-    days.push(0);
-  }
-  for (let i = 1; i <= daysInMonth; i++) {
-    days.push(i);
+  const days: Date[] = [];
+  for (let i = 0; i < startDayOfWeek; i++) {
+    let prevMonth: number = 11,
+      prevYear: number = currentYear;
+    if (currentMonth - 2 < 0) {
+      // curMonth -2 : 현재 선택된 월의 getMonth -1 값 즉, 전 월이 12월일 경우
+      prevYear = -1;
+    } else {
+      prevMonth = currentMonth - 2;
+    }
+    days.push(new Date(prevYear, prevMonth, i - startDayOfWeek + 1));
   }
 
-  function genDayFlag(day: number) {
-    const matchedYearMonth = (target: Date) => ({
-      bool:
-        day > 0 &&
-        target.getFullYear() === currentYear &&
-        target.getMonth() + 1 === currentMonth,
-      targetDay: target.getDate(),
-    });
-    const endTarget = matchedYearMonth(endDate),
-      maxTarget = matchedYearMonth(maxDate),
-      minTarget = matchedYearMonth(minDate),
-      startTarget = startDate && matchedYearMonth(startDate);
-    const dateOfDay = new Date(currentYear, currentMonth - 1, day);
+  for (let i = 1; i <= daysInMonth; i++) {
+    days.push(new Date(currentYear, currentMonth - 1, i));
+  }
+
+  for (let i = 1; i <= 6 - endDayOfWeek; i++) {
+    let nextYear = currentYear,
+      nextMonth = 0;
+    if (currentMonth > 11) {
+      nextYear += 1;
+    } else {
+      nextMonth = currentMonth;
+    }
+    days.push(new Date(nextYear, nextMonth, i));
+  }
+
+  function genDayFlag(day: Date) {
+    const normalizedEndDate = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      selectedDate.getDate()
+    );
+    const selected =
+      selectedDate.getFullYear() === day.getFullYear() &&
+      selectedDate.getMonth() === day.getMonth() &&
+      selectedDate.getDate() === day.getDate();
+
+    let includePeriod = false;
+    if (period === "week") {
+      const startOfWeekDate = new Date(
+        day.getFullYear(),
+        day.getMonth(),
+        day.getDate() - day.getDay()
+      );
+      const startOfWeekEndDate = new Date(
+        normalizedEndDate.getFullYear(),
+        normalizedEndDate.getMonth(),
+        normalizedEndDate.getDate() - normalizedEndDate.getDay()
+      );
+
+      includePeriod = startOfWeekEndDate === startOfWeekDate;
+    } else if (period === "month") {
+      includePeriod = normalizedEndDate.getMonth() === day.getMonth();
+    }
+
     return {
-      selected:
-        (endTarget.bool && endTarget.targetDay === day) ||
-        (startTarget?.bool && startTarget.targetDay === day),
+      selected,
       disabled:
-        (maxTarget.bool && maxTarget.targetDay < day) ||
-        (minTarget.bool && minTarget.targetDay > day),
-      inRange: startDate && startDate < dateOfDay && endDate > dateOfDay,
+        compareDate(minDate, day).under || compareDate(maxDate, day).over,
+      includePeriod,
     };
   }
   return (
@@ -221,41 +275,26 @@ const Calendar = ({
             (timeSelect ? "mb-2" : "")
           }
         >
-          {days.map((day, index) => {
-            const isCurrentMonth = index >= firstDayOfMonth;
-            const { selected, disabled, inRange } = genDayFlag(day);
+          {days.map((day) => {
+            const isCurrentMonth = day.getMonth() === currentMonth - 1;
+            const { selected, disabled, includePeriod } = genDayFlag(day);
 
             return (
-              <div
-                key={index}
-                className={`text-center p-2 cursor-pointer aria-disabled:text-gray-300 aria-disabled:cursor-default w-[40px] ${
-                  selected
-                    ? "bg-cuspoint text-cusorange shadow-border rounded-2xl"
-                    : !isCurrentMonth
-                    ? "cursor-default"
-                    : inRange
-                    ? "rounded-2xl bg-cusbanana shadow-border"
-                    : "text-gray-500 dark:text-white"
-                }`}
-                onClick={() => {
-                  if (isCurrentMonth && !disabled) {
-                    handleDayClick(day);
-                  }
-                }}
-                aria-disabled={disabled}
-              >
-                {day === 0 ? "" : day}
-              </div>
+              <DayButton
+                key={day.toLocaleDateString()}
+                day={day}
+                handleDayClick={handleDayClick}
+                isCurrentMonth={isCurrentMonth}
+                selected={selected}
+                disabled={disabled}
+                includePeriod={includePeriod}
+              />
             );
           })}
         </div>
       </div>
       {timeSelect && (
-        <TimeDropdown
-          currentDate={endDate}
-          handleDateChange={handleDateChange}
-          inline={inline}
-        />
+        <TimeDropdown inline={inline} min={minDate} max={maxDate} />
       )}
     </div>
   );
@@ -280,5 +319,41 @@ const ArrowButton = ({
     >
       {isNext ? <p>&gt;</p> : <p>&lt;</p>}
     </button>
+  );
+};
+
+const DayButton = ({
+  day,
+  handleDayClick,
+  selected,
+  isCurrentMonth,
+  includePeriod,
+  disabled,
+}: {
+  day: Date;
+  handleDayClick: (day: Date) => void;
+  selected?: boolean;
+  isCurrentMonth: boolean;
+  includePeriod?: boolean;
+  disabled: boolean;
+}) => {
+  return (
+    <div
+      className={`text-center p-2 cursor-pointer aria-disabled:text-gray-300 aria-disabled:cursor-default w-[40px] ${
+        selected
+          ? "bg-cuspoint text-cusorange shadow-border rounded-2xl"
+          : !isCurrentMonth
+          ? "cursor-default"
+          : includePeriod
+          ? "rounded-2xl bg-cusbanana shadow-border"
+          : "text-gray-500 dark:text-white"
+      }`}
+      onClick={() => {
+        handleDayClick(day);
+      }}
+      aria-disabled={disabled}
+    >
+      {day.getDate()}
+    </div>
   );
 };
