@@ -198,7 +198,11 @@ const DataLened = ({
       <div className={"rounded-full h-3 w-3 " + dotColor}></div>
       <div className="flex items-center justify-between flex-1 w-full h-full">
         <p className="flex-1">{label}</p>
-        {!nodata && <p>{value} kcal</p>}
+        {!nodata && (
+          <p>
+            <span className="point-value">{value}</span> kcal
+          </p>
+        )}
       </div>
     </div>
   );
