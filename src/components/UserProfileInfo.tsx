@@ -15,17 +15,18 @@ const UserProfileInfo = ({ profileData }: UserProfileInfoProps) => {
     <div className="flex flex-col items-center gap-2">
       {!loading ? (
         <Image
-          src={image === "0" ? "/mealmory_logo.svg" : image}
+          src={image === "0" ? "/defaultProfile.jpg" : image}
           width={107}
           height={107}
-          className=" rounded-full"
-          alt="나의 카카오 프로필 사진"
+          className="border border-gray-200 rounded-full "
+          alt="프로필 사진"
+          quality={100}
           priority
         />
       ) : (
         <div className="w-[107px] h-[96.5px] bg-zinc-500 rounded-full"></div>
       )}
-      <div className=" text-gray-500 text-center dark:text-white">
+      <div className="text-center text-gray-500 dark:text-white">
         {!loading ? <p>{email}</p> : <SkeletonP className="mb-2" />}
         {!loading ? nickName && <p>{nickName}</p> : <SkeletonP />}
       </div>
