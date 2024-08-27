@@ -2,7 +2,7 @@
 
 import CheckBox from "@/components/atoms/CheckBox";
 import { fetcher, fetchServer } from "@/utils/fetchClient";
-import { getTimestamp } from "@/utils/timestamp";
+import { getTimestamp } from "@/utils/timeFns";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { errorAlert } from "@/utils/alertFns";
@@ -54,7 +54,7 @@ export default function Consent() {
   }
 
   return (
-    <div className="w-full h-screen max-w-5xl mx-auto p-2 text-xl sm:text-base">
+    <div className="w-full h-screen max-w-5xl p-2 mx-auto text-xl sm:text-base">
       <p className="text-[1.1em] text-center mb-3">
         서비스 약관 및 개인정보 수집 동의
       </p>
@@ -71,12 +71,12 @@ export default function Consent() {
                 handleClick={() => handleCheckAgree(agreeType)}
                 checked={agreements[agreeType]}
               />
-              <p className="text-sm w-full break-words">{text}</p>
+              <p className="w-full text-sm break-words">{text}</p>
             </div>
           );
         })}
         <button
-          className="bg-cuspoint text-cusorange shadow-border rounded-xl w-full p-3 font-semibold"
+          className="w-full p-3 font-semibold bg-cuspoint text-cusorange shadow-border rounded-xl"
           onClick={handleSubmitConsent}
           disabled={!agreements.privacy || !agreements.terms}
         >

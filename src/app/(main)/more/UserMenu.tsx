@@ -2,7 +2,7 @@
 
 import { questionAlert, successAlert } from "@/utils/alertFns";
 import { fetcher } from "@/utils/fetchClient";
-import { getTimestamp } from "@/utils/timestamp";
+import { getTimestamp } from "@/utils/timeFns";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
@@ -52,7 +52,7 @@ const UserMenu = () => {
   return (
     <div className="w-full mt-8">
       <button
-        className="rounded-xl shadow-border p-3 px-5 sm:mx-0 mx-auto"
+        className="p-3 px-5 mx-auto rounded-xl shadow-border sm:mx-0"
         onClick={handleSignOut}
       >
         회원 탈퇴

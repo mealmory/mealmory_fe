@@ -3,7 +3,7 @@ import returnFetch, {
   ReturnFetchDefaultOptions,
 } from "return-fetch";
 import Cookies from "js-cookie";
-import { getTimestamp } from "./timestamp";
+import { getTimestamp } from "./timeFns";
 import { redirectUri, scope } from "@/app/auth/kakaoConst";
 import { errorAlert } from "./alertFns";
 

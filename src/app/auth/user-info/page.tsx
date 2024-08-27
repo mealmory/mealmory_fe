@@ -7,7 +7,7 @@ import { USER_INFO_FORM_LABEL } from "@/constants/userConstants";
 import { errorAlert } from "@/utils/alertFns";
 import { fetcher } from "@/utils/fetchClient";
 import { storageGet } from "@/utils/storageFns";
-import { getTimestamp } from "@/utils/timestamp";
+import { getTimestamp } from "@/utils/timeFns";
 import { useRouter } from "next/navigation";
 import { useState, FormEvent, useEffect } from "react";
 
@@ -89,7 +89,7 @@ export default function UserInfo() {
   return (
     <div className="w-full h-full flex flex-col max-w-[360px] mx-auto p-2 pt-12">
       <UserProfileInfo profileData={userData} />
-      <form onSubmit={handleSubmit} className="h-full flex flex-col gap-4 pb-2">
+      <form onSubmit={handleSubmit} className="flex flex-col h-full gap-4 pb-2">
         {USER_INFO_FORM_LABEL.inputList.map(({ label, name, type }) => (
           <Input
             key={name}
@@ -120,7 +120,7 @@ export default function UserInfo() {
         ))}
         <button
           type="submit"
-          className="bg-cuspoint text-cusorange shadow-border rounded-xl w-full p-3 font-semibold  mt-4"
+          className="w-full p-3 mt-4 font-semibold bg-cuspoint text-cusorange shadow-border rounded-xl"
         >
           저장하기
         </button>

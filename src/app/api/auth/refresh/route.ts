@@ -1,5 +1,5 @@
 import { fetchClient } from "@/utils/fetchClient";
-import { getTimestamp } from "@/utils/timestamp";
+import { getTimestamp } from "@/utils/timeFns";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 

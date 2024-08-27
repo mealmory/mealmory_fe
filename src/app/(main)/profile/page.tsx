@@ -6,7 +6,7 @@ import UserProfileInfo from "@/components/UserProfileInfo";
 import { USER_INFO_FORM_LABEL } from "@/constants/userConstants";
 import { successAlert } from "@/utils/alertFns";
 import { fetcher } from "@/utils/fetchClient";
-import { getTimestamp } from "@/utils/timestamp";
+import { getTimestamp } from "@/utils/timeFns";
 import { useEffect, useState } from "react";
 
 interface UserData {
@@ -109,7 +109,7 @@ export default function Profile() {
         profileData={{ email: userData?.email, image: userData?.profile }}
       />
       <form
-        className="w-full flex flex-col gap-4"
+        className="flex flex-col w-full gap-4"
         onSubmit={(e) => {
           e.preventDefault();
           handleEdit();
@@ -153,7 +153,7 @@ export default function Profile() {
           />
         ))}
         {isEdit && (
-          <div className="w-full flex gap-2">
+          <div className="flex w-full gap-2">
             <button
               type="submit"
               className={btnClass + "bg-cuspoint text-cusorange flex-1"}
@@ -175,7 +175,7 @@ export default function Profile() {
       {!isEdit && (
         <button
           type="button"
-          className="bg-cuspoint text-cusorange shadow-border p-3"
+          className="p-3 bg-cuspoint text-cusorange shadow-border"
           onClick={() => setIdEdit(true)}
         >
           수정하기

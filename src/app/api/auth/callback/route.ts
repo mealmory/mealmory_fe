@@ -1,5 +1,5 @@
 import { fetchClient } from "@/utils/fetchClient";
-import { getTimestamp } from "@/utils/timestamp";
+import { getTimestamp } from "@/utils/timeFns";
 import { NextRequest, NextResponse } from "next/server";
 
 interface LoginResponse {
