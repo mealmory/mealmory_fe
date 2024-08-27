@@ -109,23 +109,31 @@ const Calendar = ({ inline }: CalendarProps) => {
     }
     changeDate(day);
   }
-
+  // yaers
   const years = Array.from(
     {
       length: maxDate.getFullYear() - minDate.getFullYear() + 1,
     },
     (_, i) => maxDate.getFullYear() - i
   );
-  const monthLength =
-    currentYear === maxDate.getFullYear()
-      ? maxDate.getMonth() + 1
-      : currentYear === minDate.getFullYear()
-      ? 12 - minDate.getMonth()
-      : 12;
+  // month
+  let monthLength = 12,
+    monthStart = 0;
+  if (currentYear === maxDate.getFullYear()) {
+    monthLength = maxDate.getMonth() + 1;
+  }
+
+  if (currentYear === minDate.getFullYear()) {
+    const minMonth = minDate.getMonth();
+    monthLength -= minMonth;
+    monthStart = minMonth;
+  }
+
   const months = Array.from(
     { length: monthLength },
-    (_, i) => (currentYear === maxDate.getFullYear() ? monthLength : 12) - i
+    (_, i) => monthStart + i + 1
   );
+
   const selectOptions = [
     {
       key: "year",
@@ -147,7 +155,7 @@ const Calendar = ({ inline }: CalendarProps) => {
       handleClick: handleYearMonthClick(false),
     },
   ];
-
+  // day
   const startDayOfWeek = new Date(currentYear, currentMonth - 1, 1).getDay();
   const endDayOfWeek = new Date(currentYear, currentMonth, 0).getDay();
 
