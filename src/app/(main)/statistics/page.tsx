@@ -1,6 +1,6 @@
 "use client";
 
-import useDate from "@/store/selectDateStore";
+import useDate, { Period } from "@/store/selectDateStore";
 import { customFetch } from "@/utils/fetchClient";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -82,8 +82,7 @@ function genDoughnutColor(label: CPFKey) {
   }
 }
 export default function StatisticsPage() {
-  const { selectedDate, changeDate } = useDate();
-  const [selectedRange, setSelectedRange] = useState<1 | 7 | 30>(1);
+  const { selectedDate, changeDate, period, changePeriod } = useDate();
   const [statisticsData, setStatisticsData] = useState<StatisticsData>();
   const router = useRouter();
   useEffect(() => {
@@ -98,7 +97,7 @@ export default function StatisticsPage() {
 
   useEffect(() => {
     const date = selectedDate.toLocaleDateString().replaceAll(". ", "-");
-    const type = selectedRange === 1 ? 1 : selectedRange === 7 ? 2 : 3;
+    const type = period === "day" ? 1 : period === "week" ? 2 : 3;
     customFetch
       .get<StatisticsData>("stat", {
         type,
@@ -112,7 +111,7 @@ export default function StatisticsPage() {
     return () => {
       setStatisticsData(undefined);
     };
-  }, [selectedDate, selectedRange]);
+  }, [selectedDate, period]);
 
   function genMealChartProps(dataLabel: "칼로리 섭취량" | "탄단지 섭취량") {
     let labels: string[] | undefined = [],
@@ -152,14 +151,18 @@ export default function StatisticsPage() {
   }
 
   return (
-    <div className="w-full min-h-screen h-full p-2 md:p-5 flex flex-col gap-9 md:gap-6">
-      <div className="flex flex-col md:flex-row gap-6 w-full md:w-max">
+    <div className="flex flex-col w-full h-full min-h-screen p-2 md:p-5 gap-9 md:gap-6">
+      <div className="flex flex-col w-full gap-6 md:flex-row md:w-max">
         {/* date, range */}
         <div className="flex items-center w-full md:w-[280px] bg-cuspoint shadow-border rounded-2xl overflow-hidden px-2 py-1 md:gap-3">
-          {[1, 7, 30].map((value) => {
+          {["day", "week", "month"].map((value) => {
             const text =
-              value === 1 ? "하루" : value === 7 ? "지난 7일" : "지난 30일";
-            const isSelected = value === selectedRange;
+              value === "day"
+                ? "하루"
+                : value === "week"
+                ? "지난 7일"
+                : "지난 30일";
+            const isSelected = value === period;
             return (
               <button
                 className={
@@ -167,7 +170,7 @@ export default function StatisticsPage() {
                   (isSelected ? "text-cusorange bg-black bg-opacity-5" : "")
                 }
                 key={value}
-                onClick={() => setSelectedRange(value as 1 | 7 | 30)}
+                onClick={() => changePeriod(value as Period)}
               >
                 {text}
               </button>
@@ -176,42 +179,42 @@ export default function StatisticsPage() {
         </div>
         <button
           onClick={() => router.push("/calendar", { scroll: false })}
-          className="bg-cuspoint shadow-border text-cusorange underline rounded-2xl p-3"
+          className="p-3 underline bg-cuspoint shadow-border text-cusorange rounded-2xl"
         >
           {selectedDate.toLocaleDateString()}
         </button>
       </div>
       <div
-        // className="flex flex-col md:flex-row items-center w-full gap-5 h-max"
-        className="grid grid-cols-1 md:grid-cols-2 gap-5 h-max"
+        // className="flex flex-col items-center w-full gap-5 md:flex-row h-max"
+        className="grid grid-cols-1 gap-5 md:grid-cols-2 h-max"
       >
         {/* ranking, chart */}
 
-        <Podium rank={statisticsData?.rank} period={selectedRange} />
-        {selectedRange !== 1 && (
+        <Podium rank={statisticsData?.rank} />
+        {period !== "day" && (
           <LineChart {...genMealChartProps("칼로리 섭취량")} />
         )}
         <DoughnutChart {...genMealChartProps("탄단지 섭취량")} />
       </div>
-      <MealTable range={selectedRange} />
+      <MealTable />
     </div>
   );
 }
 
-const MealTable = ({ range }: { range: 1 | 7 | 30 }) => {
-  const { selectedDate } = useDate();
+const MealTable = () => {
+  const { selectedDate, period } = useDate();
   const [tableData, setTableData] = useState<
     Array<SimpleCalory & { empty: boolean }>
   >([]);
   useEffect(() => {
     customFetch
       .get<SimpleCaloryResponse>("meal/search", {
-        type: range === 1 ? 1 : range === 7 ? 2 : 3,
+        type: period === "day" ? 1 : period === "week" ? 2 : 3,
         time: toFetchTimeString(selectedDate),
       })
       .then((res) => {
         if (res.body.code === 0) {
-          if (range === 1) {
+          if (period === "day") {
             const key = toFetchTimeString(selectedDate).split(" ")[0];
             const data = res.body.data[key].map((item) => ({
               ...item,
@@ -235,22 +238,18 @@ const MealTable = ({ range }: { range: 1 | 7 | 30 }) => {
           }
         }
       });
-  }, [selectedDate, range]);
+  }, [selectedDate, period]);
 
   const tDataList = tableData?.map((item) => ({ ...item, empty: false }));
-  const period = useMemo(() => {
-    if (range === 1) return "day";
-    if (range === 7) return "week";
-    return "month";
-  }, [range]);
+
   return tDataList ? (
     <Table
-      tHead={range === 1 ? "시간" : "날짜"}
+      tHead={period === "day" ? "시간" : "날짜"}
       tDataList={tDataList}
       period={period}
       tclassName="flex-1 flex flex-col justify-between animate-float-3"
     />
   ) : (
-    <div className="w-full h-full shadow-border rounded-xl bg-cusbanana dark:bg-cusdarkbanana overflow-hidden flex-1"></div>
+    <div className="flex-1 w-full h-full overflow-hidden shadow-border rounded-xl bg-cusbanana dark:bg-cusdarkbanana"></div>
   );
 };

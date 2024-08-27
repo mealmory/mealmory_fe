@@ -1,13 +1,13 @@
 import Image from "next/image";
 import { CharName } from "./page";
+import useDate from "@/store/selectDateStore";
 
 const Podium = ({
   rank,
-  period,
 }: {
   rank: { [key: string | number]: string } | undefined;
-  period: 1 | 7 | 30;
 }) => {
+  const { period } = useDate();
   function transCharictorKey(charName: CharName): "fat" | "normal" | "skinny" {
     if (charName === "과식") return "fat";
     if (charName === "보통") return "normal";
@@ -34,7 +34,7 @@ const Podium = ({
   return (
     <div className="rounded-2xl bg-cusbanana dark:bg-cusdarkbanana shadow-border p-5 min-h-[23.12vw] h-max w-full basis-1/2 flex-1 flex items-end animate-float">
       {rankResult ? (
-        period === 1 ? (
+        period === "day" ? (
           <DayTopCharacter topCharacter={rankResult[0]} />
         ) : (
           <WeekMonthCharacter
@@ -65,7 +65,7 @@ const DayTopCharacter = ({
   };
 }) => {
   return (
-    <div className="flex-1 flex flex-col items-center justify-center self-center gap-5">
+    <div className="flex flex-col items-center self-center justify-center flex-1 gap-5">
       <Image
         src={topCharacter.src}
         alt={topCharacter.alt}
