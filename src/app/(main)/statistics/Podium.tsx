@@ -41,7 +41,9 @@ const Podium = ({
             rankingList={[rankResult[1], rankResult[0], rankResult[2]]}
           />
         )
-      ) : null}
+      ) : (
+        <DayTopCharacter />
+      )}
     </div>
   );
 };
@@ -52,12 +54,13 @@ const CHARATER_MENTION = {
   fat: "혹시.. 벌크업 중이신가요?",
   normal: "오늘도 완벽한 칼로리 컨트롤!",
   skinny: "혹시 굶고 계시진 않으시죠..?",
+  empty: "기록된 식단이 없습니다. 새로운 식단을 추가해보세요!",
 };
 
 const DayTopCharacter = ({
   topCharacter,
 }: {
-  topCharacter: {
+  topCharacter?: {
     src: string;
     alt: string;
     rank: string;
@@ -66,14 +69,18 @@ const DayTopCharacter = ({
 }) => {
   return (
     <div className="flex flex-col items-center self-center justify-center flex-1 gap-5">
-      <Image
-        src={topCharacter.src}
-        alt={topCharacter.alt}
-        width={0}
-        height={0}
-        className="w-[100px] sm:w-[120px]"
-      />
-      <p className="text-center">{CHARATER_MENTION[topCharacter.type]}</p>
+      {topCharacter && (
+        <Image
+          src={topCharacter.src}
+          alt={topCharacter.alt}
+          width={0}
+          height={0}
+          className="w-[100px] sm:w-[120px]"
+        />
+      )}
+      <p className="text-center">
+        {CHARATER_MENTION[topCharacter ? topCharacter.type : "empty"]}
+      </p>
     </div>
   );
 };
