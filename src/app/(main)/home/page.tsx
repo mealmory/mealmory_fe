@@ -4,7 +4,7 @@ import { MAIN_LABELS } from "@/constants/mainConstants";
 import { errorAlert } from "@/utils/alertFns";
 import { customFetch } from "@/utils/fetchClient";
 import { storageSet } from "@/utils/storageFns";
-import { toFetchTimeString } from "@/utils/timestamp";
+import { toFetchTimeString } from "@/utils/timeFns";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -79,7 +79,7 @@ export default function Home() {
   const { caloryData, avg, userAvg } = MAIN_LABELS;
 
   return (
-    <div className="w-full min-h-screen h-max p-2 flex flex-col gap-10 overflow-visible">
+    <div className="flex flex-col w-full min-h-screen gap-10 p-2 overflow-visible h-max">
       {mainData && (
         <>
           <Section>
@@ -102,7 +102,7 @@ export default function Home() {
           <Section titleHeader="나의 데이터" className="animate-float">
             <AvgCardList avgDatas={mainData.user} avgTitles={userAvg} />
           </Section>
-          <div className="w-ful md:flex flex-row gap-2 animate-float-2">
+          <div className="flex-row gap-2 w-ful md:flex animate-float-2">
             <Section titleHeader="동일 연령대 평균 데이터">
               <AvgCardList
                 avgDatas={mainData.avg}
@@ -111,12 +111,12 @@ export default function Home() {
               />
             </Section>
           </div>
-          <Section className="flex-1 flex flex-col gap-2 animate-float-4">
-            <div className="w-full flex gap-3 flex-col sm:flex-row sm:items-center">
-              <p className="w-max text-lg">오늘 식단 목록</p>
+          <Section className="flex flex-col flex-1 gap-2 animate-float-4">
+            <div className="flex flex-col w-full gap-3 sm:flex-row sm:items-center">
+              <p className="text-lg w-max">오늘 식단 목록</p>
               <Link
                 href={"/mealplan/add"}
-                className="rounded-2xl text-center sm:rounded-xl shadow-border bg-cuspoint text-cusorange sm:p-2 p-4 w-full sm:w-max"
+                className="w-full p-4 text-center rounded-2xl sm:rounded-xl shadow-border bg-cuspoint text-cusorange sm:p-2 sm:w-max"
               >
                 식단 추가하기
               </Link>
@@ -157,7 +157,7 @@ const CaloryBar = ({
         style={{ width: `${percent}%` }}
       >
         {isAmr && (
-          <span className=" hidden sm:block w-full bg-cusyellow dark:bg-dcusyellow h-2"></span>
+          <span className="hidden w-full h-2  sm:block bg-cusyellow dark:bg-dcusyellow"></span>
         )}
         <span
           className={
