@@ -19,3 +19,13 @@ export const toFetchTimeString = (date: Date) => {
   });
   return `${yearMonthDay.substring(0, yearMonthDay.length - 1)} ${time}`;
 };
+
+export const toMMddString = (date: Date) => {
+  const MMdd = date
+    .toLocaleDateString("ko-KR", {
+      month: "2-digit",
+      day: "2-digit",
+    })
+    .replaceAll(". ", "-");
+  return MMdd.substring(0, MMdd.length - 1);
+};
