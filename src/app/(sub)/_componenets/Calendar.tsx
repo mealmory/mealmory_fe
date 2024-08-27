@@ -344,7 +344,7 @@ const DayButton = ({
           : "text-gray-500 dark:text-white"
       }`}
       onClick={() => {
-        !disabled && handleDayClick(day);
+        !disabled && isCurrentMonth && handleDayClick(day);
       }}
       aria-disabled={disabled}
       data-date={day.toLocaleDateString()}
