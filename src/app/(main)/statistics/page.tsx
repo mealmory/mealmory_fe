@@ -10,6 +10,7 @@ import { SimpleCalory, SimpleCaloryResponse } from "../home/page";
 import { toFetchTimeString } from "@/utils/timestamp";
 import { storageRemove, storageSet } from "@/utils/storageFns";
 import Table from "../_components/Table";
+import { compareDate } from "@/app/(sub)/util";
 
 export type CharName = "보통" | "과식" | "소식";
 
@@ -92,26 +93,29 @@ export default function StatisticsPage() {
     changeDate(yesterday);
     return () => {
       storageRemove("max");
-    };
-  }, []);
-
-  useEffect(() => {
-    const date = selectedDate.toLocaleDateString().replaceAll(". ", "-");
-    const type = period === "day" ? 1 : period === "week" ? 2 : 3;
-    customFetch
-      .get<StatisticsData>("stat", {
-        type,
-        date: date.substring(0, date.length - 1),
-      })
-      .then((res) => {
-        if (res.body.code === 0) {
-          setStatisticsData(res.body.data);
-        }
-      });
-    return () => {
       setStatisticsData(undefined);
     };
-  }, [selectedDate, period]);
+  }, []);
+  const notToday = !compareDate(new Date(), selectedDate).same;
+
+  useEffect(() => {
+    if (notToday) {
+      const date = selectedDate.toLocaleDateString().replaceAll(". ", "-");
+      const type = period === "day" ? 1 : period === "week" ? 2 : 3;
+      customFetch
+        .get<StatisticsData>("stat", {
+          type,
+          date: date.substring(0, date.length - 1),
+        })
+        .then((res) => {
+          if (res.body.code === 0) {
+            setStatisticsData(res.body.data);
+          } else {
+            setStatisticsData(undefined);
+          }
+        });
+    }
+  }, [selectedDate, period, notToday]);
 
   function genMealChartProps(dataLabel: "칼로리 섭취량" | "탄단지 섭취량") {
     let labels: string[] | undefined = [],
@@ -196,48 +200,49 @@ export default function StatisticsPage() {
         )}
         <DoughnutChart {...genMealChartProps("탄단지 섭취량")} />
       </div>
-      <MealTable />
+      <MealTable notToday={notToday} />
     </div>
   );
 }
 
-const MealTable = () => {
+const MealTable = ({ notToday }: { notToday: boolean }) => {
   const { selectedDate, period } = useDate();
   const [tableData, setTableData] = useState<
     Array<SimpleCalory & { empty: boolean }>
   >([]);
   useEffect(() => {
-    customFetch
-      .get<SimpleCaloryResponse>("meal/search", {
-        type: period === "day" ? 1 : period === "week" ? 2 : 3,
-        time: toFetchTimeString(selectedDate),
-      })
-      .then((res) => {
-        if (res.body.code === 0) {
-          if (period === "day") {
-            const key = toFetchTimeString(selectedDate).split(" ")[0];
-            const data = res.body.data[key].map((item) => ({
-              ...item,
-              empty: false,
-            }));
-            setTableData(data);
-          } else {
-            const data = Object.values(res.body.data)
-              .map((value) => {
-                if (value.length > 0) {
-                  const result = value.reduce((a, b) => ({
-                    ...a,
-                    total: a.total + b.total,
-                  }));
-                  return { ...result, empty: false };
-                }
-                return;
-              })
-              .filter((item) => item !== undefined);
-            setTableData(data);
+    notToday &&
+      customFetch
+        .get<SimpleCaloryResponse>("meal/search", {
+          type: period === "day" ? 1 : period === "week" ? 2 : 3,
+          time: toFetchTimeString(selectedDate),
+        })
+        .then((res) => {
+          if (res.body.code === 0) {
+            if (period === "day") {
+              const key = toFetchTimeString(selectedDate).split(" ")[0];
+              const data = res.body.data[key].map((item) => ({
+                ...item,
+                empty: false,
+              }));
+              setTableData(data);
+            } else {
+              const data = Object.values(res.body.data)
+                .map((value) => {
+                  if (value.length > 0) {
+                    const result = value.reduce((a, b) => ({
+                      ...a,
+                      total: a.total + b.total,
+                    }));
+                    return { ...result, empty: false };
+                  }
+                  return;
+                })
+                .filter((item) => item !== undefined);
+              setTableData(data);
+            }
           }
-        }
-      });
+        });
   }, [selectedDate, period]);
 
   const tDataList = tableData?.map((item) => ({ ...item, empty: false }));
