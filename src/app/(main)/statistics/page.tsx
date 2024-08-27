@@ -3,11 +3,11 @@
 import useDate, { Period } from "@/store/selectDateStore";
 import { customFetch } from "@/utils/fetchClient";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Podium from "./Podium";
 import { DoughnutChart, LineChart } from "./Chart";
 import { SimpleCalory, SimpleCaloryResponse } from "../home/page";
-import { toFetchTimeString } from "@/utils/timestamp";
+import { toFetchTimeString, toMMddString } from "@/utils/timeFns";
 import { storageRemove, storageSet } from "@/utils/storageFns";
 import Table from "../_components/Table";
 import { compareDate } from "@/app/(sub)/util";
@@ -86,6 +86,8 @@ export default function StatisticsPage() {
   const { selectedDate, changeDate, period, changePeriod } = useDate();
   const [statisticsData, setStatisticsData] = useState<StatisticsData>();
   const router = useRouter();
+  const notToday = !compareDate(new Date(), selectedDate).same;
+
   useEffect(() => {
     storageSet("max", "1");
     const yesterday = new Date();
@@ -96,7 +98,6 @@ export default function StatisticsPage() {
       setStatisticsData(undefined);
     };
   }, []);
-  const notToday = !compareDate(new Date(), selectedDate).same;
 
   useEffect(() => {
     if (notToday) {
@@ -122,29 +123,67 @@ export default function StatisticsPage() {
       dataList: number[] | undefined = [],
       colors: string[] | undefined = [];
     if (dataLabel === "칼로리 섭취량") {
-      statisticsData
-        ? Object.entries(statisticsData.dailyGraph).forEach(([key, value]) => {
-            labels && labels.push(key.substring(5, key.length));
-            dataList && dataList.push(value);
-          })
-        : ((labels = undefined), (dataList = undefined), (colors = undefined));
+      if (statisticsData) {
+        Object.entries(statisticsData.dailyGraph).forEach(([key, value]) => {
+          labels && labels.push(key.substring(5, key.length));
+          dataList && dataList.push(value);
+        });
+      } else {
+        if (period === "day") {
+          labels = [toFetchTimeString(selectedDate)[0]];
+          dataList = [0];
+        } else if (period === "week") {
+          const startDayOfWeek = new Date(
+            selectedDate.getFullYear(),
+            selectedDate.getMonth(),
+            selectedDate.getDate() - selectedDate.getDay()
+          );
+          for (let i = 0; i < 7; i++) {
+            labels.push(toMMddString(startDayOfWeek));
+            dataList.push(0);
+            startDayOfWeek.setDate(startDayOfWeek.getDate() + 1);
+          }
+        } else {
+          const startDayOfMonth = new Date(
+            selectedDate.getFullYear(),
+            selectedDate.getMonth(),
+            1
+          );
+          const startDayOfNextMonth = new Date(
+            selectedDate.getFullYear(),
+            selectedDate.getMonth() + 1,
+            1
+          );
+          const endDayOfMonth = new Date(startDayOfNextMonth.getTime() - 1);
+          for (let i = 0; i < endDayOfMonth.getDate(); i++) {
+            labels && labels.push(toMMddString(startDayOfMonth));
+            dataList && dataList.push(0);
+            startDayOfMonth.setDate(startDayOfMonth.getDate() + 1);
+          }
+        }
+        colors = undefined;
+      }
     } else {
-      statisticsData
-        ? Object.entries(statisticsData.cpfGraph).forEach(([key, value]) => {
-            labels && labels.push(transCPFKey(key as CPFKey));
-            dataList &&
-              dataList.push(
-                key === "calory"
-                  ? value
-                  : +transGramOrKcal(
-                      value,
-                      key as Exclude<CPFKey, "calory">,
-                      true
-                    ).toFixed(2)
-              );
-            colors && colors.push(genDoughnutColor(key as CPFKey));
-          })
-        : ((labels = undefined), (dataList = undefined), (colors = undefined));
+      if (statisticsData) {
+        Object.entries(statisticsData.cpfGraph).forEach(([key, value]) => {
+          labels && labels.push(transCPFKey(key as CPFKey));
+          dataList &&
+            dataList.push(
+              key === "calory"
+                ? value
+                : +transGramOrKcal(
+                    value,
+                    key as Exclude<CPFKey, "calory">,
+                    true
+                  ).toFixed(2)
+            );
+          colors && colors.push(genDoughnutColor(key as CPFKey));
+        });
+      } else {
+        labels = ["데이터 없음"];
+        dataList = [1];
+        colors = [genDoughnutColor("calory")];
+      }
     }
     return {
       dataLabel,
@@ -188,10 +227,7 @@ export default function StatisticsPage() {
           {selectedDate.toLocaleDateString()}
         </button>
       </div>
-      <div
-        // className="flex flex-col items-center w-full gap-5 md:flex-row h-max"
-        className="grid grid-cols-1 gap-5 md:grid-cols-2 h-max"
-      >
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 h-max">
         {/* ranking, chart */}
 
         <Podium rank={statisticsData?.rank} />
@@ -243,7 +279,7 @@ const MealTable = ({ notToday }: { notToday: boolean }) => {
             }
           }
         });
-  }, [selectedDate, period]);
+  }, [selectedDate, period, notToday]);
 
   const tDataList = tableData?.map((item) => ({ ...item, empty: false }));
 
