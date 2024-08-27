@@ -154,17 +154,8 @@ const Calendar = ({ inline }: CalendarProps) => {
   const daysInMonth = getDaysInMonth(currentYear, currentMonth);
   const days: Date[] = [];
   for (let i = 0; i < startDayOfWeek; i++) {
-    let prevMonth: number = 11,
-      prevYear: number = currentYear;
-    if (currentMonth - 2 < 0) {
-      // curMonth -2 : 현재 선택된 월의 getMonth -1 값 즉, 전 월이 12월일 경우
-      prevYear = -1;
-    } else {
-      prevMonth = currentMonth - 2;
-    }
-    days.push(new Date(prevYear, prevMonth, i - startDayOfWeek + 1));
+    days.push(new Date(currentYear, currentMonth - 1, i - startDayOfWeek + 1));
   }
-
   for (let i = 1; i <= daysInMonth; i++) {
     days.push(new Date(currentYear, currentMonth - 1, i));
   }
@@ -181,11 +172,6 @@ const Calendar = ({ inline }: CalendarProps) => {
   }
 
   function genDayFlag(day: Date) {
-    const normalizedEndDate = new Date(
-      selectedDate.getFullYear(),
-      selectedDate.getMonth(),
-      selectedDate.getDate()
-    );
     const selected =
       selectedDate.getFullYear() === day.getFullYear() &&
       selectedDate.getMonth() === day.getMonth() &&
@@ -199,14 +185,14 @@ const Calendar = ({ inline }: CalendarProps) => {
         day.getDate() - day.getDay()
       );
       const startOfWeekEndDate = new Date(
-        normalizedEndDate.getFullYear(),
-        normalizedEndDate.getMonth(),
-        normalizedEndDate.getDate() - normalizedEndDate.getDay()
+        selectedDate.getFullYear(),
+        selectedDate.getMonth(),
+        selectedDate.getDate() - selectedDate.getDay()
       );
-
-      includePeriod = startOfWeekEndDate === startOfWeekDate;
+      includePeriod =
+        startOfWeekEndDate.getTime() === startOfWeekDate.getTime();
     } else if (period === "month") {
-      includePeriod = normalizedEndDate.getMonth() === day.getMonth();
+      includePeriod = selectedDate.getMonth() === day.getMonth();
     }
 
     return {
@@ -219,7 +205,7 @@ const Calendar = ({ inline }: CalendarProps) => {
   return (
     <div className="w-full max-w-md mx-auto p-4 text-gray-500 dark:text-white flex h-full flex-col md:flex-row justify-between md:w-[820px]  gap-8 ">
       <div className="w-full h-full max-w-md mx-auto md:w-[360px] flex-1">
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex items-center justify-between mb-4">
           <ArrowButton
             handleClick={handlePrevMonth}
             isNext={false}
@@ -271,7 +257,7 @@ const Calendar = ({ inline }: CalendarProps) => {
         </div>
         <div
           className={
-            "h-[calc(100%-70px)] grid grid-cols-7 gap-1 " +
+            "h-[calc(100%-70px)] grid grid-cols-7 justfy-center gap-1 " +
             (timeSelect ? "mb-2" : "")
           }
         >
@@ -339,19 +325,21 @@ const DayButton = ({
 }) => {
   return (
     <div
-      className={`text-center p-2 cursor-pointer aria-disabled:text-gray-300 aria-disabled:cursor-default w-[40px] ${
+      className={`text-center p-2 cursor-pointer mx-auto aria-disabled:text-gray-300 aria-disabled:cursor-default w-[40px] rounded-2xl ${
         selected
-          ? "bg-cuspoint text-cusorange shadow-border rounded-2xl"
-          : !isCurrentMonth
-          ? "cursor-default"
+          ? "bg-cuspoint text-cusorange shadow-border"
           : includePeriod
-          ? "rounded-2xl bg-cusbanana shadow-border"
+          ? "bg-cusbanana shadow-border " +
+            (!isCurrentMonth ? "text-gray-300" : "")
+          : !isCurrentMonth
+          ? "cursor-default bg-gray-200 bg-opacity-30 text-gray-300"
           : "text-gray-500 dark:text-white"
       }`}
       onClick={() => {
-        handleDayClick(day);
+        !disabled && handleDayClick(day);
       }}
       aria-disabled={disabled}
+      data-date={day.toLocaleDateString()}
     >
       {day.getDate()}
     </div>
