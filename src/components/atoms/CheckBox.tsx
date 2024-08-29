@@ -10,7 +10,7 @@ const CheckBox = ({ name, handleClick, checked }: CheckBoxProps) => {
   return (
     <label
       htmlFor={"checkbox-" + uuid}
-      className="flex items-center gap-1 w-max"
+      className="flex items-center gap-1 w-max text-lg"
     >
       <input
         id={"checkbox-" + uuid}
@@ -26,7 +26,7 @@ const CheckBox = ({ name, handleClick, checked }: CheckBoxProps) => {
       >
         {checked && <BsCheck size={18} />}
       </div>
-      <span>{name}</span>
+      <span className="point-value">{name}</span>
     </label>
   );
 };
