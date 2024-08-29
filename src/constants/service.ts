@@ -274,3 +274,92 @@ export const PRIVACY_TEXT = {
     },
   ],
 };
+
+export const LIBRARYLIST = [
+  {
+    name: "next",
+    version: "14.2.4",
+    src: "https://nextjs.org",
+    copyright: "2024 Vercel Inc.",
+    license: "MIT",
+  },
+  {
+    name: "return-fetch",
+    version: "0.4.6",
+    src: "https://return-fetch.myeongjae.kim",
+    copyright: "2023 Myeongjae Kim",
+    license: "MIT",
+  },
+  {
+    name: "react-icons/all-files",
+    version: "4.1.0",
+    src: "https://github.com/react-icons/react-icons#readme",
+    copyright: "2018 kamijin_fanta <kamijin@live.jp>",
+    license: "MIT",
+  },
+  {
+    name: "heroicons",
+    version: "0.3.5",
+    src: "https://heroicons.com",
+    copyright: "Tailwind Labs Inc.",
+    license: "MIT",
+  },
+  {
+    name: "bootstrap-icons",
+    version: "1.0.0-alpha3",
+    src: "https://icons.getbootstrap.com",
+    copyright: "2019-2024 The Bootstrap Authors",
+    license: "MIT",
+  },
+  {
+    name: "react-chartjs-2",
+    version: "5.2.0",
+    src: "https://github.com/reactchartjs/react-chartjs-2",
+    copyright: "2020 Jeremy Ayerst",
+    license: "MIT",
+  },
+  {
+    name: "sweetalert2",
+    version: "11.4.8",
+    src: "https://sweetalert2.github.io",
+    copyright: "2014 Tristan Edwards & Limon Monte",
+    license: "MIT",
+  },
+  {
+    name: "uuid",
+    version: "10.0.0",
+    src: "https://github.com/uuidjs/uuid#readme",
+    copyright: "2010-2020 Robert Kieffer and other contributors",
+    license: "MIT",
+  },
+  {
+    name: "zustand",
+    version: "4.5.4",
+    src: "https://github.com/pmndrs/zustand",
+    copyright: "2019 Paul Henschel",
+    license: "MIT",
+  },
+  {
+    name: "js-cookie",
+    version: "3.0.5",
+    src: "https://github.com/js-cookie/js-cookie#readme",
+    copyright:
+      "2018 Copyright 2018 Klaus Hartl, Fagner Brack, GitHub Contributors",
+    license: "MIT",
+  },
+  {
+    name: "tailwindcss",
+    version: "3.4.1",
+    src: "https://tailwindcss.com",
+    copyright: "2024 Tailwind Labs Inc.",
+    license: "MIT",
+  },
+];
+
+export const FONT_LICENSE = [
+  {
+    name: "Jua",
+    src: "https://openfontlicense.org/",
+    copyright: "Woowahan Brothers",
+  },
+];
