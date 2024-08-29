@@ -2,8 +2,8 @@ import Link from "next/link";
 import { HiChevronRight } from "@react-icons/all-files/hi/HiChevronRight";
 
 const SERVICE_INFO_ITEMS = [
-  { title: "서비스 이용 약관", link: "/terms-of-use" },
-  { title: "개인정보 처리방침", link: "/privacy-policy" },
+  { title: "서비스 이용 약관", link: "/service" },
+  { title: "개인정보 처리방침", link: "/privacy" },
   { title: "오픈 라이선스", link: "/open-license" },
 ];
 
