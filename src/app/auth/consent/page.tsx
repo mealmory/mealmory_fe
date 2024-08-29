@@ -1,19 +1,25 @@
 "use client";
 
 import CheckBox from "@/components/atoms/CheckBox";
-import { fetcher, fetchServer } from "@/utils/fetchClient";
+import { fetcher } from "@/utils/fetchClient";
 import { getTimestamp } from "@/utils/timeFns";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { errorAlert } from "@/utils/alertFns";
+import PrivacyDocument from "@/components/PrivacyDocument";
+import ServiceDocument from "@/components/\bServiceDocument";
 
 export default function Consent() {
   const consents = [
-    { name: "이용 약관", text: Array(100).fill("a").join(""), type: "terms" },
+    {
+      name: "이용 약관",
+      type: "terms",
+      mandatory: true,
+    },
     {
       name: "개인정보 처리 방침",
-      text: Array(100).fill("b").join(""),
       type: "privacy",
+      mandatory: true,
     },
   ];
   const [agreements, setAgreements] = useState({
@@ -54,24 +60,22 @@ export default function Consent() {
   }
 
   return (
-    <div className="w-full h-screen max-w-5xl p-2 mx-auto text-xl sm:text-base">
-      <p className="text-[1.1em] text-center mb-3">
-        서비스 약관 및 개인정보 수집 동의
-      </p>
+    <div className="w-full h-screen max-w-5xl p-2 mx-auto text-xl sm:text-base overflow-y-hidden">
+      <p className="text-[1.1em] text-center mb-3">약관동의</p>
       <div className="w-full h-full mx-auto text-balance">
-        {consents.map(({ name, type, text }) => {
+        {consents.map(({ name, type, mandatory }) => {
           const agreeType = type as keyof typeof agreements;
+          const mandatoryText = mandatory ? "(필수)" : "(선택)";
           return (
-            <div
-              key={type}
-              className="mb-3 max-h-[500px] overflow-y-scroll h-2/5"
-            >
+            <div key={type} className="mb-3 max-h-[500px] h-2/5">
               <CheckBox
-                name={name}
+                name={`${mandatoryText} ${name}`}
                 handleClick={() => handleCheckAgree(agreeType)}
                 checked={agreements[agreeType]}
               />
-              <p className="w-full text-sm break-words">{text}</p>
+              <div className="h-[calc(100%-24px)] mt-1 overflow-y-scroll scroll-visible rounded-lg border p-2">
+                {type === "privacy" ? <PrivacyDocument /> : <ServiceDocument />}
+              </div>
             </div>
           );
         })}
