@@ -152,7 +152,7 @@ export const SERVICE_TEXT = {
 
 export const PRIVACY_TEXT = {
   title: "밀모리 개인정보 처리 방침",
-  stap: [
+  step: [
     {
       subTitle: "수집하는 개인정보 항목 및 수집 방법",
       content: [
