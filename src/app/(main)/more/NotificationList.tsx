@@ -12,15 +12,15 @@ const AdminUseButton = dynamic(
 type Notice = { id: number; title: string; date: string };
 interface NoticeResponse {
   flag: 0 | 1;
+  count: number;
   notice: Array<Notice>;
 }
-const VIEW_NOTICE_LENGTH = 5;
 
 const NotificationList = () => {
   const [noticeData, setNoticeData] = useState<Array<Notice>>([]);
   const [newNotice, setNewNotice] = useState(false);
   const [page, setPage] = useState(1);
-
+  const [maxPage, setMaxPage] = useState(1);
   useEffect(() => {
     customFetch
       .get<NoticeResponse>("notice/search", { page: page })
@@ -31,13 +31,10 @@ const NotificationList = () => {
           }
 
           setNoticeData(res.body.data.notice);
+          setMaxPage(res.body.data.count);
         }
       });
   }, [page]);
-
-  const pageLength = noticeData
-    ? Math.ceil(noticeData.length / VIEW_NOTICE_LENGTH)
-    : 1;
 
   return (
     <div className="w-full flex flex-col items-center gap-2 py-3 animate-float">
@@ -70,10 +67,8 @@ const NotificationList = () => {
           </Link>
         ))
       )}
-      {pageLength ? (
-        <Pagination page={page} setPage={setPage} pageLength={pageLength} />
-      ) : (
-        0
+      {maxPage > 1 && (
+        <Pagination page={page} setPage={setPage} pageLength={maxPage} />
       )}
     </div>
   );
