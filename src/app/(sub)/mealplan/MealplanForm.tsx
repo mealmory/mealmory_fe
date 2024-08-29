@@ -8,7 +8,7 @@ import { MEAL_ITEM_TITLE } from "@/constants/mainConstants";
 import { usePathname, useRouter } from "next/navigation";
 import useDate from "@/store/selectDateStore";
 import { customFetch } from "@/utils/fetchClient";
-import { toFetchTimeString } from "@/utils/timestamp";
+import { toFetchTimeString } from "@/utils/timeFns";
 import Swal from "sweetalert2";
 import { errorAlert } from "@/utils/alertFns";
 import { MealPlanDetailResponse } from "@/app/(sub)/mealplan/mealType";
