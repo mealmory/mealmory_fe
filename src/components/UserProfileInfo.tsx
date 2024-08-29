@@ -24,7 +24,7 @@ const UserProfileInfo = ({ profileData }: UserProfileInfoProps) => {
           priority
         />
       ) : (
-        <div className="w-[107px] h-[96.5px] bg-zinc-500 rounded-full"></div>
+        <div className="w-[107px] h-[96.5px] bg-zinc-300 rounded-full animate-pulse"></div>
       )}
       <div className="text-center text-gray-500 dark:text-white">
         {!loading ? <p>{email}</p> : <SkeletonP className="mb-2" />}
@@ -39,7 +39,8 @@ export default UserProfileInfo;
 const SkeletonP = ({ className }: { className?: string }) => (
   <p
     className={
-      "bg-zinc-500 p-2 w-[155px] h-[20px] rounded-lg " + (className ?? "")
+      "bg-zinc-300 animate-pulse p-2 w-[155px] h-[20px] rounded-lg " +
+      (className ?? "")
     }
   ></p>
 );
