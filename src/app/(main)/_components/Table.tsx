@@ -2,6 +2,7 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Pagination from "@/components/Pagination";
+import { menuTypeTransform } from "@/app/(sub)/util";
 interface TableProps {
   tHead: string;
   tclassName?: string;
@@ -49,13 +50,14 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
       <table className="w-full flex-1 h-full text-center border-collapse border-hidden">
         <thead className="border-b-4">
           <tr>
-            <th className={thClass}>{tHead}</th>
+            {period === "day" && <th className={"w-1/12 " + thClass}>종류</th>}
+            <th className={"w-3/12 " + thClass}>{tHead}</th>
             <th className={thClass}>칼로리</th>
           </tr>
         </thead>
         <tbody>
           {caloryList ? (
-            caloryList.map(({ id, time, total, empty }) =>
+            caloryList.map(({ id, time, total, empty, type }) =>
               empty ? (
                 <tr key={`${id}${time}`}>
                   <td colSpan={2} className={thClass + " invisible"}>
@@ -64,8 +66,13 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
                 </tr>
               ) : (
                 <tr key={`${id}${time}`}>
+                  {period === "day" && (
+                    <td className={thClass}>{menuTypeTransform(type)}</td>
+                  )}
                   <td className={thClass} suppressHydrationWarning>
-                    {tHead === "날짜" ? time.split(" ")[0] : time.split(" ")[1]}
+                    {tHead === "날짜"
+                      ? time.split(" ")[0]
+                      : time.split(" ")[1].substring(0, 5)}
                   </td>
                   <td
                     className={`${thClass} font-semibold underline text-cusorange cursor-pointer`}
