@@ -361,5 +361,6 @@ export const FONT_LICENSE = [
     name: "Jua",
     src: "https://openfontlicense.org/",
     copyright: "Woowahan Brothers",
+    license: "SIL Open Font License (OFL) version 1.1",
   },
 ];
