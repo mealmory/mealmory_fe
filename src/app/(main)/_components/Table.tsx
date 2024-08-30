@@ -60,7 +60,10 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
             caloryList.map(({ id, time, total, empty, type }) =>
               empty ? (
                 <tr key={`${id}${time}`}>
-                  <td colSpan={2} className={thClass + " invisible"}>
+                  <td
+                    colSpan={period === "day" ? 3 : 2}
+                    className={thClass + " invisible"}
+                  >
                     {total}
                   </td>
                 </tr>
