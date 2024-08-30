@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { BsX } from "@react-icons/all-files/bs/BsX";
-import Calendar from "../_componenets/Calendar";
+import Calendar from "./Calendar";
 
 const DatePicker = () => {
   const router = useRouter();

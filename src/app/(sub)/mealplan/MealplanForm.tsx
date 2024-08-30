@@ -12,7 +12,7 @@ import { toFetchTimeString } from "@/utils/timeFns";
 import Swal from "sweetalert2";
 import { errorAlert } from "@/utils/alertFns";
 import { MealPlanDetailResponse } from "@/app/(sub)/mealplan/mealType";
-import MealPlanItem from "../_componenets/MealPlanItem";
+import MealPlanItem from "./MealPlanItem";
 import { reCalcMenuSpec, calcMenuSpec, toKRLocaleString } from "../util";
 
 const MEAL_TYPES = [
