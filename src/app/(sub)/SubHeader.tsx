@@ -26,7 +26,7 @@ export default function SubHeader() {
     if (segments[0] === "open-license") return "오픈 라이센스";
     return "title 미정";
   })();
-  const isShow = segments.at(-1) !== "division";
+  const isShow = segments.at(-1) !== "division" || segments[0] !== "calendar";
   return (
     <>
       {isShow ? (
