@@ -4,7 +4,8 @@ import { HiChevronRight } from "@react-icons/all-files/hi/HiChevronRight";
 const SERVICE_INFO_ITEMS = [
   { title: "서비스 이용 약관", link: "/service" },
   { title: "개인정보 처리방침", link: "/privacy" },
-  { title: "오픈 라이선스", link: "/open-license" },
+  { title: "오픈 소스", link: "/open-source" },
+  { title: "오픈 라이센스", link: "/open-license" },
 ];
 
 const ServiceInfoList = () => {
