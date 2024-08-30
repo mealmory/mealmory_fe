@@ -1,13 +1,18 @@
 "use client";
 
-import useDate, { Period } from "@/store/selectDateStore";
+import useDate from "@/store/selectDateStore";
 import { customFetch } from "@/utils/fetchClient";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Podium from "./Podium";
 import { DoughnutChart, LineChart } from "./Chart";
 import { SimpleCalory, SimpleCaloryResponse } from "../home/page";
-import { toFetchTimeString, toMMddString } from "@/utils/timeFns";
+import {
+  genStartEndDate,
+  toFetchTimeString,
+  toMMddString,
+  toyyMMddString,
+} from "@/utils/timeFns";
 import { storageRemove, storageSet } from "@/utils/storageFns";
 import Table from "../_components/Table";
 import { compareDate } from "@/app/(sub)/util";
@@ -83,7 +88,7 @@ function genDoughnutColor(label: CPFKey) {
   }
 }
 export default function StatisticsPage() {
-  const { selectedDate, changeDate, period, changePeriod } = useDate();
+  const { selectedDate, changeDate, period } = useDate();
   const [statisticsData, setStatisticsData] = useState<StatisticsData>();
   const router = useRouter();
   const notToday = !compareDate(new Date(), selectedDate).same;
@@ -192,40 +197,29 @@ export default function StatisticsPage() {
       colors,
     };
   }
-
+  const periodText =
+    period === "day" ? "하루" : period === "week" ? "일주일" : "한달";
+  const dateRange = genStartEndDate(selectedDate, period);
   return (
     <div className="flex flex-col w-full h-full min-h-screen p-2 md:p-5 gap-9 md:gap-6">
-      <div className="flex flex-col w-full gap-6 md:flex-row md:w-max">
+      <div className="flex flex-col w-full gap-2 md:flex-row md:w-max items-center">
         {/* date, range */}
-        <div className="flex items-center w-full md:w-[280px] bg-cuspoint shadow-border rounded-2xl overflow-hidden px-2 py-1 md:gap-3">
-          {["day", "week", "month"].map((value) => {
-            const text =
-              value === "day"
-                ? "하루"
-                : value === "week"
-                ? "지난 7일"
-                : "지난 30일";
-            const isSelected = value === period;
-            return (
-              <button
-                className={
-                  "p-2 basis-[80px] flex-1 " +
-                  (isSelected ? "text-cusorange bg-black bg-opacity-5" : "")
-                }
-                key={value}
-                onClick={() => changePeriod(value as Period)}
-              >
-                {text}
-              </button>
-            );
-          })}
-        </div>
         <button
-          onClick={() => router.push("/calendar", { scroll: false })}
-          className="p-3 underline bg-cuspoint shadow-border text-cusorange rounded-2xl"
+          onClick={() =>
+            router.push("/calendar/with-period", { scroll: false })
+          }
+          className="p-3 px-4 bg-cuspoint shadow-border rounded-2xl flex items-center gap-3"
         >
-          {selectedDate.toLocaleDateString()}
+          <p className="underline text-cusorange">
+            {toyyMMddString(selectedDate)}
+          </p>
+          <p className="text-sm">{periodText}</p>
         </button>
+        {period !== "day" && dateRange && (
+          <p>{`${toyyMMddString(dateRange.startDate)} ~ ${toyyMMddString(
+            dateRange.endDate
+          )}`}</p>
+        )}
       </div>
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 h-max">
         {/* ranking, chart */}
