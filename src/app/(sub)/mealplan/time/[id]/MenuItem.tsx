@@ -1,6 +1,6 @@
 "use client";
 
-import FlipItem from "../../FlipItem";
+import FlipItem from "../../../_componenets/FlipItem";
 import { MealDetailDTO } from "../../mealType";
 
 const MenuItem = ({

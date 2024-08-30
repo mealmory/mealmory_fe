@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import FlipItem from "../../FlipItem";
+import FlipItem from "../../../_componenets/FlipItem";
 import { useEffect, useState } from "react";
 import { MealPlanDetailResponse } from "../../mealType";
 import { customFetch } from "@/utils/fetchClient";
