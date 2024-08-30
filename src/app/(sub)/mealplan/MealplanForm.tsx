@@ -174,14 +174,17 @@ export default function MealplanForm({
           return;
         }
         customFetch.post("meal/add", result).then((res) => {
-          const ok = res.body.code === 0;
+          const { code } = res.body;
           Swal.fire({
-            title: ok
-              ? "식단을 성공적으로 저장했습니다."
-              : "식단 저장에 실패햇습니다. 잠시 후 다시 시도해 주세요",
-            icon: ok ? "success" : "error",
+            title:
+              code === 0
+                ? "식단을 성공적으로 저장했습니다."
+                : code === 1008
+                ? "존재하는 식단 종류입니다. 간식 외에는 하루에 한번만 저장이 가능합니다."
+                : "식단 저장에 실패햇습니다. 잠시 후 다시 시도해 주세요",
+            icon: code === 0 ? "success" : "error",
           }).then(() => {
-            ok && router.back();
+            code === 0 && router.back();
           });
         });
       }
