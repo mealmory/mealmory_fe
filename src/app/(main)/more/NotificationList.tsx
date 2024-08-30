@@ -30,7 +30,11 @@ const NotificationList = () => {
             setNewNotice(true);
           }
 
-          setNoticeData(res.body.data.notice);
+          setNoticeData(
+            res.body.data.notice.toSorted(
+              (a, b) => +new Date(b.date) - +new Date(a.date)
+            )
+          );
           setMaxPage(res.body.data.count);
         }
       });
