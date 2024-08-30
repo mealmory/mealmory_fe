@@ -85,7 +85,7 @@ const MealPlanItem = ({
             <p>{MEAL_ITEM_TITLE.weight} :</p>
             <div className="flex-1 flex items-center justify-between pr-2 point-value border-b gap-2 border-black dark:border-gray-500">
               <input
-                className="flex-1 pl-2 rounded-lg "
+                className="flex-1 pl-2 rounded-lg focus:outline-none "
                 type="number"
                 value={amount.toString()}
                 onChange={(e) =>
@@ -101,7 +101,8 @@ const MealPlanItem = ({
               (showCpf ? "h-max p-1" : "h-0")
             }
           >
-            {Object.entries(menu_spec).map(([key, specValue]) => {
+            {["carbs", "protein", "fat"].map((key) => {
+              const specValue = menu_spec[key as keyof typeof menu_spec];
               return (
                 <CPFCard
                   key={key}
