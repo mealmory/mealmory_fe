@@ -22,7 +22,8 @@ export default function SubHeader() {
     if (segments[0] === "notice") return "공지 사항";
     if (segments[0] === "service") return "이용 약관";
     if (segments[0] === "privacy") return "개인정보 처리방침";
-    if (segments[0] === "open-license") return "오픈 라이선스";
+    if (segments[0] === "open-source") return "오픈 소스";
+    if (segments[0] === "open-license") return "오픈 라이센스";
     return "title 미정";
   })();
   const isShow = segments.at(-1) !== "division";
