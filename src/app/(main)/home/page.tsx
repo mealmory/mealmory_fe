@@ -85,10 +85,14 @@ export default function Home() {
           <Section>
             {Object.keys(caloryData).map((key) => {
               const target = key as keyof typeof caloryData;
+              const bigKcal =
+                caloryData.amr > caloryData.total ? "amr" : "total";
+              const smallKcal =
+                caloryData.amr > caloryData.total ? "total" : "amr";
               const percent =
-                target === "amr"
+                target === bigKcal
                   ? 100
-                  : (mainData.user.total / mainData.user.amr) * 100;
+                  : (mainData.user[smallKcal] / mainData.user[bigKcal]) * 100;
               return (
                 <CaloryBar
                   key={target}
