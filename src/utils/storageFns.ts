@@ -76,19 +76,16 @@ const decryptWithAES = async (encryptedData: string) => {
   return;
 };
 
-const hasWindow = typeof window !== "undefined";
-
 export const storageGet = (key: string) => {
-  if (hasWindow) {
+  if (typeof window !== "undefined") {
     const storageData = localStorage.getItem(key);
     const result = storageData ? decryptWithAES(storageData) : undefined;
     return result;
   }
-  return;
 };
 
 export const storageSet = (key: string, value: string) => {
-  if (hasWindow) {
+  if (typeof window !== "undefined") {
     encryptWithAES(value).then((res) => {
       if (res) localStorage.setItem(key, res);
     });
@@ -96,5 +93,5 @@ export const storageSet = (key: string, value: string) => {
 };
 
 export const storageRemove = (key: string) => {
-  if (hasWindow) localStorage.removeItem(key);
+  if (typeof window !== "undefined") localStorage.removeItem(key);
 };
