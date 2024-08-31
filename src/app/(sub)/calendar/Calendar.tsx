@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { storageGet } from "@/utils/storageFns";
 import TimeDropdown from "../_componenets/TimeDropdown";
 import Selector from "@/components/atoms/Selector";
@@ -27,7 +27,6 @@ const Calendar = ({ inline }: CalendarProps) => {
   const timeSelect = searchParams.get("select") === "time";
 
   const [maxDate, setMaxDate] = useState(new Date());
-
   const [minDate, setMinDate] = useState(new Date("2023-3-14"));
   const [currentYear, setCurrentYear] = useState(
     selectedDate.getFullYear() || maxDate.getFullYear()
@@ -35,6 +34,8 @@ const Calendar = ({ inline }: CalendarProps) => {
   const [currentMonth, setCurrentMonth] = useState(
     selectedDate.getMonth() + 1 || maxDate.getMonth() + 1
   );
+
+  const router = useRouter();
 
   useEffect(() => {
     setTimeout(async () => {
@@ -106,8 +107,10 @@ const Calendar = ({ inline }: CalendarProps) => {
         );
         if (CompareResultMaxTime) changeFullDate(maxDate);
       }
+    } else {
+      changeDate(day);
     }
-    changeDate(day);
+    router.back();
   }
   // yaers
   const years = Array.from(
