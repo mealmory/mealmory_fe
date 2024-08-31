@@ -1,6 +1,7 @@
 "use client";
 
 import Pagination from "@/components/Pagination";
+import useAmdin from "@/store/adminStore";
 import { customFetch } from "@/utils/fetchClient";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -21,6 +22,10 @@ const NotificationList = () => {
   const [newNotice, setNewNotice] = useState(false);
   const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState(1);
+  const { isAdmin, checkAdmin } = useAmdin();
+  useEffect(() => {
+    checkAdmin();
+  }, []);
   useEffect(() => {
     customFetch
       .get<NoticeResponse>("notice/search", { page: page })
@@ -44,7 +49,7 @@ const NotificationList = () => {
     <div className="w-full flex flex-col items-center gap-2 py-3 animate-float">
       <div className="w-full relative">
         <p className="text-xl sm:text-2xl mb-2 text-center">공지사항</p>
-        <AdminUseButton />
+        {isAdmin && <AdminUseButton />}
       </div>
       {noticeData.length < 1 ? (
         <div className="w-full rounded-xl shadow-border p-3 sm:p-6 flex justify-center items-center">

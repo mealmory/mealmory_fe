@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { errorAlert } from "@/utils/alertFns";
 import dynamic from "next/dynamic";
 import { storageSet } from "@/utils/storageFns";
-import { useVerification } from "@/hook/useVerification";
+import useAmdin from "@/store/adminStore";
 
 const DetailAdminUseButtons = dynamic(
   () => import("@/app/(sub)/notice/[id]/DetilAdminUseButtons")
@@ -22,9 +22,10 @@ interface NoticeDetail {
 export default function NoticeDetail({ params }: { params: { id: string } }) {
   const { id } = params;
   const [noticeData, setNoticeData] = useState<NoticeDetail>();
-  const { isAdmin } = useVerification();
+  const { isAdmin, checkAdmin } = useAmdin();
   const router = useRouter();
   useEffect(() => {
+    checkAdmin();
     customFetch
       .get<NoticeDetail[]>("notice/info", { id: id })
       .then((res) => {
@@ -65,10 +66,12 @@ export default function NoticeDetail({ params }: { params: { id: string } }) {
 
   return (
     <main className="w-full h-full ">
-      <DetailAdminUseButtons
-        handleDeleteClick={handleDeleteClick}
-        handleEditClick={handleEditClick}
-      />
+      {isAdmin && (
+        <DetailAdminUseButtons
+          handleDeleteClick={handleDeleteClick}
+          handleEditClick={handleEditClick}
+        />
+      )}
       <div className="w-full h-full min-h-[calc(100vh-55px)] sm:rounded-xl shadow-border overflow-hidden">
         <div className="border-b bg-cusbanana p-5">
           <h1 className=" sm:text-2xl">{noticeData?.title}</h1>

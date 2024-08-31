@@ -2,7 +2,7 @@
 
 import Input from "@/components/atoms/Input";
 import TextArea from "@/components/atoms/TextArea";
-import { useVerification } from "@/hook/useVerification";
+import useAmdin from "@/store/adminStore";
 import { questionAlert } from "@/utils/alertFns";
 import { customFetch } from "@/utils/fetchClient";
 import { storageGet, storageRemove } from "@/utils/storageFns";
@@ -15,9 +15,10 @@ const NoticeAddForm = ({ isEdit }: { isEdit?: boolean }) => {
   const [description, setDescription] = useState("");
   const router = useRouter();
   const pointWord = isEdit ? "수정" : "추가";
-  const { isAdmin } = useVerification();
+  const { isAdmin, checkAdmin } = useAmdin();
 
   useEffect(() => {
+    checkAdmin();
     if (!isAdmin) router.back();
     else if (isEdit) {
       storageGet("ntl")?.then((result) => setTitle(result || ""));

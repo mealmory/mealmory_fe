@@ -1,4 +1,3 @@
-import { useVerification } from "@/hook/useVerification";
 import { BsPencilSquare } from "@react-icons/all-files/bs/BsPencilSquare";
 import { BsXSquare } from "@react-icons/all-files/bs/BsXSquare";
 
@@ -9,8 +8,7 @@ const DetailAdminUseButtons = ({
   handleEditClick: () => void;
   handleDeleteClick: () => void;
 }) => {
-  const { isAdmin } = useVerification();
-  return isAdmin ? (
+  return (
     <div className="flex items-center gap-2 justify-end pr-2 mb-2 text-bold">
       <button
         onClick={handleEditClick}
@@ -27,7 +25,7 @@ const DetailAdminUseButtons = ({
         <BsXSquare size={20} />
       </button>
     </div>
-  ) : null;
+  );
 };
 
 export default DetailAdminUseButtons;
