@@ -40,6 +40,7 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
   const { caloryList, pageLength } = listDataSet;
 
   const thClass = "border-2 p-1";
+  const colSpan = period === "day" ? 3 : 2;
   return (
     <div
       className={
@@ -60,10 +61,7 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
             caloryList.map(({ id, time, total, empty, type }) =>
               empty ? (
                 <tr key={`${id}${time}`}>
-                  <td
-                    colSpan={period === "day" ? 3 : 2}
-                    className={thClass + " invisible"}
-                  >
+                  <td colSpan={colSpan} className={thClass + " invisible"}>
                     {total}
                   </td>
                 </tr>
@@ -96,7 +94,7 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
             )
           ) : (
             <tr>
-              <td colSpan={2}>데이터가 없습니다.</td>
+              <td colSpan={colSpan}>데이터가 없습니다.</td>
             </tr>
           )}
         </tbody>
