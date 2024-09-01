@@ -100,7 +100,6 @@ export default function StatisticsPage() {
     changeDate(yesterday);
     return () => {
       storageRemove("max");
-      setStatisticsData(undefined);
     };
   }, []);
 
@@ -121,6 +120,9 @@ export default function StatisticsPage() {
           }
         });
     }
+    return () => {
+      notToday && setStatisticsData(undefined);
+    };
   }, [selectedDate, period, notToday]);
 
   function genMealChartProps(dataLabel: "칼로리 섭취량" | "탄단지 섭취량") {
@@ -273,6 +275,9 @@ const MealTable = ({ notToday }: { notToday: boolean }) => {
             }
           }
         });
+    return () => {
+      setTableData([]);
+    };
   }, [selectedDate, period, notToday]);
 
   const tDataList = tableData?.map((item) => ({ ...item, empty: false }));
