@@ -33,6 +33,8 @@ export async function POST(req: NextRequest) {
       ...res.body,
       data: returnData,
     });
+    response.headers.set("Access-Control-Allow-Credentials", "true");
+
     const actExpires = new Date();
     const rftExpires = new Date();
     // actExpires.setMinutes(actExpires.getMinutes()+20)
