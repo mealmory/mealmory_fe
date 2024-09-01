@@ -17,7 +17,7 @@ export default function CallbackKakao() {
   const code = searchParams.get("code");
   useEffect(() => {
     if (code) {
-      fetchServer<LoginResponse>("auth/callback", {
+      fetchServer<LoginResponse>("callback", {
         method: "POST",
         body: { code },
         credentials: "same-origin",

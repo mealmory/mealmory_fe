@@ -94,7 +94,7 @@ export const fetchServer: <T>(
   url: FetchArgs[0],
   init?: JsonRequestInit
 ) => Promise<JsonResponse<ApiResponse<T>>> = returnFetchJson({
-  baseUrl: process.env.NEXT_PUBLIC_AUTH_BASEURL,
+  baseUrl: `${process.env.NEXT_PUBLIC_AUTH_BASEURL}auth/`,
 });
 
 function authErrorHandler(code: number) {
@@ -131,7 +131,7 @@ class Fetcher {
   }
 
   async refresh() {
-    return fetchServer("auth/refresh", {
+    return fetchServer("refresh", {
       method: "POST",
       credentials: "same-origin",
     }).then((res) => {
