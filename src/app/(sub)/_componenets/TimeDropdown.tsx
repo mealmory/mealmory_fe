@@ -103,7 +103,7 @@ const TimeDropdown = ({
           actionRefs.current[1] = el;
         }}
         className={
-          "rounded-lg w-full absolute -bottom-1 left-1/2 -translate-x-1/2 translate-y-full border bg-white dark:bg-cusdark flex " +
+          "rounded-lg overflow-hidden w-full absolute -bottom-1 left-1/2 -translate-x-1/2 translate-y-full border bg-white dark:bg-cusdark flex " +
           (flip ? "md:hidden" : "")
         }
       >
