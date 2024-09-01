@@ -70,7 +70,7 @@ export const fetchClient: <T>(
   url: FetchArgs[0],
   init?: JsonRequestInit
 ) => Promise<JsonResponse<ApiResponse<T>>> = returnFetchJson({
-  baseUrl: process.env.NEXT_PUBLIC_BASEURL,
+  baseUrl: `${process.env.NEXT_PUBLIC_AUTH_BASEURL}data/`,
   interceptors: {
     async request(requestArgs) {
       const accessToken = Cookies.get("act");
@@ -82,6 +82,7 @@ export const fetchClient: <T>(
             authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
           },
+          credentials: "omit",
         };
       }
       return requestArgs;
@@ -93,31 +94,8 @@ export const fetchServer: <T>(
   url: FetchArgs[0],
   init?: JsonRequestInit
 ) => Promise<JsonResponse<ApiResponse<T>>> = returnFetchJson({
-  baseUrl: "http://localhost:3000/api/",
+  baseUrl: process.env.NEXT_PUBLIC_AUTH_BASEURL,
 });
-
-export const fetcher = async <T>(url: FetchArgs[0], init?: JsonRequestInit) => {
-  const res = await fetchClient<T>(url, init);
-  const { code } = res.body;
-  if (code === 1007) {
-    const newResponse = await fetchServer<T>("auth/refresh", {
-      method: "POST",
-      credentials: "same-origin",
-    });
-    if (newResponse.body.code === 0) {
-      const secondRes = await fetchClient<T>(url, init);
-      if (secondRes.body.code === 0) return secondRes;
-      return newResponse;
-    } else {
-      window.Kakao &&
-        window.Kakao.Auth.authorize({
-          redirectUri,
-          scope,
-        });
-    }
-  }
-  return res;
-};
 
 function authErrorHandler(code: number) {
   if (code !== 1004 && code !== 1005 && code !== 1006 && code !== 4004) return;
@@ -182,7 +160,7 @@ class Fetcher {
     return this.fetcher<T>(fullUrl, { ...init, method: "GET" });
   }
 
-  post<T>(url: string, body: object, init?: JsonRequestInit) {
+  post<T>(url: string, body?: object, init?: JsonRequestInit) {
     return this.fetcher<T>(url, {
       ...init,
       method: "POST",
@@ -193,7 +171,7 @@ class Fetcher {
     });
   }
 
-  put<T>(url: string, body: object, init?: JsonRequestInit) {
+  put<T>(url: string, body?: object, init?: JsonRequestInit) {
     return this.fetcher<T>(url, {
       ...init,
       method: "PUT",
@@ -204,7 +182,7 @@ class Fetcher {
     });
   }
 
-  delete<T>(url: string, body: object, init?: JsonRequestInit) {
+  delete<T>(url: string, body?: object, init?: JsonRequestInit) {
     return this.fetcher<T>(url, {
       ...init,
       method: "DELETE",
