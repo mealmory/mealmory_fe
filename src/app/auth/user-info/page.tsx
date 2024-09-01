@@ -5,9 +5,8 @@ import SelectMenu from "@/components/SelectMenu";
 import UserProfileInfo from "@/components/UserProfileInfo";
 import { USER_INFO_FORM_LABEL } from "@/constants/userConstants";
 import { errorAlert } from "@/utils/alertFns";
-import { fetcher } from "@/utils/fetchClient";
+import { customFetch } from "@/utils/fetchClient";
 import { storageGet } from "@/utils/storageFns";
-import { getTimestamp } from "@/utils/timeFns";
 import { useRouter } from "next/navigation";
 import { useState, FormEvent, useEffect } from "react";
 
@@ -47,33 +46,25 @@ export default function UserInfo() {
   const router = useRouter();
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    fetcher("user/info/add", {
-      method: "POST",
-      body: {
-        timestamp: getTimestamp(),
+    customFetch
+      .post("user/info/add", {
         gender: selectedOption.gender,
         activemass: selectedOption.activemass,
         age: inputValue.age,
         weight: inputValue.weight,
         height: inputValue.height,
-      },
-    })
+      })
       .then((res) => {
         if (res.body.code === 0) {
-          fetcher("user/process", {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: {
-              timestamp: getTimestamp(),
+          customFetch
+            .put("user/process", {
               collect: 1,
-            },
-          }).then((res) => {
-            if (res.body.code === 0) {
-              router.replace("/home");
-            }
-          });
+            })
+            .then((res) => {
+              if (res.body.code === 0) {
+                router.replace("/home");
+              }
+            });
         }
       })
       .catch((e: Error) => {

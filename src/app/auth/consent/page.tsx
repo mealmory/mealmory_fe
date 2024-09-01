@@ -1,8 +1,7 @@
 "use client";
 
 import CheckBox from "@/components/atoms/CheckBox";
-import { fetcher } from "@/utils/fetchClient";
-import { getTimestamp } from "@/utils/timeFns";
+import { customFetch } from "@/utils/fetchClient";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { errorAlert } from "@/utils/alertFns";
@@ -33,29 +32,24 @@ export default function Consent() {
 
   function handleSubmitConsent() {
     if (agreements.privacy && agreements.terms) {
-      fetcher("user/process", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          timestamp: getTimestamp(),
+      customFetch
+        .put("user/process", {
           agreement: 1,
-        },
-      }).then((res) => {
-        if (res.body.code === 0) {
-          router.push("/auth/user-info");
-        }
-        if (res.body.code === 1004) {
-          errorAlert(
-            "로그인 시간이 만료되었습니다.",
-            "다시 로그인 해 주세요.",
-            () => {
-              router.replace("/auth");
-            }
-          );
-        }
-      });
+        })
+        .then((res) => {
+          if (res.body.code === 0) {
+            router.push("/auth/user-info");
+          }
+          if (res.body.code === 1004) {
+            errorAlert(
+              "로그인 시간이 만료되었습니다.",
+              "다시 로그인 해 주세요.",
+              () => {
+                router.replace("/auth");
+              }
+            );
+          }
+        });
     }
   }
 

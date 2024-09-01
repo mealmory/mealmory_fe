@@ -1,8 +1,7 @@
 "use client";
 
-import { questionAlert, successAlert } from "@/utils/alertFns";
-import { fetcher } from "@/utils/fetchClient";
-import { getTimestamp } from "@/utils/timeFns";
+import { questionAlert } from "@/utils/alertFns";
+import { customFetch } from "@/utils/fetchClient";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
@@ -13,12 +12,7 @@ const UserMenu = () => {
   function handleSignOut() {
     questionAlert({
       afterEffect: () => {
-        fetcher("user/info/delete", {
-          method: "DELETE",
-          body: {
-            timestamp: getTimestamp(),
-          },
-        }).then((res) => {
+        customFetch.delete("user/info/delete").then((res) => {
           if (res.body.code !== 0) throw new Error("탈퇴 실패");
         });
       },

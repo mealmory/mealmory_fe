@@ -4,9 +4,8 @@ import Input from "@/components/atoms/Input";
 import SelectMenu from "@/components/SelectMenu";
 import UserProfileInfo from "@/components/UserProfileInfo";
 import { USER_INFO_FORM_LABEL } from "@/constants/userConstants";
-import { successAlert } from "@/utils/alertFns";
-import { fetcher } from "@/utils/fetchClient";
-import { getTimestamp } from "@/utils/timeFns";
+import { errorAlert, successAlert } from "@/utils/alertFns";
+import { customFetch } from "@/utils/fetchClient";
 import { useEffect, useState } from "react";
 
 interface UserData {
@@ -38,15 +37,7 @@ export default function Profile() {
     weight: 0,
   });
   useEffect(() => {
-    fetcher<UserData>(
-      "user/info/search?" +
-        new URLSearchParams({
-          timestamp: getTimestamp().toString(),
-        }),
-      {
-        method: "GET",
-      }
-    ).then((res) => {
+    customFetch.get<UserData>("user/info/search").then((res) => {
       if (res.body.code === 0) {
         const { data } = res.body;
         setUserData(data);
@@ -84,13 +75,9 @@ export default function Profile() {
       return result;
     })();
     const editDTO = {
-      timestamp: getTimestamp(),
       ...changedInput,
     };
-    fetcher("user/info/edit", {
-      method: "PUT",
-      body: editDTO,
-    }).then((res) => {
+    customFetch.put("user/info/edit", { ...editDTO }).then((res) => {
       if (res.body.code === 0) {
         successAlert(
           "수정 완료!",
@@ -99,6 +86,10 @@ export default function Profile() {
             setIdEdit(false);
           }
         );
+      } else {
+        errorAlert("수정에 실패했습니다.", "잠시 후 다시 시도해주세요.", () => {
+          setIdEdit(false);
+        });
       }
     });
   }
