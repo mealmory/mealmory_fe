@@ -12,7 +12,7 @@ export default function Header() {
     setMenuFlip(true);
   }, [pathname]);
   return (
-    <header className="sm:h-screen h-max sm:w-40 w-full fixed top-0 left-0 bg-white dark:bg-cusdark z-10 flex flex-col sm:p-4 p-1 sm:shadow-border justify-center sm:justify-start gap-4">
+    <header className="sm:h-screen h-max sm:w-40 w-full fixed top-0 left-0 bg-white dark:bg-cusdark z-10 flex flex-col sm:p-4 p-1 py-2 sm:shadow-border justify-center sm:justify-start gap-4">
       <div className="w-full self-center flex items-center gap-1 justify-between px-3 ">
         <div className="flex items-center gap-1 ">
           <Image
