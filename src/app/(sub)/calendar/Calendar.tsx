@@ -38,19 +38,22 @@ const Calendar = ({ inline }: CalendarProps) => {
   const router = useRouter();
 
   useEffect(() => {
-    setTimeout(async () => {
+    (async () => {
       const max = await storageGet("max");
-      if (max === "1") {
+      if (max === "1" && compareDate(selectedDate, new Date()).same) {
         const newMax = new Date(
           maxDate.getFullYear(),
           maxDate.getMonth(),
           maxDate.getDate() - 1
         );
         setMaxDate(newMax);
+        changeFullDate(newMax);
+        setCurrentYear(maxDate.getFullYear());
+        setCurrentMonth(maxDate.getMonth());
       }
       const min = await storageGet("sud");
       min && setMinDate(new Date(min));
-    }, 150);
+    })();
   }, []);
 
   function handlePrevMonth() {
