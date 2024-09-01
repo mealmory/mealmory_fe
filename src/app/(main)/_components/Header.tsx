@@ -19,6 +19,7 @@ export default function Header() {
     questionAlert({
       title: "로그아웃 하시겠습니까?",
       text: "",
+      confirmText: "로그아웃",
       afterEffect: () => {
         fetchServer("logout", {
           method: "POST",
@@ -26,18 +27,16 @@ export default function Header() {
         }).then((res) => {
           if (res.body.code !== 0) {
             throw new Error();
+          } else {
+            successAlert("안전하게 로그아웃 되었습니다.", "", () => {
+              router.replace("/");
+            });
           }
         });
       },
-      confirmText: "로그아웃",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        successAlert("안전하게 로그아웃 되었습니다.", "", () => {
-          router.replace("/");
-        });
-      } else {
+      errotEffect: () => {
         errorAlert("로그아웃에 실패하였습니다.", "잠시후 다시 시도해주세요.");
-      }
+      },
     });
   }
   return (

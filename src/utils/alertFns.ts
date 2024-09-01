@@ -2,31 +2,39 @@ import Swal from "sweetalert2";
 
 type QuestionAlert = {
   afterEffect: () => void;
+  errotEffect?: () => void;
   title: string;
   text?: string;
   confirmText: string;
   cancelText?: string;
 };
 
-export const questionAlert = ({
+export const questionAlert = async ({
   afterEffect,
   title,
   text,
   confirmText,
   cancelText,
+  errotEffect,
 }: QuestionAlert) => {
-  return Swal.fire({
-    title,
-    text,
-    icon: "question",
-    showCancelButton: true,
-    confirmButtonColor: "#88858586",
-    cancelButtonColor: "#eac407",
-    confirmButtonText: confirmText,
-    cancelButtonText: cancelText ?? "취소",
-    preConfirm: afterEffect,
-    allowOutsideClick: () => false,
-  });
+  try {
+    const result = await Swal.fire({
+      title,
+      text,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#88858586",
+      cancelButtonColor: "#eac407",
+      confirmButtonText: confirmText,
+      cancelButtonText: cancelText ?? "취소",
+      allowOutsideClick: () => false,
+    });
+    if (result.isConfirmed) {
+      afterEffect();
+    }
+  } catch (error) {
+    errotEffect && errotEffect();
+  }
 };
 
 export const errorAlert = (

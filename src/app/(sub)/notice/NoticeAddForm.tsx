@@ -41,14 +41,36 @@ const NoticeAddForm = ({ isEdit }: { isEdit?: boolean }) => {
 
   function handleSaveClick() {
     if (title.length > 0 && description.length > 0) {
+      const successed = () => {
+        Swal.fire({
+          title: `성공적으로 공지사항을 ${pointWord}하였습니다.`,
+          icon: "success",
+        }).then(() => {
+          router.back();
+        });
+      };
+      const fail = () => {
+        Swal.fire({
+          title: `공지사항을 ${pointWord}하지 못했습니다.`,
+          icon: "error",
+        });
+      };
       const afterEffect = isEdit
         ? () => {
             storageGet("ndx")?.then((id) => {
-              customFetch.put("notice/edit", {
-                title,
-                description,
-                id: Number(id),
-              });
+              customFetch
+                .put("notice/edit", {
+                  title,
+                  description,
+                  id: Number(id),
+                })
+                .then((res) => {
+                  if (res.body.code === 0) {
+                    successed();
+                  } else {
+                    fail();
+                  }
+                });
             });
           }
         : () => {
@@ -58,8 +80,10 @@ const NoticeAddForm = ({ isEdit }: { isEdit?: boolean }) => {
                 description,
               })
               .then((res) => {
-                if (res.body.code !== 0) {
-                  throw new Error();
+                if (res.body.code === 0) {
+                  successed();
+                } else {
+                  fail();
                 }
               });
           };
@@ -68,23 +92,7 @@ const NoticeAddForm = ({ isEdit }: { isEdit?: boolean }) => {
         text: "",
         confirmText: pointWord,
         afterEffect,
-      })
-        .then((result) => {
-          if (result.isConfirmed) {
-            Swal.fire({
-              title: `성공적으로 공지사항을 ${pointWord}하였습니다.`,
-              icon: "success",
-            }).then(() => {
-              router.back();
-            });
-          }
-        })
-        .catch((e) => {
-          Swal.fire({
-            title: `공지사항을 ${pointWord}하지 못했습니다.`,
-            icon: "error",
-          });
-        });
+      });
     }
   }
   return (
