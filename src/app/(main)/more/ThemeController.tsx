@@ -77,7 +77,7 @@ const ThemeBtn = ({
       />
       <div
         className={
-          "w-full sm:p-7 transition ease-in-out duration-300 p-4 rounded-xl bg-cusgray peer-checked:text-white " +
+          "w-full sm:p-7 transition ease-in-out duration-300 p-4 rounded-xl bg-cusgray peer-checked:text-white dark:text-gray-500 " +
           color
         }
       >
