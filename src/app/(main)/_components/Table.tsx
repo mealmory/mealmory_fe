@@ -20,7 +20,7 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
   const [page, setPage] = useState(1);
   const router = useRouter();
   const listDataSet = useMemo(() => {
-    const periodNum = period === "week" ? 7 : period === "month" ? 10 : 5;
+    const periodNum = period === "month" ? 10 : 7;
     if (!tDataList.length)
       return { caloryList: undefined, pageLength: undefined };
     const caloryList = tDataList.slice(
