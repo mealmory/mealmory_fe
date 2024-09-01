@@ -232,7 +232,7 @@ export default function MealplanForm({
           );
         })}
       </div>
-      <div className="w-full max-w-96 mx-auto flex flex-col gap-5">
+      <div className="w-full max-w-96 mx-auto flex flex-col gap-5 px-2 sm:px-0">
         <button
           className="w-full border-2 border-cusorange text-cusorange p-2"
           onClick={() => {
