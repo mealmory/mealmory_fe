@@ -2,6 +2,7 @@
 
 import Input from "@/components/atoms/Input";
 import TextArea from "@/components/atoms/TextArea";
+import useConfirmPageLeave from "@/hook/useConfirmPageLeave";
 import useAmdin from "@/store/adminStore";
 import { questionAlert } from "@/utils/alertFns";
 import { customFetch } from "@/utils/fetchClient";
@@ -35,6 +36,9 @@ const NoticeAddForm = ({ isEdit }: { isEdit?: boolean }) => {
       }
     };
   }, []);
+
+  useConfirmPageLeave();
+
   function handleSaveClick() {
     if (title.length > 0 && description.length > 0) {
       const afterEffect = isEdit

@@ -14,6 +14,7 @@ import { errorAlert } from "@/utils/alertFns";
 import { MealPlanDetailResponse } from "@/app/(sub)/mealplan/mealType";
 import MealPlanItem from "./MealPlanItem";
 import { reCalcMenuSpec, calcMenuSpec, toKRLocaleString } from "../util";
+import useConfirmPageLeave from "@/hook/useConfirmPageLeave";
 
 const MEAL_TYPES = [
   { name: "아침", optionValue: 1 },
@@ -33,7 +34,7 @@ export default function MealplanForm({
   setSelectedType: Dispatch<SetStateAction<number>>;
 }) {
   const { mealPlanList, editStart, reset } = useMealPlanStore();
-  const { selectedDate, init, changeDate } = useDate();
+  const { selectedDate, init } = useDate();
   const router = useRouter();
   const totalCalory =
     mealPlanList.length > 0 &&
@@ -99,7 +100,7 @@ export default function MealplanForm({
       reset();
     };
   }, []);
-
+  useConfirmPageLeave();
   function handleSaveClick() {
     if (mealPlanList.length > 0 && typeof totalCalory === "number") {
       const menuList = mealPlanList.map(
