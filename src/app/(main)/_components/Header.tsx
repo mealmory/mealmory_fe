@@ -2,7 +2,7 @@
 import Navigator from "@/app/(main)/_components/Navigator";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { HiLogout } from "@react-icons/all-files/hi/HiLogout";
+import { HiMenu } from "@react-icons/all-files/hi/HiMenu";
 import { useEffect, useState } from "react";
 
 export default function Header() {
@@ -26,7 +26,7 @@ export default function Header() {
           <p>MealMory</p>
         </div>
         <button className="sm:hidden " onClick={() => setMenuFlip(false)}>
-          <HiLogout size={30} />
+          <HiMenu size={30} />
         </button>
       </div>
       <Navigator
@@ -36,8 +36,8 @@ export default function Header() {
           "absolute flip-nav left-0 top-0 sm:relative sm:translate-x-0 sm:transition-none z-50 h-screen sm:bg-inherit sm:h-full w-full flex flex-col items-end sm:items-start " +
           (menuFlip ? "translate-x-full " : "bg-[rgba(0,0,0,0.35)]")
         }
-        middleClass="flex flex-col bg-white dark:bg-cusdark gap-10 sm:gap-4 w-3/4 h-full sm:h-max sm:w-full p-4 sm:p-0 self-end"
-        itemClass="flex gap-1 items-center sm:text-base text-2xl"
+        middleClass="flex flex-col justify-between bg-white dark:bg-cusdark w-3/4 h-full sm:w-full p-4 sm:p-0 self-end"
+        itemClass="flex gap-1 items-center sm:text-base text-xl"
         navTransition={{
           transition: `transform 150ms ease-in-out ${
             !menuFlip ? "0s" : "200ms"
