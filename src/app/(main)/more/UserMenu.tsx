@@ -1,14 +1,13 @@
 "use client";
 
 import { questionAlert } from "@/utils/alertFns";
-import { customFetch } from "@/utils/fetchClient";
+import { customFetch, fetchServer } from "@/utils/fetchClient";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 
 const UserMenu = () => {
   const router = useRouter();
-  const cookies = Cookies;
   function handleSignOut() {
     questionAlert({
       afterEffect: () => {
@@ -28,9 +27,15 @@ const UserMenu = () => {
             icon: "success",
             allowOutsideClick: () => false,
           }).then(() => {
-            cookies.remove("act");
-            cookies.remove("rft");
-            router.replace("/");
+            fetchServer("logout", {
+              method: "POST",
+              credentials: "same-origin",
+            }).then((res) => {
+              if (res.body.code !== 0) {
+                throw new Error();
+              }
+              router.replace("/");
+            });
           });
         }
       })

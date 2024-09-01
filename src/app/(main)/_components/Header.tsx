@@ -1,16 +1,45 @@
 "use client";
 import Navigator from "@/app/(main)/_components/Navigator";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { HiMenu } from "@react-icons/all-files/hi/HiMenu";
 import { useEffect, useState } from "react";
+import { fetchServer } from "@/utils/fetchClient";
+import { errorAlert, questionAlert, successAlert } from "@/utils/alertFns";
 
 export default function Header() {
   const pathname = usePathname();
   const [menuFlip, setMenuFlip] = useState(true);
+  const router = useRouter();
   useEffect(() => {
     setMenuFlip(true);
   }, [pathname]);
+
+  function handleLogoutClick() {
+    questionAlert({
+      title: "로그아웃 하시겠습니까?",
+      text: "",
+      afterEffect: () => {
+        fetchServer("logout", {
+          method: "POST",
+          credentials: "same-origin",
+        }).then((res) => {
+          if (res.body.code !== 0) {
+            throw new Error();
+          }
+        });
+      },
+      confirmText: "로그아웃",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        successAlert("안전하게 로그아웃 되었습니다.", "", () => {
+          router.replace("/");
+        });
+      } else {
+        errorAlert("로그아웃에 실패하였습니다.", "잠시후 다시 시도해주세요.");
+      }
+    });
+  }
   return (
     <header className="sm:h-screen h-max sm:w-40 w-full fixed top-0 left-0 bg-white dark:bg-cusdark z-10 flex flex-col sm:p-4 p-1 py-2 sm:shadow-border justify-center sm:justify-start gap-4">
       <div className="w-full self-center flex items-center gap-1 justify-between px-3 ">
@@ -43,6 +72,7 @@ export default function Header() {
             !menuFlip ? "0s" : "200ms"
           }, background 200ms ease-in-out ${menuFlip ? "0s" : "200ms"}`,
         }}
+        handleLogoutClick={handleLogoutClick}
       />
     </header>
   );
