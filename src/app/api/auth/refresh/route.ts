@@ -25,17 +25,25 @@ export async function POST(req: NextRequest) {
         const response = NextResponse.json(returnData);
         response.headers.set("Access-Control-Allow-Credentials", "true");
 
+        const actExpires = new Date();
+        const rftExpires = new Date();
+        // actExpires.setMinutes(actExpires.getMinutes()+20)
+        actExpires.setHours(actExpires.getHours() + 2);
+        rftExpires.setHours(rftExpires.getHours() + 2);
+
         response.cookies.set({
           name: "act",
           value: data.access_token,
-          // expires: new Date(Date.now() + data.expires_in),
+          expires: actExpires,
           secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
           path: "/",
         });
         response.cookies.set({
           name: "rft",
           value: data.refresh_token,
-          // expires: new Date(Date.now() + data.refresh_token_expires_in),
+          expires: rftExpires,
+          sameSite: "strict",
           secure: process.env.NODE_ENV === "production",
           httpOnly: process.env.NODE_ENV === "production",
           path: "/",
