@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { CharName } from "./page";
 import useDate from "@/store/selectDateStore";
+import { CharName } from "./StatisticsType";
 
 const Podium = ({
   rank,

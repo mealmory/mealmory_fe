@@ -17,25 +17,7 @@ import Table from "../_components/Table";
 import { compareDate } from "@/app/(sub)/util";
 import DoughnutChart from "./DoughnutChart";
 import { LineChart } from "./LineChart";
-
-type CharName = "보통" | "과식" | "소식";
-
-interface StatisticsData {
-  rank: {
-    [key: number]: CharName;
-  };
-  cpfGraph: {
-    carbs: number;
-    protein: number;
-    fat: number;
-    calory: number;
-  };
-  dailyGraph: {
-    [key: string]: number;
-  };
-}
-
-type CPFKey = "carbs" | "protein" | "fat" | "calory";
+import { CPFKey, StatisticsData } from "./StatisticsType";
 
 function transCPFKey(cfpKey: CPFKey) {
   if (cfpKey === "carbs") return "탄수화물";
