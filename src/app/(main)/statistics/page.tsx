@@ -5,7 +5,6 @@ import { customFetch } from "@/utils/fetchClient";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Podium from "./Podium";
-import { DoughnutChart, LineChart } from "./Chart";
 import { SimpleCalory, SimpleCaloryResponse } from "../home/page";
 import {
   genStartEndDate,
@@ -16,6 +15,8 @@ import {
 import { storageRemove, storageSet } from "@/utils/storageFns";
 import Table from "../_components/Table";
 import { compareDate } from "@/app/(sub)/util";
+import DoughnutChart from "./DoughnutChart";
+import { LineChart } from "./LineChart";
 
 type CharName = "보통" | "과식" | "소식";
 
