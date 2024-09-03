@@ -17,7 +17,7 @@ import { storageRemove, storageSet } from "@/utils/storageFns";
 import Table from "../_components/Table";
 import { compareDate } from "@/app/(sub)/util";
 
-export type CharName = "보통" | "과식" | "소식";
+type CharName = "보통" | "과식" | "소식";
 
 interface StatisticsData {
   rank: {
@@ -34,7 +34,7 @@ interface StatisticsData {
   };
 }
 
-export type CPFKey = "carbs" | "protein" | "fat" | "calory";
+type CPFKey = "carbs" | "protein" | "fat" | "calory";
 
 function transCPFKey(cfpKey: CPFKey) {
   if (cfpKey === "carbs") return "탄수화물";
