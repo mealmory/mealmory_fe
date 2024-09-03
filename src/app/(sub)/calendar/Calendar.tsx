@@ -49,7 +49,7 @@ const Calendar = ({ inline }: CalendarProps) => {
         setMaxDate(newMax);
         changeFullDate(newMax);
         setCurrentYear(maxDate.getFullYear());
-        setCurrentMonth(maxDate.getMonth());
+        setCurrentMonth(maxDate.getMonth() + 1);
       }
       const min = await storageGet("sud");
       min && setMinDate(new Date(min));
