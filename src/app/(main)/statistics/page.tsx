@@ -36,14 +36,14 @@ interface StatisticsData {
 
 export type CPFKey = "carbs" | "protein" | "fat" | "calory";
 
-export function transCPFKey(cfpKey: CPFKey) {
+function transCPFKey(cfpKey: CPFKey) {
   if (cfpKey === "carbs") return "탄수화물";
   if (cfpKey === "protein") return "단백질";
   if (cfpKey === "fat") return "지방";
   return "기타";
 }
 
-export function transGramOrKcal(
+function transGramOrKcal(
   value: number,
   type: Exclude<CPFKey, "calory">,
   toKcal: boolean
