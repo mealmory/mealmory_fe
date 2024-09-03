@@ -86,9 +86,9 @@ export default function Home() {
             {Object.keys(caloryData).map((key) => {
               const target = key as keyof typeof caloryData;
               const bigKcal =
-                caloryData.amr > caloryData.total ? "amr" : "total";
+                mainData.user.amr > mainData.user.total ? "amr" : "total";
               const smallKcal =
-                caloryData.amr > caloryData.total ? "total" : "amr";
+                mainData.user.amr > mainData.user.total ? "total" : "amr";
               const percent =
                 target === bigKcal
                   ? 100
