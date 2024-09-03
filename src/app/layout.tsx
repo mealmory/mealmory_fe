@@ -13,8 +13,11 @@ const jua = Jua({
 });
 
 export const metadata: Metadata = {
-  title: "MealMory",
+  title: "밀모리",
   description: "식사의 추억",
+  icons: {
+    icon: "/mealmory_logo.svg",
+  },
 };
 
 export default function RootLayout({
