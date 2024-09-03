@@ -45,7 +45,7 @@ export const compareDate = (
   if (comparisonType === "time") {
     return {
       under: baseDate > targetDate,
-      over: baseDate < targetDate,
+      over: baseDate <= targetDate,
       same:
         baseYear === targetYear &&
         baseMonth === targetMonth &&
@@ -58,7 +58,7 @@ export const compareDate = (
   const normalizedTarget = new Date(targetYear, targetMonth, targetDay);
   return {
     under: normalizedBase > normalizedTarget,
-    over: normalizedBase < normalizedTarget,
+    over: normalizedBase <= normalizedTarget,
     same:
       baseYear === targetYear &&
       baseMonth === targetMonth &&
