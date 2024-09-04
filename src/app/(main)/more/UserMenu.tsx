@@ -11,31 +11,31 @@ const UserMenu = () => {
     questionAlert({
       afterEffect: () => {
         customFetch.delete("user/info/delete").then((res) => {
-          if (res.body.code !== 0) throw new Error("탈퇴 실패");
-          Swal.fire({
-            title: "회원 탈퇴가 성공적으로 완료되었습니다.",
-            text: "그동안 밀모리를 이용해 주셔서 감사합니다.",
-            icon: "success",
-            allowOutsideClick: () => false,
-          }).then(() => {
-            fetchServer("logout", {
-              method: "POST",
-              credentials: "same-origin",
-            }).then((res) => {
-              if (res.body.code !== 0) {
-                throw new Error();
-              }
-              router.replace("/");
+          if (res.body.code !== 0) {
+            Swal.fire({
+              title: "회원 탈퇴에 실패했습니다.",
+              text: "잠시 후 다시 시도해 주세요.",
+              icon: "error",
+              allowOutsideClick: () => false,
             });
-          });
-        });
-      },
-      errotEffect: () => {
-        Swal.fire({
-          title: "회원 탈퇴에 실패했습니다.",
-          text: "잠시 후 다시 시도해 주세요.",
-          icon: "error",
-          allowOutsideClick: () => false,
+          } else {
+            Swal.fire({
+              title: "회원 탈퇴가 성공적으로 완료되었습니다.",
+              text: "그동안 밀모리를 이용해 주셔서 감사합니다.",
+              icon: "success",
+              allowOutsideClick: () => false,
+            }).then(() => {
+              fetchServer("logout", {
+                method: "POST",
+                credentials: "same-origin",
+              }).then((res) => {
+                if (res.body.code !== 0) {
+                  throw new Error();
+                }
+                router.replace("/");
+              });
+            });
+          }
         });
       },
       title: "정말로 회원 탈퇴를 진행하시겠습니까?",
