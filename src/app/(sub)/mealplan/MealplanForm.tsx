@@ -13,7 +13,12 @@ import Swal from "sweetalert2";
 import { errorAlert } from "@/utils/alertFns";
 import { MealPlanDetailResponse } from "@/app/(sub)/mealplan/mealType";
 import MealPlanItem from "./MealPlanItem";
-import { reCalcMenuSpec, calcMenuSpec, toKRLocaleString } from "../util";
+import {
+  reCalcMenuSpec,
+  calcMenuSpec,
+  toKRLocaleString,
+  calcKcal,
+} from "../util";
 import useConfirmPageLeave from "@/hook/useConfirmPageLeave";
 
 const MEAL_TYPES = [
@@ -38,7 +43,9 @@ export default function MealplanForm({
   const router = useRouter();
   const totalCalory =
     mealPlanList.length > 0 &&
-    mealPlanList.map((meal) => meal?.kcal).reduce((a, b) => a && b && a + b);
+    mealPlanList
+      .map((meal) => meal && calcKcal(meal.kcal, meal.value, meal.amount))
+      .reduce((a, b) => a && b && a + b);
   const pathname = usePathname();
   const id = edit ? pathname.split("/").at(-1) : undefined;
   useEffect(() => {
@@ -118,7 +125,7 @@ export default function MealplanForm({
         }) => {
           return {
             menu,
-            kcal,
+            kcal: calcKcal(kcal, value, amount),
             amount,
             did,
             cid,

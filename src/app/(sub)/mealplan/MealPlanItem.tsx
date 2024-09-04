@@ -5,7 +5,7 @@ import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
 import { BsX } from "@react-icons/all-files/bs/BsX";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toFixeNumberTwo } from "../util";
+import { calcKcal, toFixeNumberTwo } from "../util";
 
 const MealPlanItem = ({
   data,
@@ -138,7 +138,8 @@ const MealPlanItem = ({
         </div>
         {type === "search" ? (
           <p className="text-center ">
-            {MEAL_ITEM_TITLE.calory}: {kcal.toLocaleString()} kcal
+            {MEAL_ITEM_TITLE.calory}:{" "}
+            {calcKcal(kcal, value, amount).toLocaleString()} kcal
           </p>
         ) : (
           <div className="flex items-center justify-center gap-2">
