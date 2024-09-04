@@ -18,6 +18,7 @@ import {
   calcMenuSpec,
   toKRLocaleString,
   calcKcal,
+  reCalcKcal,
 } from "../util";
 import useConfirmPageLeave from "@/hook/useConfirmPageLeave";
 
@@ -57,10 +58,11 @@ export default function MealplanForm({
           .then((res) => {
             if (res.body.code === 0) {
               const data = res.body.data[0].menuList.map((items) => {
-                const { carbs, protein, fat, unit, ...item } = items;
+                const { carbs, protein, fat, unit, kcal, ...item } = items;
                 const value = item.did === 4 ? 0 : 100;
                 return {
                   ...item,
+                  kcal: reCalcKcal(kcal, value, item.amount),
                   menu_spec: {
                     carbs: reCalcMenuSpec(
                       item.did !== 4,
