@@ -19,12 +19,14 @@ const useMealPlanStore = create<MealPlanStoreType>((set) => ({
   setCmid: (cmid) => set({ cmid: cmid }),
   reset: () => set({ mealPlanList: [] }),
   editStart: (mealList) => {
-    const cmid = uuid();
-    const newList = mealList.map((item) => ({
-      ...item,
-      type: item.did === 4 ? ("self" as MealItemType) : "search",
-      id: cmid,
-    }));
+    const newList = mealList.map((item) => {
+      const cmid = uuid();
+      return {
+        ...item,
+        type: item.did === 4 ? ("self" as MealItemType) : "search",
+        id: cmid,
+      };
+    });
     set({ mealPlanList: newList });
   },
   addMeal: (newMeal) => {
