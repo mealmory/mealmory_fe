@@ -139,7 +139,7 @@ const MealPlanItem = ({
         {type === "search" ? (
           <p className="text-center ">
             {MEAL_ITEM_TITLE.calory}:{" "}
-            {calcKcal(kcal, value, amount).toLocaleString()} kcal
+            {calcKcal(true, kcal, value, amount).toLocaleString()} kcal
           </p>
         ) : (
           <div className="flex items-center justify-center gap-2">

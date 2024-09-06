@@ -160,12 +160,28 @@ export function reCalcMenuSpec(
   return num;
 }
 
-export function calcKcal(kcal: number, value: number, amount: number) {
-  return value !== 0 ? toFixeNumberTwo((kcal / value) * amount) : kcal;
+export function calcKcal(
+  isSearch: boolean,
+  kcal: number,
+  value: number,
+  amount: number
+) {
+  if (isSearch) {
+    return value !== 0 ? toFixeNumberTwo((kcal / value) * amount) : kcal;
+  }
+  return kcal;
 }
 
-export function reCalcKcal(kcal: number, value: number, amount: number) {
-  return value !== 0 ? toFixeNumberTwo((kcal * value) / amount) : kcal;
+export function reCalcKcal(
+  isSearch: boolean,
+  kcal: number,
+  value: number,
+  amount: number
+) {
+  if (isSearch) {
+    return value !== 0 ? toFixeNumberTwo((kcal * value) / amount) : kcal;
+  }
+  return kcal;
 }
 
 // input fns
