@@ -45,7 +45,10 @@ export default function MealplanForm({
   const totalCalory =
     mealPlanList.length > 0 &&
     mealPlanList
-      .map((meal) => meal && calcKcal(meal.kcal, meal.value, meal.amount))
+      .map(
+        (meal) =>
+          meal && calcKcal(meal.did !== 4, meal.kcal, meal.value, meal.amount)
+      )
       .reduce((a, b) => a && b && a + b);
   const pathname = usePathname();
   const id = edit ? pathname.split("/").at(-1) : undefined;
@@ -62,7 +65,7 @@ export default function MealplanForm({
                 const value = item.did === 4 ? 0 : 100;
                 return {
                   ...item,
-                  kcal: reCalcKcal(kcal, value, item.amount),
+                  kcal: reCalcKcal(item.did !== 4, kcal, value, item.amount),
                   menu_spec: {
                     carbs: reCalcMenuSpec(
                       item.did !== 4,
@@ -127,7 +130,7 @@ export default function MealplanForm({
         }) => {
           return {
             menu,
-            kcal: calcKcal(kcal, value, amount),
+            kcal: calcKcal(did !== 4, kcal, value, amount),
             amount,
             did,
             cid,
