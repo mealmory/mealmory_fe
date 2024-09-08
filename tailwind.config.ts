@@ -27,6 +27,7 @@ const config: Config = {
         dcusgray: "#5A5A5A",
         cusdark: "rgb(90,90,90)",
         cusdarkbanana: "#6C6C6C",
+        "cusdarkbanana-2": "#C3C1AF",
         dcusyellow: "#E3D342",
         dcuspink: "#E6CDB6",
         carbs: "#6CFD8C",
@@ -37,6 +38,7 @@ const config: Config = {
       colors: {
         cusorange: "#FFB800",
         cusyellow: "#F6E54D",
+        "cusd-orange": "#FEF2D4",
         bmiLess: "#58AAE6",
         bmiSafe: "#85BD1A",
         bmiWarning: "#F67E2F",
