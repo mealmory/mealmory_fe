@@ -17,3 +17,9 @@ export function checkBmi(bmi: number) {
   }
   return { text: "측정불가", status: "none" };
 }
+
+export function setViewHeight() {
+  const vh = window.innerHeight * 0.01;
+  console.log(vh);
+  document.documentElement.style.setProperty("--vh", `${vh}px`);
+}

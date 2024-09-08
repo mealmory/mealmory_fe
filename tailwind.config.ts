@@ -12,6 +12,12 @@ const config: Config = {
       boxShadow: {
         border: "0 0 3px 0 rgba(0, 0, 0, 0.3)",
       },
+      height: {
+        rscreen: "calc(var(--vh)*100)",
+      },
+      minHeight: {
+        rscreen: "calc(var(--vh)*100)",
+      },
       backgroundColor: {
         cusyellow: "#F6E54D",
         cusbanana: "#FFFEF7",
