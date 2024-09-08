@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/app/ThemeProvider";
 import KakaoScript from "./KakaoScript";
 import { Suspense } from "react";
+import RealViewHeightProvider from "./RealViewHeightProvider";
 
 const jua = Jua({
   subsets: ["latin"],
@@ -32,14 +33,16 @@ export default function RootLayout({
       <body
         className={
           jua.className +
-          " overscroll-none overflow-y-scroll min-h-screen w-screen max-w-[2560px] mx-auto relative"
+          " overscroll-none overflow-y-scroll min-h-rscreen w-screen max-w-[2560px] mx-auto relative"
         }
       >
         <ThemeProvider>
-          <Suspense>
-            {children}
-            {modal}
-          </Suspense>
+          <RealViewHeightProvider>
+            <Suspense>
+              {children}
+              {modal}
+            </Suspense>
+          </RealViewHeightProvider>
         </ThemeProvider>
         <KakaoScript />
       </body>

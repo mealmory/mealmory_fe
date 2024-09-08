@@ -54,7 +54,7 @@ export default function Consent() {
   }
 
   return (
-    <div className="w-full h-screen max-w-5xl p-2 mx-auto text-xl sm:text-base overflow-y-hidden">
+    <div className="w-full h-rscreen max-w-5xl p-2 mx-auto text-xl sm:text-base overflow-y-hidden">
       <p className="text-[1.1em] text-center mb-3">약관동의</p>
       <div className="w-full h-full mx-auto text-balance">
         {consents.map(({ name, type, mandatory }) => {

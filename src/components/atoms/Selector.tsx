@@ -38,6 +38,10 @@ const Selector = ({
       }
     };
     if (!flip) {
+      const target = optionRefs.current.find((el) => {
+        return el?.dataset.selected === "true";
+      });
+      target && target.scrollIntoView();
       document.addEventListener("mousedown", handleOutSideClick);
     } else {
       document.removeEventListener("mousedown", handleOutSideClick);
@@ -95,6 +99,7 @@ const Selector = ({
               ref={(el) => {
                 optionRefs.current[i + 1] = el;
               }}
+              data-selected={optionValue === value}
             >
               {name}
             </li>

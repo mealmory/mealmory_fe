@@ -61,7 +61,10 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
             caloryList.map(({ id, time, total, empty, type }) =>
               empty ? (
                 <tr key={`${id}${time}`}>
-                  <td colSpan={colSpan} className={thClass + " invisible"}>
+                  <td
+                    colSpan={colSpan}
+                    className={thClass + " invisible border-none"}
+                  >
                     {total}
                   </td>
                 </tr>
@@ -99,7 +102,7 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
           )}
         </tbody>
       </table>
-      <div className="w-full border-b" />
+      {pageLength && pageLength > 1 && <div className="w-full border-b" />}
       <Pagination pageLength={pageLength} page={page} setPage={setPage} />
     </div>
   );

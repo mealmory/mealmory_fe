@@ -186,7 +186,7 @@ export default function StatisticsPage() {
     period === "day" ? "하루" : period === "week" ? "일주일" : "한달";
   const dateRange = genStartEndDate(selectedDate, period);
   return (
-    <div className="flex flex-col w-full h-full min-h-screen p-2 md:p-5 gap-9 md:gap-6">
+    <div className="flex flex-col w-full h-full min-h-rscreen p-2 md:p-5 gap-9 md:gap-6">
       <div className="flex flex-col w-full gap-2 md:flex-row md:w-max items-center">
         {/* date, range */}
         <button

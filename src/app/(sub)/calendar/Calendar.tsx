@@ -116,18 +116,17 @@ const Calendar = ({ inline }: CalendarProps) => {
     router.back();
   }
   // yaers
+  const lastYear = maxDate.getFullYear() + 100;
+
   const years = Array.from(
     {
-      length: maxDate.getFullYear() - minDate.getFullYear() + 1,
+      length: lastYear - minDate.getFullYear() + 1,
     },
-    (_, i) => maxDate.getFullYear() - i
+    (_, i) => lastYear - i
   );
   // month
   let monthLength = 12,
     monthStart = 0;
-  if (currentYear === maxDate.getFullYear()) {
-    monthLength = maxDate.getMonth() + 1;
-  }
 
   if (currentYear === minDate.getFullYear()) {
     const minMonth = minDate.getMonth();
@@ -255,10 +254,7 @@ const Calendar = ({ inline }: CalendarProps) => {
           </div>
           <ArrowButton
             handleClick={handleNextMonth}
-            disabled={
-              currentYear === maxDate.getFullYear() &&
-              currentMonth === maxDate.getMonth() + 1
-            }
+            disabled={currentYear === lastYear}
             isNext={true}
           />
         </div>
@@ -339,15 +335,15 @@ const DayButton = ({
 }) => {
   return (
     <div
-      className={`text-center p-2 cursor-pointer mx-auto aria-disabled:text-gray-300 aria-disabled:cursor-default w-[40px] rounded-2xl ${
+      className={`text-center p-2 cursor-pointer mx-auto aria-disabled:text-gray-300 aria-disabled:dark:text-gray-400 aria-disabled:cursor-default w-[40px] rounded-2xl ${
         selected
           ? "bg-cuspoint text-cusorange shadow-border"
           : includePeriod
-          ? "bg-cusbanana shadow-border " +
+          ? "bg-cusbanana dark:bg-cusdarkbanana-2 shadow-border dark:text-cusd-orange " +
             (!isCurrentMonth ? "text-gray-300" : "")
           : !isCurrentMonth
           ? "cursor-default bg-gray-200 bg-opacity-30 text-gray-300"
-          : "text-gray-500 dark:text-white"
+          : "text-gray-500 dark:text-white "
       }`}
       onClick={() => {
         !disabled && isCurrentMonth && handleDayClick(day);

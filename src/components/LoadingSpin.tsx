@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function LoadingSpin() {
   return (
-    <div className="w-full h-full min-h-screen flex justify-center items-center">
+    <div className="w-full h-full min-h-rscreen flex justify-center items-center">
       <div className="max-w-full max-h-full w-[200px] h-[200px]">
         <Image
           src={"/LoadingCircle.svg"}

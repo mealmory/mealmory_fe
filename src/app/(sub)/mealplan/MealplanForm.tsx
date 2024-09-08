@@ -205,7 +205,7 @@ export default function MealplanForm({
   }
 
   return (
-    <div className="min-h-[calc(100vh-55px)] h-full w-full py-2 sm:px-2">
+    <div className="h-full w-full py-2 sm:px-2">
       <div className="flex flex-col-reverse sm:flex-row items-center gap-3 sm:gap-8 w-[96%] mx-auto sm:w-full sm:mx-0">
         {/* meal type , datepicker */}
         {!edit && (

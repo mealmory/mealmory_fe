@@ -11,6 +11,7 @@ export default function Header() {
   const pathname = usePathname();
   const [menuFlip, setMenuFlip] = useState(true);
   const router = useRouter();
+
   useEffect(() => {
     setMenuFlip(true);
   }, [pathname]);
@@ -40,7 +41,7 @@ export default function Header() {
     });
   }
   return (
-    <header className="sm:h-screen h-max sm:w-40 w-full fixed top-0 left-0 bg-white dark:bg-cusdark z-10 flex flex-col sm:p-4 p-1 py-2 sm:shadow-border justify-center sm:justify-start gap-4">
+    <header className="sm:h-rscreen h-max sm:w-40 w-full fixed top-0 left-0 bg-white dark:bg-cusdark z-10 flex flex-col sm:p-4 p-1 py-2 sm:shadow-border justify-center sm:justify-start gap-4">
       <div className="w-full self-center flex items-center gap-1 justify-between px-3 ">
         <div className="flex items-center gap-1 ">
           <Image
@@ -61,7 +62,7 @@ export default function Header() {
         pathname={pathname}
         navFlip={() => setMenuFlip(true)}
         navClass={
-          "absolute flip-nav left-0 top-0 sm:relative sm:translate-x-0 sm:transition-none z-50 h-screen sm:bg-inherit sm:h-full w-full flex flex-col items-end sm:items-start " +
+          "absolute flip-nav left-0 top-0 sm:relative sm:translate-x-0 sm:transition-none z-50 h-rscreen sm:bg-inherit sm:h-full w-full flex flex-col items-end sm:items-start " +
           (menuFlip ? "translate-x-full " : "bg-[rgba(0,0,0,0.35)]")
         }
         middleClass="flex flex-col justify-between bg-white dark:bg-cusdark w-3/4 h-full sm:w-full p-4 sm:p-0 self-end"
