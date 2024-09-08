@@ -339,11 +339,11 @@ const DayButton = ({
         selected
           ? "bg-cuspoint text-cusorange shadow-border"
           : includePeriod
-          ? "bg-cusbanana shadow-border " +
+          ? "bg-cusbanana dark:bg-cusdarkbanana-2 shadow-border dark:text-cusd-orange " +
             (!isCurrentMonth ? "text-gray-300" : "")
           : !isCurrentMonth
           ? "cursor-default bg-gray-200 bg-opacity-30 text-gray-300"
-          : "text-gray-500 dark:text-white"
+          : "text-gray-500 dark:text-white "
       }`}
       onClick={() => {
         !disabled && isCurrentMonth && handleDayClick(day);
