@@ -26,8 +26,8 @@ export default function Navigator({
   handleLogoutClick,
 }: NavigatorProps) {
   return (
-    <nav className={navClass} style={navTransition}>
-      <div className={middleClass}>
+    <nav className={navClass} style={navTransition} onClick={navFlip}>
+      <div className={middleClass} onClick={(e) => e.stopPropagation()}>
         <div className="flex flex-col  gap-6 sm:gap-4">
           <button className="self-end sm:hidden" onClick={navFlip}>
             <HiX size={30} />
