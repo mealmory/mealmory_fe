@@ -79,7 +79,7 @@ export default function Home() {
   const { caloryData, avg, userAvg } = MAIN_LABELS;
 
   return (
-    <div className="flex flex-col w-full min-h-screen gap-10 p-2 overflow-visible h-max">
+    <div className="flex flex-col w-full min-h-rscreen gap-10 p-2 overflow-visible h-max">
       {mainData && (
         <>
           <Section>

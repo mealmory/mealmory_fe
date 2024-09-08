@@ -95,7 +95,7 @@ export default function Profile() {
   }
   const btnClass = "shadow-border p-3 ";
   return (
-    <div className="w-full min-h-screen h-max max-w-[360px] mx-auto flex flex-col justify-center p-1 gap-4">
+    <div className="w-full min-h-rscreen h-max max-w-[360px] mx-auto flex flex-col justify-center p-1 gap-4">
       <UserProfileInfo
         profileData={{ email: userData?.email, image: userData?.profile }}
       />

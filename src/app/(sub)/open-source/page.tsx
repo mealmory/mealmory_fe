@@ -2,7 +2,7 @@ import { FONT_LICENSE, LIBRARYLIST } from "@/constants/service";
 
 export default function OpenSourcePage() {
   return (
-    <main className=" h-screen overflow-y-scroll scroll-visible p-2 mx-auto max-w-[600px]">
+    <main className=" h-rscreen overflow-y-scroll scroll-visible p-2 mx-auto max-w-[600px]">
       <OpenList title="라이브러리">
         {LIBRARYLIST.map((item) => (
           <OpenSourceItem key={item.name} {...item} />

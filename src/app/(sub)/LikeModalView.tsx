@@ -10,7 +10,7 @@ const LikeModalView = ({
   maxWidth?: boolean;
 }) => {
   return (
-    <div className="bg-black bg-opacity-35 fixed left-0 top-0 w-screen h-screen flex justify-center items-center">
+    <div className="bg-black bg-opacity-35 fixed left-0 top-0 w-screen h-rscreen flex justify-center items-center">
       <div
         className={
           "w-full h-full overflow-hidden bg-white dark:bg-cusdark sm:rounded-2xl " +

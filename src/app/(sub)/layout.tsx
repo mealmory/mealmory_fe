@@ -7,9 +7,9 @@ export default function SubLayout({
   children: Readonly<ReactNode>;
 }) {
   return (
-    <div className="w-full min-h-screen relative max-w-[1200px] mx-auto pt-[55px]">
+    <div className="w-full min-h-rscreen relative max-w-[1200px] mx-auto pt-[55px]">
       <SubHeader />
-      {children}
+      <main className="min-h-[calc((var(--vh)*100)-55px)]">{children}</main>
     </div>
   );
 }
