@@ -361,6 +361,10 @@ export const FONT_LICENSE = [
     name: "Jua",
     src: "https://openfontlicense.org/",
     copyright: "Woowahan Brothers",
-    license: "SIL Open Font License (OFL) version 1.1",
+  },
+  {
+    name: "국민연금체",
+    src: "https://blog.naver.com/pro_nps/223057676647",
+    copyright: "국민연금공단",
   },
 ];
