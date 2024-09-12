@@ -67,8 +67,7 @@ const OpenFontItem = ({
   name,
   copyright,
   src,
-  license,
-}: Omit<OprnSouceItemProps, "version">) => {
+}: Omit<Omit<OprnSouceItemProps, "version">, "license">) => {
   return (
     <li className="shadow-border p-2">
       <p>
@@ -81,7 +80,6 @@ const OpenFontItem = ({
         <p>Copyright (c) {copyright},</p>
         <p>with Reserved {name}</p>
       </div>
-      <p>{license}</p>
     </li>
   );
 };

@@ -36,7 +36,7 @@ const Pagination = ({ page, pageLength, setPage }: PaginationProps) => {
                   className={
                     "rounded-lg w-6 sm:block " +
                     (num === page
-                      ? "text-white bg-cusorange font-bold block"
+                      ? "text-white bg-cusorange fontExBold block"
                       : "hidden")
                   }
                   dot={num}

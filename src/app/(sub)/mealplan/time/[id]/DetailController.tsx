@@ -54,7 +54,7 @@ const DetailController = ({
 const Button = ({ name, handler }: { name: string; handler: () => void }) => {
   return (
     <button
-      className=" border-2 font-bold flex-1 p-2 text-gray-400"
+      className=" border-2 fontExBold flex-1 p-2 text-gray-400"
       onClick={handler}
     >
       {name}

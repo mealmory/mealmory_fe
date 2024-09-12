@@ -21,7 +21,7 @@ const ServiceInfoList = () => {
           >
             <p>{title}</p>
             <HiChevronRight
-              className="text-cusorange font-bold"
+              className="text-cusorange fontExBold"
               size={25}
               style={{}}
             />
