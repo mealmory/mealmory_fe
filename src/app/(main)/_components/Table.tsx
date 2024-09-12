@@ -71,7 +71,9 @@ const Table = ({ tHead, tclassName, tDataList, period }: TableProps) => {
               ) : (
                 <tr key={`${id}${time}`}>
                   {period === "day" && (
-                    <td className={thClass}>{menuTypeTransform(type)}</td>
+                    <td className={"w-2/12 " + thClass}>
+                      {menuTypeTransform(type)}
+                    </td>
                   )}
                   <td className={thClass} suppressHydrationWarning>
                     {tHead === "날짜"
