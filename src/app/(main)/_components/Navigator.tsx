@@ -76,7 +76,7 @@ export const NavItem = ({
   const { matched: ActiveIcon, normal: NormalIcon } = icon;
   return (
     <Link
-      className={(className ?? "") + "" + (active ? " font-bold" : "")}
+      className={(active ? " fontExBold " : "fontBold ") + (className ?? "")}
       href={link}
     >
       {active ? <ActiveIcon size={iconSize} /> : <NormalIcon size={iconSize} />}
