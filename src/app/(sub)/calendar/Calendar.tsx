@@ -10,6 +10,7 @@ import {
   compareTime,
   formattedNumber,
   getDaysInMonth,
+  toKRLocaleString,
 } from "../util";
 import useDate from "@/store/selectDateStore";
 
@@ -40,7 +41,7 @@ const Calendar = ({ inline }: CalendarProps) => {
   useEffect(() => {
     (async () => {
       const max = await storageGet("max");
-      if (max === "1" && compareDate(selectedDate, new Date()).same) {
+      if (max === "1") {
         const newMax = new Date(
           maxDate.getFullYear(),
           maxDate.getMonth(),
@@ -109,6 +110,8 @@ const Calendar = ({ inline }: CalendarProps) => {
           time
         );
         if (CompareResultMaxTime) changeFullDate(maxDate);
+      } else {
+        changeDate(day);
       }
     } else {
       changeDate(day);
