@@ -27,7 +27,7 @@ const PrivacyDocument = () => {
                           <span className="point-value">
                             {item.summaryWord}
                           </span>{" "}
-                          : {value}
+                          : {item.value}
                         </li>
                       ))}
                     </ul>
