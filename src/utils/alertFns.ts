@@ -61,8 +61,9 @@ export const successAlert = (
     title,
     text,
     icon: "success",
+    allowOutsideClick: () => false,
   }).then((result) => {
-    afterEffect && afterEffect();
+    if (result.isConfirmed && afterEffect) afterEffect();
     return result;
   });
 };

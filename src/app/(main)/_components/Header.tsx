@@ -26,17 +26,17 @@ export default function Header() {
           method: "POST",
           credentials: "same-origin",
         }).then((res) => {
-          if (res.body.code !== 0) {
-            throw new Error();
-          } else {
+          if (res.body.code === 0) {
             successAlert("안전하게 로그아웃 되었습니다.", "", () => {
-              router.replace("/");
+              router.replace("/auth");
             });
+          } else {
+            errorAlert(
+              "로그아웃에 실패하였습니다.",
+              "잠시후 다시 시도해주세요."
+            );
           }
         });
-      },
-      errotEffect: () => {
-        errorAlert("로그아웃에 실패하였습니다.", "잠시후 다시 시도해주세요.");
       },
     });
   }
